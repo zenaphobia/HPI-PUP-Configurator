@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>My first three.js app</title>
+		<link rel="stylesheet" href="style.css">
+		<style>
+			@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Poppins:wght@200;400;800&display=swap');
+		</style>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+
+	</head>
+	<body>
+		<script type="module" src="Pavati.js"></script>
+		<div class="UIWrapper">
+			<div class="uiContainer">
+				<div class="Text">
+					<div id="textTop">
+						Welcome!
+					</div>
+					<div id="textBottom">
+						Click on any of the options you change your experience
+					</div>
+				</div>
+				<div class="Buttons">
+					<button class="btn-reg" id="change-texture">
+						Change Texture
+					</button>
+				</div>
+				<div class="Buttons">
+					<button class="btn-reg" id="open-door">
+						Open Door
+					</button>
+				</div>
+				<canvas id="myCanvas"></canvas>
+			</div>
+		</div>
+	</body>
+</html>

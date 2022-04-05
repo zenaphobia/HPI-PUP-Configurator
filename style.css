@@ -1,0 +1,90 @@
+.UIWrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: auto;
+    background-image: url(bkg.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 99vw;
+    height: 99vh;
+}
+
+
+.uiContainer {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Poppins';
+    margin-top: 7em;
+    margin-right: 5em;
+    margin-left: 5em;
+}
+
+#textTop {
+    display: flex;
+    margin-bottom: -.35em;
+    font-size: 4em;
+    font-weight: 800;
+}
+
+#textBottom {
+    display: flex;
+    font-size: 2em;
+    font-weight: 400;
+}
+
+.Buttons {
+
+}
+
+.btn-reg {
+    background-color: #e92027;
+    border: none;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: 'Poppins';
+    font-size: 14px;
+    margin-top: 1em;
+    transition-duration: 0.4s;
+    width: fit-content;
+    border-radius: 24px;
+    -webkit-border-radius: 24px;
+    -moz-border-radius: 24px;
+    -ms-border-radius: 24px;
+    -o-border-radius: 24px;
+}
+.btn-reg:hover {
+    background-color: #e92027;
+    color: white;
+    padding-left: 35px;
+    padding-right: 35px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: 'Poppins';
+    font-size: 14px;
+    margin-top: 1em;
+    width: fit-content;
+    border-radius: 24px;
+    -webkit-border-radius: 24px;
+    -moz-border-radius: 24px;
+    -ms-border-radius: 24px;
+    -o-border-radius: 24px;
+}
+
+#myCanvas {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin: auto;
+    max-width: 90vw;
+    min-width: 90vw;
+    max-height: calc(90vw / 2);
+    min-height: calc(90vw / 2) ;
+    object-fit: cover;
+    outline: none;
+    border: none;
+}
