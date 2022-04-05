@@ -122,22 +122,6 @@ function init(){
     }
     animate();
 
-    //functions
-    document.getElementById('open-door').addEventListener("click", testRenderPUP)
-
-
-    //Window resizing
-    window.addEventListener( 'resize', onWindowResize );
-
-    function onWindowResize(){
-
-    camera.aspect = container.offsetWidth / container.offsetHeight;
-    camera.updateProjectionMatrix();
-
-    renderer.setSize( container.offsetWidth , container.offsetHeight );
-
-}
-
     //#region Basic PUP object implementation
     var clientPUP = {
         Hatch: 'flat',
@@ -163,7 +147,25 @@ function init(){
     }
     //#endregion
 
-    function testRenderPUP(){
+    //functions
+    document.getElementById('open-door').addEventListener("click", function(){testRenderPUP('domed')})
+
+
+    //Window resizing
+    window.addEventListener( 'resize', onWindowResize );
+
+    function onWindowResize(){
+
+    camera.aspect = container.offsetWidth / container.offsetHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize( container.offsetWidth , container.offsetHeight );
+
+}
+
+    function testRenderPUP(hatchSelection){
+
+        clientPUP.Hatch = hatchSelection;
         console.log({clientPUP});
     }
 
