@@ -86,18 +86,15 @@ function init(){
     //  Model Loader
     loader.load(
         // resource URL
-        'models/stripped-model3.glb',
+        'models/test.glb',
         // called when the resource is loaded
         function ( gltf ) {
 
             //texture changes
 
             //windowMesh = gltf.scene.getObjectByName('Window');
-            base = gltf.scene;
-            windowMesh = base.getObjectByName('Window');
-            base.scale.set(.045,.045,.045);
             scene.add(base);
-            windowMesh.material = windowMat;
+            //windowMesh.material = windowMat;
         },
         // called while loading is progressing
         function ( xhr ) {
