@@ -1,10 +1,3 @@
-// import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.121.1/build/three.module.js';
-// import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/loaders/GLTFLoader.js'
-// import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/controls/OrbitControls.js';
-// import { EXRLoader } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/loaders/EXRLoader.js'
-// import { DRACOLoader } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/loaders/DRACOLoader.js'
-// import { Water } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/objects/Water.js';
-// import { Sky } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/objects/Sky.js';
 import * as THREE from '/js/three.module.js';
 import { GLTFLoader } from '/js/GLTFLoader.js';
 import { OrbitControls } from '/js/OrbitControls.js';
@@ -38,10 +31,6 @@ function init(){
     //initialize objects
     var base;
     var windowMesh;
-    let water;
-    var sun = new THREE.Vector3();
-    let mixer;
-    let Clock;
 
     //load textures
 
@@ -65,20 +54,20 @@ function init(){
 
 
     const pmremGenerator = new THREE.PMREMGenerator(renderer);
-    //pmremGenerator.compileEquirectangularShader();
+    pmremGenerator.compileEquirectangularShader();
 
-    // new EXRLoader()
-    // .load( 'hdrs/gothic_manor_01_1k.exr', function ( texture ) {
+    new EXRLoader()
+    .load( 'hdrs/gothic_manor_01_1k.exr', function ( texture ) {
 
-    //     var exrCubeRenderTarget = pmremGenerator.fromEquirectangular(texture);
-    //     var exrBackground = exrCubeRenderTarget.texture;
-    //     var newEnvMap = exrCubeRenderTarget ? exrCubeRenderTarget.texture : null;
+        var exrCubeRenderTarget = pmremGenerator.fromEquirectangular(texture);
+        var exrBackground = exrCubeRenderTarget.texture;
+        var newEnvMap = exrCubeRenderTarget ? exrCubeRenderTarget.texture : null;
 
-    //     scene.environment = exrCubeRenderTarget.texture;
+        scene.environment = exrCubeRenderTarget.texture;
 
-    //     texture.dispose();
-    //     pmremGenerator.dispose();
-    // } );
+        texture.dispose();
+        pmremGenerator.dispose();
+    } );
 
 
     //Orbit Controls
@@ -107,14 +96,6 @@ function init(){
             base = gltf.scene;
             windowMesh = base.getObjectByName('Window');
             base.scale.set(.045,.045,.045);
-            //Animations
-            mixer = new THREE.AnimationMixer(base);
-            const clips = gltf.animations;
-            const floatClip = THREE.AnimationClip.findByName(clips, 'Tower_Top_Shell_Top_DC_ShellAction.001');
-            const action = mixer.clipAction(floatClip);
-
-            action.play();
-
             scene.add(base);
             windowMesh.material = windowMat;
         },
@@ -128,76 +109,11 @@ function init(){
         }
     );
 
-        //water
-        const waterGeometry = new THREE.PlaneGeometry( 10000, 10000 );
-
-        water = new Water(
-            waterGeometry,
-            {
-                textureWidth: 512,
-                textureHeight: 512,
-                waterNormals: new THREE.TextureLoader().load( '/textures/waternormals.jpg', function ( texture ) {
-
-                    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-
-                } ),
-                sunDirection: new THREE.Vector3(),
-                sunColor: 0xffffff,
-                waterColor: 0x001e0f,
-                distortionScale: 3.7,
-                fog: scene.fog !== undefined
-            }
-        );
-        water.rotation.x = - Math.PI / 2;
-        water.material.uniforms[ 'size' ].value = 50;
-
-        water.rotation.x = - Math.PI / 2;
-        scene.add( water );
-
-                        // Skybox
-
-                        const sky = new Sky();
-                        sky.scale.setScalar( 10000 );
-                        scene.add( sky );
-
-                        const skyUniforms = sky.material.uniforms;
-
-                        skyUniforms[ 'turbidity' ].value = 10;
-                        skyUniforms[ 'rayleigh' ].value = 2;
-                        skyUniforms[ 'mieCoefficient' ].value = 0.005;
-                        skyUniforms[ 'mieDirectionalG' ].value = 0.8;
-
-                        const parameters = {
-                            elevation: .04,
-                            azimuth: 125
-                        };
-
-
-                    function updateSun() {
-
-                        const phi = THREE.MathUtils.degToRad( 90 - parameters.elevation );
-                        const theta = THREE.MathUtils.degToRad( parameters.azimuth );
-
-                        sun.setFromSphericalCoords( 1, phi, theta );
-
-                        sky.material.uniforms[ 'sunPosition' ].value.copy( sun );
-                        water.material.uniforms[ 'sunDirection' ].value.copy( sun ).normalize();
-
-                        scene.environment = pmremGenerator.fromScene( sky ).texture;
-
-                    }
-
-                    updateSun();
-
-    Clock = new THREE.Clock();
     //Animate
     function animate() {
         requestAnimationFrame( animate );
         renderer.render( scene, camera );
         controls.update();
-        if(mixer)
-            mixer.update(Clock.getDelta());
-        water.material.uniforms[ 'time' ].value += 1.0 / 60.0;
         //console.log(container.offsetWidth);
         //console.log(controls.getPolarAngle());
             //Observe a scene or a renderer
@@ -209,12 +125,10 @@ function init(){
     animate();
 
     //functions
-
-    //document.getElementById('open-door').addEventListener("click", function(){openDoorAnim()})
+    document.getElementById('open-door').addEventListener("click", openDoorAnim)
 
 
     //Window resizing
-
     window.addEventListener( 'resize', onWindowResize );
 
     function onWindowResize(){
@@ -223,9 +137,37 @@ function init(){
     camera.updateProjectionMatrix();
 
     renderer.setSize( container.offsetWidth , container.offsetHeight );
-    console.log(container.offsetWidth + ', ' + container.offsetHeight);
 
 }
+
+    //#region Basic PUP object implementation
+    var clientPUP = {
+        Hatch: 'flat',
+        Gullwing: true,
+        HeadacheRack: 'none',
+        LadderRack: true,
+        LEDLighting: 'none', //'battery', 'wired'
+        AdditionalGullwingTray: false,
+        AdditionalLowSideTray: 'none',
+        LidFinshes: 'Diamond Plate',
+        TruckSlide: '1200',
+    };
+
+    switch(clientPUP.Hatch){
+        case 'flat':
+            console.log('flat hatch is selected');
+            break;
+        case 'domed':
+            console.log('domed hatch is selected');
+            break;
+        default:
+        console.log('invalid selection');
+    }
+    //#endregion
+
+    function testRenderPUP(){
+        console.log({clientPUP});
+    }
 
     //Math function to convert angle to Radian
     //radian = 2 * Math.PI * (p_angle / 360);
