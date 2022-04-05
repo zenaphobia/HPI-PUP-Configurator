@@ -50,9 +50,9 @@ function init(){
         transmission: .65,
         opacity: .5,
     });
+
     //Lights
     const light = new THREE.PointLight( 0xFFFFFF, 5, 100 );
-
 
     const pmremGenerator = new THREE.PMREMGenerator(renderer);
     pmremGenerator.compileEquirectangularShader();
@@ -90,8 +90,6 @@ function init(){
         'models/test.glb',
         // called when the resource is loaded
         function ( gltf ) {
-
-            //texture changes
 
             //windowMesh = gltf.scene.getObjectByName('Window');
             scene.add(gltf.scene);
@@ -135,6 +133,7 @@ function init(){
         TruckSlide: '1200',
     };
 
+    //example of one render switch case, there will be one for every option in renderPUP();
     switch(clientPUP.Hatch){
         case 'flat':
             console.log('flat hatch is selected');
