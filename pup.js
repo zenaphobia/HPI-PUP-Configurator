@@ -2,6 +2,7 @@ import * as THREE from '/js/three.module.js';
 import { GLTFLoader } from '/js/GLTFLoader.js';
 import { OrbitControls } from '/js/OrbitControls.js';
 import { DRACOLoader } from '/js/DRACOLoader.js'
+import { EXRLoader } from '/js/EXRLoader.js'
 import { Water } from '/js/Water.js';
 import { Sky } from '/js/Sky.js';
 
@@ -93,7 +94,7 @@ function init(){
             //texture changes
 
             //windowMesh = gltf.scene.getObjectByName('Window');
-            scene.add(base);
+            scene.add(gltf.scene);
             //windowMesh.material = windowMat;
         },
         // called while loading is progressing
@@ -122,7 +123,7 @@ function init(){
     animate();
 
     //functions
-    document.getElementById('open-door').addEventListener("click", openDoorAnim)
+    document.getElementById('open-door').addEventListener("click", testRenderPUP)
 
 
     //Window resizing
