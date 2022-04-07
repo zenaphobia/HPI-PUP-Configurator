@@ -30,8 +30,9 @@ function init(){
     //renderer.outputEncoding = THREE.sRGBEncoding;
 
     //initialize objects
-    var base;
+    var basemesh;
     var windowMesh;
+    let testmesh;
 
     //load textures
 
@@ -77,7 +78,7 @@ function init(){
     controls.minDistance = 1.5;
     controls.enablePan = false;
     controls.enableDamping = true;
-    //controls.maxPolarAngle = 1.6;
+    controls.maxPolarAngle = 1.6;
 
     //Draco Loader
     const dracoLoader = new DRACOLoader()
@@ -87,12 +88,13 @@ function init(){
     //  Model Loader
     loader.load(
         // resource URL
-        'models/test.glb',
+        'models/decimate-all.glb',
         // called when the resource is loaded
         function ( gltf ) {
 
-            //windowMesh = gltf.scene.getObjectByName('Window');
-            scene.add(gltf.scene);
+            basemesh = gltf.scene;
+            testmesh = gltf.scene.getObjectByName('hatch');
+            scene.add(basemesh);
             //windowMesh.material = windowMat;
         },
         // called while loading is progressing
@@ -147,7 +149,7 @@ function init(){
     //#endregion
 
     //functions
-    document.getElementById('open-door').addEventListener("click", function(){testRenderPUP('domed')})
+    document.getElementById('test-function').addEventListener("click", function(){testRenderPUP('domed')})
 
 
     //Window resizing
@@ -165,7 +167,8 @@ function init(){
     function testRenderPUP(hatchSelection){
 
         clientPUP.Hatch = hatchSelection;
-        console.log({clientPUP});
+        console.log({clientPUP} + ", test was successful!");
+        testmesh.visible = !testmesh.visible;
     }
 
     //Math function to convert angle to Radian
