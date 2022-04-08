@@ -3,8 +3,6 @@ import { GLTFLoader } from '/js/GLTFLoader.js';
 import { OrbitControls } from '/js/OrbitControls.js';
 import { DRACOLoader } from '/js/DRACOLoader.js'
 import { EXRLoader } from '/js/EXRLoader.js'
-import { Water } from '/js/Water.js';
-import { Sky } from '/js/Sky.js';
 
 init();
 
