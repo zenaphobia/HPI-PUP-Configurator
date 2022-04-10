@@ -88,18 +88,24 @@ function init(){
         opacity: .5,
     });
 
-async function loadCustomMat(){
-    const testMat = await new THREE.ShaderMaterial({
-        uniforms: {
-
-            u_Time: { value: 1.0 },
-            resolution: { value: new THREE.Vector2()}
-        },
-        vertexShader: loadWebObjects('shaders/vert.glsl'),
-        fragmentShader: loadWebObjects('shaders/frag.glsl')
-
-    });
-    return testMat;
+async function loadCustomMat( vertexShaderUrl, fragmentShaderurl ){
+    try{
+        const customMat = await new THREE.ShaderMaterial({
+            uniforms: {
+    
+                u_Time: { value: 1.0 },
+                resolution: { value: new THREE.Vector2()}
+            },
+            vertexShader: loadWebObjects(vertexShaderUrl),
+            fragmentShader: loadWebObjects(fragmentShaderurl)
+    
+        });
+        return customMat;
+    }
+    catch{
+        console.log("There was an error");
+        return null
+    }
 }
 
     //Lights
@@ -144,7 +150,7 @@ async function loadCustomMat(){
 
             basemesh = gltf.scene;
             testmesh = gltf.scene.getObjectByName('hatch');
-            testmesh.material = loadCustomMat();
+            testmesh.material = loadCustomMat('shaders/vert.glsl', 'shaders/frag.glsl');
             scene.add(basemesh);
             //windowMesh.material = windowMat;
         },
