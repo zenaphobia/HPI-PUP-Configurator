@@ -32,21 +32,43 @@ function init(){
     var basemesh;
     var windowMesh;
     let testmesh;
-    let vertexShader;
+    let vertexShaderData;
 
     //Loader Function
-    // async function loadWebObjects(url, vName) {
-    //     try{
-    //         fileLoader.load(url, function ( data ) {vdata =  data;},);
-    //         //loader.load('shader.frag',function ( data ) {fShader =  data;},);
-    //     }
-    //     catch {
-    //         console.log(error);
-    //     }
-    //     return vdata; 
-    // };
+    async function loadWebObjects(url) {
+        try{
+            await fileLoader.load(
+                // resource URL
+                url,
 
-    //loadWebObjects('./shaders/vert.glsl', vertexShader);
+                // onLoad callback
+                function ( data ) {
+                    // output the text to the console
+                    console.log("data loaded successfully");
+                    console.log(data);
+                    return data;
+                },
+
+                // onProgress callback
+                function ( xhr ) {
+                    //console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+                },
+
+                // onError callback
+                function ( err ) {
+                    console.error( err );
+                    return null;
+                }
+            );
+            //loader.load('shader.frag',function ( data ) {fShader =  data;},);
+        }
+        catch {
+            console.log(error);
+            return null;
+        }
+        return null;
+    };
+
 
     //load textures
 
@@ -66,21 +88,19 @@ function init(){
         opacity: .5,
     });
 
-    try {
-        const testMat = new THREE.ShaderMaterial({
-            uniforms: {
+async function loadCustomMat(){
+    const testMat = await new THREE.ShaderMaterial({
+        uniforms: {
 
-                u_Time: { value: 1.0 },
-                resolution: { value: new THREE.Vector2()}
-            },
-            u_vertexShader: fileLoader.load('shaders/vert.glsl',function ( data ) {u_vertexShader =  data;},).data
-            //u_fragmentShader: u_fragmentShader
+            u_Time: { value: 1.0 },
+            resolution: { value: new THREE.Vector2()}
+        },
+        vertexShader: loadWebObjects('shaders/vert.glsl'),
+        fragmentShader: loadWebObjects('shaders/frag.glsl')
 
-        });
-    }
-    catch(error) {
-        console.log(error);
-    }
+    });
+    return testMat;
+}
 
     //Lights
     const light = new THREE.PointLight( 0xFFFFFF, 5, 100 );
@@ -124,6 +144,7 @@ function init(){
 
             basemesh = gltf.scene;
             testmesh = gltf.scene.getObjectByName('hatch');
+            testmesh.material = loadCustomMat();
             scene.add(basemesh);
             //windowMesh.material = windowMat;
         },
