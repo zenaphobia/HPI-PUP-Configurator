@@ -10,6 +10,7 @@ function init(){
 
     //Scene setup
     const loader = new GLTFLoader();
+    const fileLoader = new THREE.FileLoader();
     const scene = new THREE.Scene();
     const container = document.getElementById('myCanvas');
     var camera = new THREE.PerspectiveCamera( 35, container.offsetWidth / container.offsetHeight, 0.1, 1000 );
@@ -31,6 +32,21 @@ function init(){
     var basemesh;
     var windowMesh;
     let testmesh;
+    let vertexShader;
+
+    //Loader Function
+    // async function loadWebObjects(url, vName) {
+    //     try{
+    //         fileLoader.load(url, function ( data ) {vdata =  data;},);
+    //         //loader.load('shader.frag',function ( data ) {fShader =  data;},);
+    //     }
+    //     catch {
+    //         console.log(error);
+    //     }
+    //     return vdata; 
+    // };
+
+    //loadWebObjects('./shaders/vert.glsl', vertexShader);
 
     //load textures
 
@@ -49,6 +65,22 @@ function init(){
         transmission: .65,
         opacity: .5,
     });
+
+    try {
+        const testMat = new THREE.ShaderMaterial({
+            uniforms: {
+
+                u_Time: { value: 1.0 },
+                resolution: { value: new THREE.Vector2()}
+            },
+            u_vertexShader: fileLoader.load('shaders/vert.glsl',function ( data ) {u_vertexShader =  data;},).data
+            //u_fragmentShader: u_fragmentShader
+
+        });
+    }
+    catch(error) {
+        console.log(error);
+    }
 
     //Lights
     const light = new THREE.PointLight( 0xFFFFFF, 5, 100 );
@@ -147,7 +179,7 @@ function init(){
     //#endregion
 
     //functions
-    document.getElementById('test-function').addEventListener("click", function(){testRenderPUP('domed')})
+    document.getElementById('change-texture').addEventListener("click", function(){applyHatch('domed')})
 
 
     //Window resizing
@@ -162,13 +194,21 @@ function init(){
 
 }
 
-    function testRenderPUP(hatchSelection){
+    function applyHatch(hatchSelection){
 
         clientPUP.Hatch = hatchSelection;
-        console.log({clientPUP} + ", test was successful!");
+        console.log("Hatch is selected");
         testmesh.visible = !testmesh.visible;
+        renderPup(clientPUP);
+
     }
 
+    function renderPup(pupObject){
+
+        //switch cases with dependencies go here
+        console.log("PUP rendered successfully")
+
+    }
     //Math function to convert angle to Radian
     //radian = 2 * Math.PI * (p_angle / 360);
 }
