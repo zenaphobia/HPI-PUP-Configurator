@@ -1,11 +1,33 @@
 import * as THREE from '/js/three.module.js';
 import { GLTFLoader } from '/js/GLTFLoader.js';
 import { OrbitControls } from '/js/OrbitControls.js';
-import { DRACOLoader } from '/js/DRACOLoader.js'
-import { EXRLoader } from '/js/EXRLoader.js'
+import { DRACOLoader } from '/js/DRACOLoader.js';
+import { EXRLoader } from '/js/EXRLoader.js';
+
+//#region custom shaders
+const vert = `
+varying vec3 vNormal;
+void main(){
+    gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);
+    vNormal = normal;
+}
+`;
+const frag =`
+varying vec3 vNormal;
+void main()
+{
+    gl_FragColor=vec4(vNormal,1.0);
+}
+`;
+//#endregion
+
 
 let loader, fileLoader, scene, container, camera, renderer, controls, dracoLoader, pmremGenerator;
 let basemesh, testmesh;
+var vertexData = vert;
+var fragData = frag;
+
+let customShader;
 
 init();
 animate();
@@ -36,40 +58,11 @@ function init(){
 
     const light = new THREE.PointLight( 0xFFFFFF, 5, 100 );
 
-    //Loader Function
-     function loadWebObjects(url) {
-        try{
-            fileLoader.load(
-                // resource URL
-                url,
-
-                // onLoad callback
-                function ( data ) {
-                    // output the text to the console
-                    console.log("custom shader data loaded successfully");
-                    //console.log(data);
-                    return data;
                 },
 
                 // onProgress callback
                 function ( xhr ) {
                     //console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-                },
-
-                // onError callback
-                function ( err ) {
-                    console.error( err );
-                    return null;
-                }
-            );
-            //loader.load('shader.frag',function ( data ) {fShader =  data;},);
-        }
-        catch {
-            console.log(error);
-            return null;
-        }
-    };
-
 
     //load textures
 
@@ -89,24 +82,41 @@ function init(){
         opacity: .5,
     });
 
-function loadCustomMat( vertexShaderUrl, fragmentShaderurl ){
-    try{
-        const customMat = new THREE.ShaderMaterial({
-            uniforms: {
+    var customShader = new THREE.ShaderMaterial({
+        uniforms:{},
+        vertexShader: vertexData,
+        fragmentShader: fragData
+    })
 
+    function loadWebObjects(url){
+        fileLoader.load(
+            url,
+            function(data){
+                console.log("data loaded successfully");
+                return data;
             },
-            vertexShader: loadWebObjects(vertexShaderUrl),
-            fragmentShader: loadWebObjects(fragmentShaderurl)
+            function(xhr){
+                console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+            },
+            function(err){
+                console.log(err);
+                return null;
+            }
+        );
+    }
 
-        });
-        console.log(customMat);
-        return customMat;
+ async function loadCustomMat( vertexShaderUrl, fragmentShaderurl ){
+    let _vdata;
+    let _fData;
+    try{
+        _vdata = fileLoader.load(vertexShaderUrl, function(data){return data},function(err){return null});
+        _fData = fileLoader.load(fragmentShaderurl, function(data){return data},function(err){return null});
     }
-    catch{
+    catch {
         console.log("There was an error");
-        return null
+        return null;
     }
-}
+};
 
     //Lights
 
@@ -147,7 +157,7 @@ function loadCustomMat( vertexShaderUrl, fragmentShaderurl ){
 
             basemesh = gltf.scene;
             testmesh = gltf.scene.getObjectByName('hatch');
-            testmesh.material = loadCustomMat('shaders/vert.glsl', 'shaders/frag.glsl');
+            testmesh.material = metalMat;
             scene.add(basemesh);
             //windowMesh.material = windowMat;
         },
