@@ -58,11 +58,6 @@ function init(){
 
     const light = new THREE.PointLight( 0xFFFFFF, 5, 100 );
 
-                },
-
-                // onProgress callback
-                function ( xhr ) {
-                    //console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
 
     //load textures
 
