@@ -83,36 +83,6 @@ function init(){
         fragmentShader: fragData
     })
 
-    function loadWebObjects(url){
-        fileLoader.load(
-            url,
-            function(data){
-                console.log("data loaded successfully");
-                return data;
-            },
-            function(xhr){
-                console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-            },
-            function(err){
-                console.log(err);
-                return null;
-            }
-        );
-    }
-
- async function loadCustomMat( vertexShaderUrl, fragmentShaderurl ){
-    let _vdata;
-    let _fData;
-    try{
-        _vdata = fileLoader.load(vertexShaderUrl, function(data){return data},function(err){return null});
-        _fData = fileLoader.load(fragmentShaderurl, function(data){return data},function(err){return null});
-    }
-    catch {
-        console.log("There was an error");
-        return null;
-    }
-};
-
     //Lights
 
     pmremGenerator = new THREE.PMREMGenerator(renderer);
