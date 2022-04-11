@@ -4,48 +4,50 @@ import { OrbitControls } from '/js/OrbitControls.js';
 import { DRACOLoader } from '/js/DRACOLoader.js'
 import { EXRLoader } from '/js/EXRLoader.js'
 
+let loader, fileLoader, scene, container, camera, renderer, controls, dracoLoader, pmremGenerator;
+let basemesh, testmesh;
+
 init();
+animate();
 
 function init(){
 
     //Scene setup
-    const loader = new GLTFLoader();
-    const fileLoader = new THREE.FileLoader();
-    const scene = new THREE.Scene();
-    const container = document.getElementById('myCanvas');
-    var camera = new THREE.PerspectiveCamera( 35, container.offsetWidth / container.offsetHeight, 0.1, 1000 );
+    loader = new GLTFLoader();
+    fileLoader = new THREE.FileLoader();
+    scene = new THREE.Scene();
+    container = document.getElementById('myCanvas');
+    camera = new THREE.PerspectiveCamera( 35, container.offsetWidth / container.offsetHeight, 0.1, 1000 );
     camera.aspect = container.offsetWidth / container.offsetHeight;
     // camera.position.z = -1.5;
     // camera.position.y = .5;
     // camera.position.x = -1;
 
-    const renderer = new THREE.WebGLRenderer({canvas: container, antialias: true, alpha: false});
+    renderer = new THREE.WebGLRenderer({canvas: container, antialias: true, alpha: true});
     renderer.localClippingEnabled = true;
 
     renderer.setClearColor(0x000000,0);
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize(container.offsetWidth, container.offsetHeight);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    //renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.outputEncoding = THREE.sRGBEncoding;
 
     //initialize objects
-    var basemesh;
-    var windowMesh;
-    let testmesh;
-    let vertexShaderData;
+
+    const light = new THREE.PointLight( 0xFFFFFF, 5, 100 );
 
     //Loader Function
-    async function loadWebObjects(url) {
+     function loadWebObjects(url) {
         try{
-            await fileLoader.load(
+            fileLoader.load(
                 // resource URL
                 url,
 
                 // onLoad callback
                 function ( data ) {
                     // output the text to the console
-                    console.log("data loaded successfully");
-                    console.log(data);
+                    console.log("custom shader data loaded successfully");
+                    //console.log(data);
                     return data;
                 },
 
@@ -66,7 +68,6 @@ function init(){
             console.log(error);
             return null;
         }
-        return null;
     };
 
 
@@ -88,18 +89,17 @@ function init(){
         opacity: .5,
     });
 
-async function loadCustomMat( vertexShaderUrl, fragmentShaderurl ){
+function loadCustomMat( vertexShaderUrl, fragmentShaderurl ){
     try{
-        const customMat = await new THREE.ShaderMaterial({
+        const customMat = new THREE.ShaderMaterial({
             uniforms: {
-    
-                u_Time: { value: 1.0 },
-                resolution: { value: new THREE.Vector2()}
+
             },
             vertexShader: loadWebObjects(vertexShaderUrl),
             fragmentShader: loadWebObjects(fragmentShaderurl)
-    
+
         });
+        console.log(customMat);
         return customMat;
     }
     catch{
@@ -109,17 +109,14 @@ async function loadCustomMat( vertexShaderUrl, fragmentShaderurl ){
 }
 
     //Lights
-    const light = new THREE.PointLight( 0xFFFFFF, 5, 100 );
 
-    const pmremGenerator = new THREE.PMREMGenerator(renderer);
+    pmremGenerator = new THREE.PMREMGenerator(renderer);
     pmremGenerator.compileEquirectangularShader();
 
     new EXRLoader()
-    .load( 'hdrs/gothic_manor_01_1k.exr', function ( texture ) {
+    .load( 'hdrs/air_museum_playground_1k.exr', function ( texture ) {
 
         var exrCubeRenderTarget = pmremGenerator.fromEquirectangular(texture);
-        var exrBackground = exrCubeRenderTarget.texture;
-        var newEnvMap = exrCubeRenderTarget ? exrCubeRenderTarget.texture : null;
 
         scene.environment = exrCubeRenderTarget.texture;
 
@@ -129,7 +126,7 @@ async function loadCustomMat( vertexShaderUrl, fragmentShaderurl ){
 
 
     //Orbit Controls
-    const controls = new OrbitControls(camera, renderer.domElement);
+    controls = new OrbitControls(camera, renderer.domElement);
     //controls.maxDistance = 3.5;
     controls.minDistance = 1.5;
     controls.enablePan = false;
@@ -137,7 +134,7 @@ async function loadCustomMat( vertexShaderUrl, fragmentShaderurl ){
     controls.maxPolarAngle = 1.6;
 
     //Draco Loader
-    const dracoLoader = new DRACOLoader()
+    dracoLoader = new DRACOLoader()
     dracoLoader.setDecoderPath('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/js/libs/draco/')
     loader.setDRACOLoader(dracoLoader)
 
@@ -163,21 +160,6 @@ async function loadCustomMat( vertexShaderUrl, fragmentShaderurl ){
             console.log( 'An error happened' + error );
         }
     );
-
-    //Animate
-    function animate() {
-        requestAnimationFrame( animate );
-        renderer.render( scene, camera );
-        controls.update();
-        //console.log(container.offsetWidth);
-        //console.log(controls.getPolarAngle());
-            //Observe a scene or a renderer
-            if (typeof __THREE_DEVTOOLS__ !== 'undefined') {
-                __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: scene }));
-                __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: renderer }));
-              }
-    }
-    animate();
 
     //#region Basic PUP object implementation
     var clientPUP = {
@@ -238,4 +220,16 @@ async function loadCustomMat( vertexShaderUrl, fragmentShaderurl ){
     }
     //Math function to convert angle to Radian
     //radian = 2 * Math.PI * (p_angle / 360);
+}
+function animate() {
+    requestAnimationFrame( animate );
+    renderer.render( scene, camera );
+    controls.update();
+    //console.log(container.offsetWidth);
+    //console.log(controls.getPolarAngle());
+        //Observe a scene or a renderer
+        if (typeof __THREE_DEVTOOLS__ !== 'undefined') {
+            __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: scene }));
+            __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: renderer }));
+          }
 }
