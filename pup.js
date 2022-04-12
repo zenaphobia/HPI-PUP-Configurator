@@ -204,6 +204,16 @@ function init(){
     function renderPup(pupObject){
 
         //switch cases with dependencies go here
+        switch(clientPUP.Hatch){
+            case 'flat':
+                console.log('flat hatch is selected');
+                break;
+            case 'domed':
+                console.log('domed hatch is selected');
+                break;
+            default:
+            console.log('invalid selection');
+        }
         console.log("PUP rendered successfully")
 
     }
