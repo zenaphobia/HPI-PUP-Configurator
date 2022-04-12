@@ -74,7 +74,7 @@ function init(){
         color: 0x000000,
         transparent: true,
         roughness: 0,
-        transmission: .015,
+        //transmission: .015, //doubles the draw calls! don't include for now.
         opacity: .95,
     });
 
@@ -122,7 +122,7 @@ function init(){
     //  Model Loader
     loader.load(
         // resource URL
-        'models/mat-test.gltf',
+        'models/test-mat.glb',
         // called when the resource is loaded
         function ( gltf ) {
 
@@ -130,13 +130,14 @@ function init(){
             testmesh = gltf.scene.getObjectByName('hatch');
 
             //Traverse method to change materials
-            // gltf.scene.traverse(function(child){
-            //     if(child.material && child.material.name === 'Carpaint'){
-            //         child.material = metalMat;
-            //     }
-            // });
-
-
+            gltf.scene.traverse(function(child){
+                if(child.material && child.material.name === 'windowglass.001'){
+                    child.material = windowMat;
+                }
+                if(child.material){
+                    allMaterials.add(child.material);
+                }
+            });
             console.log(allMaterials);
             scene.add(basemesh);
         },
