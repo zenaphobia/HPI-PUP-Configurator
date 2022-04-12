@@ -23,7 +23,7 @@ void main()
 
 
 let loader, fileLoader, scene, container, camera, renderer, controls, dracoLoader, pmremGenerator;
-let basemesh, testmesh;
+let basemesh, testmesh, windowMesh, truckBaseMesh;
 var vertexData = vert;
 var fragData = frag;
 
@@ -70,18 +70,23 @@ function init(){
         roughness: 0,
     });
     var windowMat = new THREE.MeshPhysicalMaterial({
-        color: 0xFFFFFF,
+        color: 0x000000,
         transparent: true,
         roughness: 0,
-        transmission: .65,
-        opacity: .5,
+        transmission: .015,
+        opacity: .95,
     });
 
     var customShader = new THREE.ShaderMaterial({
         uniforms:{},
         vertexShader: vertexData,
         fragmentShader: fragData
-    })
+    });
+    
+    var truckPaint = new THREE.MeshPhysicalMaterial({
+        color: 0x606060,
+        roughness: .05,
+    });
 
     //Lights
 
@@ -116,13 +121,16 @@ function init(){
     //  Model Loader
     loader.load(
         // resource URL
-        'models/decimate-all.glb',
+        'models/mat-test2.glb',
         // called when the resource is loaded
         function ( gltf ) {
 
             basemesh = gltf.scene;
             testmesh = gltf.scene.getObjectByName('hatch');
-            testmesh.material = metalMat;
+            truckBaseMesh = gltf.scene.getObjectByName('truck-body');
+            windowMesh = gltf.scene.getObjectByName('truck-window');
+
+            //testmesh.material = metalMat;
             scene.add(basemesh);
             //windowMesh.material = windowMat;
         },
