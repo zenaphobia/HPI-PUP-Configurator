@@ -23,9 +23,10 @@ void main()
 
 
 let loader, fileLoader, scene, container, camera, renderer, controls, dracoLoader, pmremGenerator;
-let basemesh, testmesh, windowMesh, truckBaseMesh;
+let basemesh, testmesh, windowMesh, truckBaseMesh, testMat;
 var vertexData = vert;
 var fragData = frag;
+const allMaterials = new Set();
 
 let customShader;
 
@@ -121,18 +122,23 @@ function init(){
     //  Model Loader
     loader.load(
         // resource URL
-        'models/mat-test2.glb',
+        'models/mat-test.gltf',
         // called when the resource is loaded
         function ( gltf ) {
 
             basemesh = gltf.scene;
             testmesh = gltf.scene.getObjectByName('hatch');
-            truckBaseMesh = gltf.scene.getObjectByName('truck-body');
-            windowMesh = gltf.scene.getObjectByName('truck-window');
 
-            //testmesh.material = metalMat;
+            //Traverse method to change materials
+            // gltf.scene.traverse(function(child){
+            //     if(child.material && child.material.name === 'Carpaint'){
+            //         child.material = metalMat;
+            //     }
+            // });
+
+
+            console.log(allMaterials);
             scene.add(basemesh);
-            //windowMesh.material = windowMat;
         },
         // called while loading is progressing
         function ( xhr ) {
