@@ -22,10 +22,12 @@ void main()
 //#endregion
 
 
-let loader, fileLoader, scene, container, camera, renderer, controls, dracoLoader, pmremGenerator;
+let loader, fileLoader, scene, container, camera, renderer, controls, dracoLoader, pmremGenerator, clientPUP;
 let basemesh, testmesh, windowMesh, truckBaseMesh, testMat;
 var vertexData = vert;
 var fragData = frag;
+//materials
+let metalMat, windowMat, redGlassMat,truckPaintMat, clearGlassMat;
 const allMaterials = new Set();
 
 let customShader;
@@ -65,26 +67,40 @@ function init(){
     //var lidColorTexture = new THREE.TextureLoader().load('./textures/lid-color.jpg', texture => {texture.flipY = false;});
 
         //Materials
-    var metalMat = new THREE.MeshPhysicalMaterial({
+    metalMat = new THREE.MeshPhysicalMaterial({
         color: 0xffffff,
         metalness: 1,
         roughness: 0,
     });
-    var windowMat = new THREE.MeshPhysicalMaterial({
+    windowMat = new THREE.MeshPhysicalMaterial({
         color: 0x000000,
         transparent: true,
         roughness: 0,
         //transmission: .015, //doubles the draw calls! don't include for now.
         opacity: .95,
     });
+    redGlassMat = new THREE.MeshPhysicalMaterial({
+        color: 0xfa0707,
+        transparent: true,
+        roughness: 0,
+        //transmission: .015, //doubles the draw calls! don't include for now.
+        opacity: .85,
+    });
+    clearGlassMat = new THREE.MeshPhysicalMaterial({
+        color: 0xffffff,
+        transparent: true,
+        roughness: 0,
+        //transmission: .015, //doubles the draw calls! don't include for now.
+        opacity: .55,
+    });
 
-    var customShader = new THREE.ShaderMaterial({
+    customShader = new THREE.ShaderMaterial({
         uniforms:{},
         vertexShader: vertexData,
         fragmentShader: fragData
     });
-    
-    var truckPaint = new THREE.MeshPhysicalMaterial({
+
+    truckPaintMat = new THREE.MeshPhysicalMaterial({
         color: 0x606060,
         roughness: .05,
     });
@@ -113,6 +129,7 @@ function init(){
     controls.enablePan = false;
     controls.enableDamping = true;
     controls.maxPolarAngle = 1.6;
+    controls.rotateSpeed = (container.offsetWidth / 2560);
 
     //Draco Loader
     dracoLoader = new DRACOLoader()
@@ -134,6 +151,9 @@ function init(){
                 if(child.material && child.material.name === 'windowglass.001'){
                     child.material = windowMat;
                 }
+                if(child.material && child.material.name === 'redglass.001'){
+                    child.material = redGlassMat;
+                }
                 if(child.material){
                     allMaterials.add(child.material);
                 }
@@ -152,7 +172,7 @@ function init(){
     );
 
     //#region Basic PUP object implementation
-    var clientPUP = {
+    clientPUP = {
         Hatch: 'flat',
         Gullwing: true,
         HeadacheRack: 'none',
@@ -192,32 +212,6 @@ function init(){
     renderer.setSize( container.offsetWidth , container.offsetHeight );
 
 }
-
-    function applyHatch(hatchSelection){
-
-        clientPUP.Hatch = hatchSelection;
-        console.log("Hatch is selected");
-        testmesh.visible = !testmesh.visible;
-        renderPup(clientPUP);
-
-    }
-
-    function renderPup(pupObject){
-
-        //switch cases with dependencies go here
-        switch(clientPUP.Hatch){
-            case 'flat':
-                console.log('flat hatch is selected');
-                break;
-            case 'domed':
-                console.log('domed hatch is selected');
-                break;
-            default:
-            console.log('invalid selection');
-        }
-        console.log("PUP rendered successfully")
-
-    }
     //Math function to convert angle to Radian
     //radian = 2 * Math.PI * (p_angle / 360);
 }
@@ -232,4 +226,30 @@ function animate() {
             __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: scene }));
             __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: renderer }));
           }
+}
+
+function applyHatch(hatchSelection){
+
+    clientPUP.Hatch = hatchSelection;
+    console.log("Hatch is selected");
+    testmesh.visible = !testmesh.visible;
+    renderPup(clientPUP);
+
+}
+
+function renderPup(pupObject){
+
+    //switch cases with dependencies go here
+    switch(clientPUP.Hatch){
+        case 'flat':
+            console.log('flat hatch is selected');
+            break;
+        case 'domed':
+            console.log('domed hatch is selected');
+            break;
+        default:
+        console.log('invalid selection');
+    }
+    console.log("PUP rendered successfully")
+
 }
