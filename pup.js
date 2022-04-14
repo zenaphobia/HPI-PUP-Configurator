@@ -23,11 +23,11 @@ void main()
 
 
 let loader, fileLoader, scene, container, camera, renderer, controls, dracoLoader, pmremGenerator, clientPUP;
-let basemesh, testmesh, windowMesh, truckBaseMesh, testMat;
+let basemesh, testmesh, windowMesh, truckBaseMesh, testMat, hingePoint, lidTest;
 var vertexData = vert;
 var fragData = frag;
 //materials
-let metalMat, windowMat, redGlassMat,truckPaintMat, clearGlassMat;
+let metalMat, windowMat, redGlassMat,truckPaintMat, clearGlassMat, testMetal;
 const allMaterials = new Set();
 
 let customShader;
@@ -64,13 +64,23 @@ function init(){
 
     //load textures
 
-    //var lidColorTexture = new THREE.TextureLoader().load('./textures/lid-color.jpg', texture => {texture.flipY = false;});
+    var lidNormalTexture = new THREE.TextureLoader().load('textures/bdp_bump_2-normal.jpg', texture => {texture.flipY = true});
+    lidNormalTexture.warpS = THREE.repeatWrapping;
+    lidNormalTexture.warpT = THREE.repeatWrapping;
+    // lidNormalTexture.repeat.x = 1;
+    // lidNormalTexture.repeat.y = .1;
 
         //Materials
     metalMat = new THREE.MeshPhysicalMaterial({
         color: 0xffffff,
         metalness: 1,
         roughness: 0,
+    });
+    testMetal = new THREE.MeshPhysicalMaterial({
+        color: 0x000000,
+        metalness: 1,
+        roughness: 0.15,
+        normalMap: lidNormalTexture,
     });
     windowMat = new THREE.MeshPhysicalMaterial({
         color: 0x000000,
@@ -139,12 +149,14 @@ function init(){
     //  Model Loader
     loader.load(
         // resource URL
-        'models/test-mat.glb',
+        'models/uv-test.glb',
         // called when the resource is loaded
         function ( gltf ) {
 
             basemesh = gltf.scene;
             testmesh = gltf.scene.getObjectByName('hatch');
+            hingePoint = gltf.scene.getObjectByName('lowside-hinge');
+            lidTest = gltf.scene.getObjectByName('Shape_IndexedFaceSet215');
 
             //Traverse method to change materials
             gltf.scene.traverse(function(child){
@@ -158,6 +170,12 @@ function init(){
                     allMaterials.add(child.material);
                 }
             });
+            try{
+                lidTest.material = testMetal;
+            }
+            catch{
+                console.log("there was an error");
+            }
             console.log(allMaterials);
             scene.add(basemesh);
         },
@@ -198,7 +216,8 @@ function init(){
     //#endregion
 
     //functions
-    document.getElementById('change-texture').addEventListener("click", function(){applyHatch('domed')})
+    document.getElementById('change-texture').addEventListener("click", function(){applyHatch('domed')});
+    document.getElementById('hinge').addEventListener("click", function(){openLowSideLid()});
 
 
     //Window resizing
@@ -252,4 +271,19 @@ function renderPup(pupObject){
     }
     console.log("PUP rendered successfully")
 
+}
+
+var lidOpen;
+
+function openLowSideLid(){
+    if(!lidOpen){
+        document.getElementById('hinge').innerHTML = 'Close lid';
+        gsap.to(hingePoint.rotation, {duration: 2, x: 2 * Math.PI * (140 / 360), ease:"expo" })
+        lidOpen = true;
+    }
+    else{
+        document.getElementById('hinge').innerHTML = 'Open Lid';
+        gsap.to(hingePoint.rotation, {duration: 2, x: 2 * Math.PI * (90 / 360), ease:"expo" })
+        lidOpen = false;
+    }
 }
