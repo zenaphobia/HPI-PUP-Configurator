@@ -26,6 +26,7 @@ let loader, fileLoader, scene, container, camera, renderer, controls, dracoLoade
 let basemesh, testmesh, windowMesh, truckBaseMesh, testMat, hingePoint, lidTest;
 var vertexData = vert;
 var fragData = frag;
+var isFullLengthPUPLoaded = false;
 //materials
 let metalMat, windowMat, redGlassMat,truckPaintMat, clearGlassMat, testMetal;
 const allMaterials = new Set();
@@ -269,6 +270,19 @@ function renderPup(pupObject){
         default:
         console.log('invalid selection');
     }
+    switch(clientPUP.Gullwing){
+        case true:
+            //this is loaded by default
+            console.log("Loading Gullwing");
+            break;
+        case false:
+            if(!isFullLengthPUPLoaded){
+                //Load full length PUP pack here
+            }
+            //unload gullwing, load full length PUP
+            console.log("Unloading Gullwing, load long hatch and lowsides");
+            break;
+    }
     console.log("PUP rendered successfully")
 
 }
@@ -286,4 +300,26 @@ function openLowSideLid(){
         gsap.to(hingePoint.rotation, {duration: 2, x: 2 * Math.PI * (90 / 360), ease:"expo" })
         lidOpen = false;
     }
+}
+
+function modelLoader(url, modelName){
+
+    loader.load( url, function ( gltf ) {
+
+        scene.add( gltf.scene.findByName(modelName) );
+
+    }, undefined, function ( error ) {
+
+        console.error( error );
+
+    } );
+
+}
+
+function loadGullwing(url, modelName){
+    //This function should only be called once, after the model is loaded -
+    //the object should just be hidden and displayed with (object.visible)
+    modelLoader(url, modelName);
+
+    //longLowSides.material = blackDiamondPlateMaterial
 }
