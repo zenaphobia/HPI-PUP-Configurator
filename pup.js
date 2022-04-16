@@ -194,12 +194,12 @@ function init(){
     clientPUP = {
         Hatch: 'flat',
         Gullwing: true,
-        HeadacheRack: 'none',
+        HeadacheRack: 'None',
         LadderRack: true,
-        LEDLighting: 'none', //'battery', 'wired'
+        LEDLighting: 'None', //'battery', 'wired'
         AdditionalGullwingTray: false,
-        AdditionalLowSideTray: 'none',
-        LidFinshes: 'Diamond Plate',
+        AdditionalLowSideTray: 'None', //1, 2
+        LidFinshes: 'DiamondPlate', //BlackDiamondPlate, Leopard, Gladiator, Patriot
         TruckSlide: '1200',
     };
 
@@ -260,15 +260,16 @@ function applyHatch(hatchSelection){
 function renderPup(pupObject){
 
     //switch cases with dependencies go here
+    //this function should be called after every change in selection
     switch(clientPUP.Hatch){
         case 'flat':
-            console.log('flat hatch is selected');
+            console.log("flat hatch is selected");
             break;
         case 'domed':
-            console.log('domed hatch is selected');
+            console.log("domed hatch is selected");
             break;
         default:
-        console.log('invalid selection');
+        console.log("invalid selection");
     }
     switch(clientPUP.Gullwing){
         case true:
@@ -281,6 +282,78 @@ function renderPup(pupObject){
             }
             //unload gullwing, load full length PUP
             console.log("Unloading Gullwing, load long hatch and lowsides");
+            break;
+    }
+    switch(clientPUP.HeadacheRack){
+        case 'Hex':
+            console.log("Loading Hex");
+            break;
+        case 'Post':
+            console.log("Loading Post");
+            break;
+        case 'None':
+            console.log("Removing headache rack");
+            break;
+    }
+    switch(clientPUP.LadderRack){
+        case true:
+            console.log("Loading Ladder Rack");
+            break;
+        case false:
+            console.log("Removing Ladder Rack");
+            break;
+    }
+    switch(clientPUP.LEDLighting){
+        //Do we need Wired and Battery as options?
+        //If not, simplify LED lighting to boolean options
+        case 'None':
+            console.log("Unload LED Lighting");
+            break;
+        case 'Wired':
+            console.log("Load Lighting");
+    }
+    switch(clientPUP.AdditionalGullwingTray){
+        case true:
+            console.log("Loading Gullwing tray");
+            break;
+        case false:
+            console.log("Remove Gullwing tray");
+            break;
+    }
+    switch(clientPUP.AdditionalLowSideTray){
+        case '1':
+            console.log("Adding one tray");
+            break;
+        case '2':
+            console.log("Adding another tray");
+            break;
+    }
+    switch(clientPUP.LidFinshes){
+        case 'DiamondPlate':
+            console.log("Loading diamond plate");
+            break;
+        case 'BlackDiamondPlate':
+            console.log("Loading black diamond plate");
+            break;
+        case 'Leopard':
+            console.log("Loading leopard");
+            break;
+        case 'Gladiator':
+            console.log("Loading gladiator");
+            break;
+        case 'Patriot':
+            console.log("Loading patriot");
+            break;
+    }
+    switch(clientPUP.TruckSlide){
+        case '1200':
+            console.log("Loading 1200XT truckslide");
+            break;
+        case '2000':
+            console.log("Loading 2000XT truckslide");
+            break;
+        case '4000':
+            console.log("Loading 4000XT truckslide");
             break;
     }
     console.log("PUP rendered successfully")
@@ -314,6 +387,19 @@ function modelLoader(url, modelName){
 
     } );
 
+}
+
+function getModel(url, modelName){
+    loader.load( url, function ( gltf ) {
+
+        _model = gltf.scene.findByName(modelName);
+        return _model;
+
+    }, undefined, function ( error ) {
+
+        console.error( error );
+
+    } );
 }
 
 function loadGullwing(url, modelName){
