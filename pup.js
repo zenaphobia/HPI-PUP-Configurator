@@ -23,7 +23,17 @@ void main()
 
 
 let loader, fileLoader, scene, container, camera, renderer, controls, dracoLoader, pmremGenerator, clientPUP;
+
+//#region INIT FILES
 let basemesh, testmesh, windowMesh, truckBaseMesh, testMat, hingePoint, lidTest;
+//Hatches
+
+//Lowsides
+
+//#endregion
+
+//Lazy Load files
+
 var vertexData = vert;
 var fragData = frag;
 var isFullLengthPUPLoaded = false;
