@@ -27,6 +27,7 @@ let loader, fileLoader, scene, container, camera, renderer, controls, dracoLoade
 //#region INIT FILES
 let basemesh, testmesh, windowMesh, truckBaseMesh, testMat, hingePoint, lidTest;
 //Hatches
+var longHatch;
 
 //Lowsides
 
@@ -160,7 +161,7 @@ function init(){
     //  Model Loader
     loader.load(
         // resource URL
-        'models/uv-test.glb',
+        'models/gullwing-flat-hatch.glb',
         // called when the resource is loaded
         function ( gltf ) {
 
@@ -177,17 +178,7 @@ function init(){
                 if(child.material && child.material.name === 'redglass.001'){
                     child.material = redGlassMat;
                 }
-                if(child.material){
-                    allMaterials.add(child.material);
-                }
             });
-            try{
-                lidTest.material = testMetal;
-            }
-            catch{
-                console.log("there was an error");
-            }
-            console.log(allMaterials);
             scene.add(basemesh);
         },
         // called while loading is progressing
@@ -212,23 +203,12 @@ function init(){
         LidFinshes: 'DiamondPlate', //BlackDiamondPlate, Leopard, Gladiator, Patriot
         TruckSlide: '1200',
     };
-
-    //example of one render switch case, there will be one for every option in renderPUP();
-    switch(clientPUP.Hatch){
-        case 'flat':
-            console.log('flat hatch is selected');
-            break;
-        case 'domed':
-            console.log('domed hatch is selected');
-            break;
-        default:
-        console.log('invalid selection');
-    }
     //#endregion
 
     //functions
     document.getElementById('change-texture').addEventListener("click", function(){applyHatch('domed')});
     document.getElementById('hinge').addEventListener("click", function(){openLowSideLid()});
+    document.getElementById('hatches').addEventListener("click", function(){swapHatches()});
 
 
     //Window resizing
@@ -242,6 +222,7 @@ function init(){
     renderer.setSize( container.offsetWidth , container.offsetHeight );
 
 }
+
     //Math function to convert angle to Radian
     //radian = 2 * Math.PI * (p_angle / 360);
 }
@@ -391,15 +372,18 @@ function modelLoader(url, modelName){
 
         scene.add( gltf.scene.findByName(modelName) );
 
-    }, undefined, function ( error ) {
+    },
+    function ( xhr ) {
+        //console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+    },
+    function ( error ) {
 
         console.error( error );
 
     } );
 
 }
-
-function getModel(url, modelName){
+function getModel(url){
     loader.load( url, function ( gltf ) {
 
         _model = gltf.scene.findByName(modelName);
@@ -412,10 +396,40 @@ function getModel(url, modelName){
     } );
 }
 
-function loadGullwing(url, modelName){
-    //This function should only be called once, after the model is loaded -
-    //the object should just be hidden and displayed with (object.visible)
-    modelLoader(url, modelName);
+function testLoad(url){
+    longhatch = getModel(url);
+}
 
-    //longLowSides.material = blackDiamondPlateMaterial
+function swapHatches(){
+    if(longHatch === undefined){
+        loader.load( 'models/Long-Gullwing-and-Flat-Hatch.glb', function ( gltf ) {
+
+            longHatch = gltf.scene;
+            basemesh.visible = false;
+            longHatch.visible = true;
+            scene.add(longHatch);
+            console.log("Donwload complete");
+
+        },
+        function ( xhr ) {
+            //console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+        },function ( error ) {
+
+            console.error( error );
+
+        } );
+    }
+    try{
+        if(longHatch.visible){
+            longHatch.visible = false;
+            basemesh.visible = true;
+        }
+        else{
+            longHatch.visible = true;
+            basemesh.visible = false;
+        }
+    }
+    catch{
+        console.log("Downloading stuffs")
+    }
 }
