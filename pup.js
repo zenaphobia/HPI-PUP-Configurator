@@ -29,6 +29,8 @@ let basemesh, testmesh, windowMesh, truckBaseMesh, testMat, hingePoint, lidTest;
 //Hatches
 var longHatch;
 
+var allModels, TruckModel, GullwingModel, HeadacheRackPost, HeadacheRackHex, LongLowSides, ShortLowSides,LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack;
+
 //Lowsides
 
 //#endregion
@@ -159,37 +161,39 @@ function init(){
     loader.setDRACOLoader(dracoLoader)
 
     //  Model Loader
-    loader.load(
-        // resource URL
-        'models/gullwing-flat-hatch.glb',
-        // called when the resource is loaded
-        function ( gltf ) {
+    // loader.load(
+    //     // resource URL
+    //     'models/gullwing-flat-hatch.glb',
+    //     // called when the resource is loaded
+    //     function ( gltf ) {
 
-            basemesh = gltf.scene;
-            testmesh = gltf.scene.getObjectByName('hatch');
-            hingePoint = gltf.scene.getObjectByName('lowside-hinge');
-            lidTest = gltf.scene.getObjectByName('Shape_IndexedFaceSet215');
+    //         basemesh = gltf.scene;
+    //         testmesh = gltf.scene.getObjectByName('hatch');
+    //         hingePoint = gltf.scene.getObjectByName('lowside-hinge');
+    //         lidTest = gltf.scene.getObjectByName('Shape_IndexedFaceSet215');
 
-            //Traverse method to change materials
-            gltf.scene.traverse(function(child){
-                if(child.material && child.material.name === 'windowglass.001'){
-                    child.material = windowMat;
-                }
-                if(child.material && child.material.name === 'redglass.001'){
-                    child.material = redGlassMat;
-                }
-            });
-            scene.add(basemesh);
-        },
-        // called while loading is progressing
-        function ( xhr ) {
-            console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-        },
-        // called when loading has errors
-        function ( error ) {
-            console.log( 'An error happened' + error );
-        }
-    );
+    //         //Traverse method to change materials
+    //         gltf.scene.traverse(function(child){
+    //             if(child.material && child.material.name === 'windowglass.001'){
+    //                 child.material = windowMat;
+    //             }
+    //             if(child.material && child.material.name === 'redglass.001'){
+    //                 child.material = redGlassMat;
+    //             }
+    //         });
+    //         scene.add(basemesh);
+    //     },
+    //     // called while loading is progressing
+    //     function ( xhr ) {
+    //         console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+    //     },
+    //     // called when loading has errors
+    //     function ( error ) {
+    //         console.log( 'An error happened' + error );
+    //     }
+    // );
+
+    addModelsToScene();
 
     //#region Basic PUP object implementation
     clientPUP = {
@@ -208,7 +212,12 @@ function init(){
     //functions
     document.getElementById('change-texture').addEventListener("click", function(){applyHatch('domed')});
     document.getElementById('hinge').addEventListener("click", function(){openLowSideLid()});
-    document.getElementById('hatches').addEventListener("click", function(){swapHatches()});
+    document.getElementById('pup-pro').addEventListener("click", function(){renderPro()});
+    document.getElementById('pup-standard').addEventListener("click", function(){renderStandard()});
+    document.getElementById('domed-hatch').addEventListener("click", function(){renderDomedHatch()});
+    document.getElementById('flat-hatch').addEventListener("click", function(){renderFlatHatch()});
+    
+    //document.getElementById('hatches').addEventListener("click", function(){swapHatches()});
 
 
     //Window resizing
@@ -366,38 +375,114 @@ function openLowSideLid(){
     }
 }
 
-function modelLoader(url, modelName){
+async function loadModels(){
+    //add all models here
+    var [truckData, gullwingData, hrHexData, hrPostData, LongLSData, shortLSData, longFHData, shortFHdata, longDomedData, shortDomedData, lRData] = await Promise.all([
+        loader.loadAsync('models/seperate-models/truck.gltf'),
+        loader.loadAsync('models/seperate-models/gullwing.gltf'),
+        loader.loadAsync('models/seperate-models/headacheRackHex.gltf'),
+        loader.loadAsync('models/seperate-models/headacheRackPost.gltf'),
+        loader.loadAsync('models/seperate-models/longLowSides.gltf'),
+        loader.loadAsync('models/seperate-models/shortLowSides.gltf'),
+        loader.loadAsync('models/seperate-models/longFlatHatch.gltf'),
+        loader.loadAsync('models/seperate-models/shortFlatHatch.gltf'),
+        loader.loadAsync('models/seperate-models/longDomedHatch.gltf'),
+        loader.loadAsync('models/seperate-models/shortDomedHatch.gltf'),
+        loader.loadAsync('models/seperate-models/ladderRack.gltf'),
+    ])
 
-    loader.load( url, function ( gltf ) {
-
-        scene.add( gltf.scene.findByName(modelName) );
-
-    },
-    function ( xhr ) {
-        //console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-    },
-    function ( error ) {
-
-        console.error( error );
-
-    } );
-
+    TruckModel = setupModel(truckData);
+    GullwingModel = setupModel(gullwingData);
+    HeadacheRackHex = setupModel(hrHexData);
+    HeadacheRackPost = setupModel(hrPostData);
+    LongLowSides = setupModel(LongLSData);
+    ShortLowSides = setupModel(shortLSData);
+    LongFlatHatch = setupModel(longFHData);
+    ShortFlatHatch = setupModel(shortFHdata);
+    LongDomedHatch = setupModel(longDomedData);
+    ShortDomedHatch = setupModel(shortDomedData);
+    LadderRack = setupModel(lRData);
+    console.log("model data set up");
+    return {TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack };
 }
-function getModel(url){
-    loader.load( url, function ( gltf ) {
 
-        _model = gltf.scene.findByName(modelName);
-        return _model;
-
-    }, undefined, function ( error ) {
-
-        console.error( error );
-
-    } );
+function setupModel(data){
+    const model = data.scene;
+    console.log("setup() finished");
+    return model;
 }
 
-function testLoad(url){
-    longhatch = getModel(url);
+async function addModelsToScene(){
+    //load models, add to scene, assign hinges to variables here
+    var {TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack} = await loadModels();
+
+    scene.add(TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack);
+    //hingePoint = ShortLowSides.scene.getObjectByName('lowside-hinge');
+    //hide models
+    HeadacheRackPost.visible = false;
+    LongLowSides.visible = false;
+    LongFlatHatch.visible = false;
+    LongDomedHatch.visible = false;
+    ShortDomedHatch.visible = false;
+    LongDomedHatch.visible = false;
+    console.log("added models");
+    //console.log(GullwingModel);
+}
+
+function renderPro(){
+
+    ShortLowSides.visible = true;
+    LongLowSides.visible = false;
+    if(!GullwingModel.visible){
+        GullwingModel.visible = true;
+        if(LongFlatHatch.visible){
+            LongFlatHatch.visible = false;
+            ShortFlatHatch.visible = true;
+        }
+        else if(LongDomedHatch.visible){
+            LongDomedHatch.visible = false;
+            ShortDomedHatch.visible = true;
+        }
+    }
+}
+
+function renderStandard(){
+
+    ShortLowSides.visible =false;
+    LongLowSides.visible = true;
+    if(GullwingModel.visible){
+        GullwingModel.visible = false;
+        if(ShortFlatHatch.visible){
+            LongFlatHatch.visible = true;
+            ShortFlatHatch.visible = false;
+        }
+        else if(ShortDomedHatch.visible){
+            LongDomedHatch.visible = true;
+            ShortDomedHatch.visible = false;
+        }
+    }
+}
+
+function renderDomedHatch(){
+    if(LongFlatHatch.visible){
+        LongFlatHatch.visible = false;
+        LongDomedHatch.visible = true;
+    }
+    else if(ShortFlatHatch.visible){
+        ShortFlatHatch.visible = false;
+        ShortDomedHatch.visible = true;
+    }
+}
+
+function renderFlatHatch(){
+    if(LongDomedHatch.visible){
+        LongDomedHatch.visible = false;
+        LongFlatHatch.visible = true;
+    }
+    else if(ShortDomedHatch.visible){
+        ShortDomedHatch.visible = false;
+        ShortFlatHatch.visible = true;
+    }
 }
 
 function swapHatches(){
