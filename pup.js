@@ -58,9 +58,9 @@ function init(){
     container = document.getElementById('myCanvas');
     camera = new THREE.PerspectiveCamera( 35, container.offsetWidth / container.offsetHeight, 0.1, 1000 );
     camera.aspect = container.offsetWidth / container.offsetHeight;
-    // camera.position.z = -1.5;
-    // camera.position.y = .5;
-    // camera.position.x = -1;
+    camera.position.z = -15;
+    camera.position.y = 5;
+    camera.position.x = -15;
 
     renderer = new THREE.WebGLRenderer({canvas: container, antialias: true, alpha: true});
     renderer.localClippingEnabled = true;
@@ -149,10 +149,13 @@ function init(){
     //Orbit Controls
     controls = new OrbitControls(camera, renderer.domElement);
     //controls.maxDistance = 3.5;
-    controls.minDistance = 1.5;
+    controls.minDistance = 10;
     controls.enablePan = false;
     controls.enableDamping = true;
     controls.maxPolarAngle = 1.6;
+    controls.maxDistance = 25;
+    controls.maxAzimuthAngle = .5;
+    controls.minAzimuthAngle = -3.5;
     controls.rotateSpeed = (container.offsetWidth / 2560);
 
     //Draco Loader
@@ -216,6 +219,10 @@ function init(){
     document.getElementById('pup-standard').addEventListener("click", function(){renderStandard()});
     document.getElementById('domed-hatch').addEventListener("click", function(){renderDomedHatch()});
     document.getElementById('flat-hatch').addEventListener("click", function(){renderFlatHatch()});
+    document.getElementById('post-headache-rack').addEventListener("click", function(){switchToPostHeadacheRack()});
+    document.getElementById('hex-headache-rack').addEventListener("click", function(){switchToHexHeadacheRack()});
+    document.getElementById('ladder-rack').addEventListener("click", function(){showOrHideLadderRack()});
+
     
     //document.getElementById('hatches').addEventListener("click", function(){swapHatches()});
 
@@ -362,19 +369,6 @@ function renderPup(pupObject){
 
 var lidOpen;
 
-function openLowSideLid(){
-    if(!lidOpen){
-        document.getElementById('hinge').innerHTML = 'Close lid';
-        gsap.to(hingePoint.rotation, {duration: 2, x: 2 * Math.PI * (140 / 360), ease:"expo" })
-        lidOpen = true;
-    }
-    else{
-        document.getElementById('hinge').innerHTML = 'Open Lid';
-        gsap.to(hingePoint.rotation, {duration: 2, x: 2 * Math.PI * (90 / 360), ease:"expo" })
-        lidOpen = false;
-    }
-}
-
 async function loadModels(){
     //add all models here
     var [truckData, gullwingData, hrHexData, hrPostData, LongLSData, shortLSData, longFHData, shortFHdata, longDomedData, shortDomedData, lRData] = await Promise.all([
@@ -417,7 +411,20 @@ async function addModelsToScene(){
     var {TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack} = await loadModels();
 
     scene.add(TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack);
-    //hingePoint = ShortLowSides.scene.getObjectByName('lowside-hinge');
+
+    //adding hinge points
+    hingePoint = ShortLowSides.getObjectByName('lowside-hinge');
+
+    //Setup Materials
+    TruckModel.traverse(function(child){
+        if(child.material && child.material.name === 'windowglass.001'){
+            child.material = windowMat;
+        }
+        if(child.material && child.material.name === 'redglass.001'){
+            child.material = redGlassMat;
+        }
+    });
+
     //hide models
     HeadacheRackPost.visible = false;
     LongLowSides.visible = false;
@@ -428,6 +435,30 @@ async function addModelsToScene(){
     console.log("added models");
     //console.log(GullwingModel);
 }
+
+function openLowSideLid(){
+    if(!lidOpen){
+        document.getElementById('hinge').innerHTML = 'Close lid';
+        gsap.to(hingePoint.rotation, {duration: 2, x: 2 * Math.PI * (140 / 360), ease:"expo" })
+        lidOpen = true;
+    }
+    else{
+        document.getElementById('hinge').innerHTML = 'Open Lid';
+        gsap.to(hingePoint.rotation, {duration: 2, x: 2 * Math.PI * (90 / 360), ease:"expo" })
+        lidOpen = false;
+    }
+}
+
+function showOrHideLadderRack(){
+    if(LadderRack.visible){
+        document.getElementById('ladder-rack').innerHTML = 'Add Ladder Rack';
+        LadderRack.visible = false;
+    }
+    else if(!LadderRack.visible){
+        document.getElementById('ladder-rack').innerHTML = 'Remove Ladder Rack';
+        LadderRack.visible = true;
+    }
+};
 
 function renderPro(){
 
@@ -485,36 +516,12 @@ function renderFlatHatch(){
     }
 }
 
-function swapHatches(){
-    if(longHatch === undefined){
-        loader.load( 'models/Long-Gullwing-and-Flat-Hatch.glb', function ( gltf ) {
+function switchToPostHeadacheRack(){
+    HeadacheRackPost.visible = true;
+    HeadacheRackHex.visible = false;
+}
 
-            longHatch = gltf.scene;
-            basemesh.visible = false;
-            longHatch.visible = true;
-            scene.add(longHatch);
-            console.log("Donwload complete");
-
-        },
-        function ( xhr ) {
-            //console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-        },function ( error ) {
-
-            console.error( error );
-
-        } );
-    }
-    try{
-        if(longHatch.visible){
-            longHatch.visible = false;
-            basemesh.visible = true;
-        }
-        else{
-            longHatch.visible = true;
-            basemesh.visible = false;
-        }
-    }
-    catch{
-        console.log("Downloading stuffs")
-    }
+function switchToHexHeadacheRack(){
+    HeadacheRackHex.visible = true;
+    HeadacheRackPost.visible = false;
 }
