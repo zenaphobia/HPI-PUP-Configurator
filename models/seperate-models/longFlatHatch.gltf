@@ -1253,21 +1253,15 @@
     "materials" : [
         {
             "doubleSided" : true,
-            "emissiveFactor" : [
-                0.09098000079393387,
-                0.04431400075554848,
-                0.0031369999051094055
-            ],
-            "name" : "Shape.898",
+            "name" : "Black Diamond Plate Test 3",
             "pbrMetallicRoughness" : {
                 "baseColorFactor" : [
-                    0.9098039865493774,
-                    0.443136990070343,
-                    0.031373001635074615,
+                    0.00374573259614408,
+                    0.00374573259614408,
+                    0.00374573259614408,
                     1
                 ],
-                "metallicFactor" : 0,
-                "roughnessFactor" : 0.6875
+                "roughnessFactor" : 0.12727271020412445
             }
         },
         {
@@ -1408,35 +1402,15 @@
         },
         {
             "doubleSided" : true,
-            "emissiveFactor" : [
-                0.10000000149011612,
-                0.10000000149011612,
-                0.07529400289058685
-            ],
-            "name" : "Shape.908",
+            "name" : "Polished aluminum",
             "pbrMetallicRoughness" : {
                 "baseColorFactor" : [
-                    1,
-                    1,
-                    0.7529410123825073,
+                    0.800000011920929,
+                    0.800000011920929,
+                    0.800000011920929,
                     1
                 ],
-                "metallicFactor" : 0,
-                "roughnessFactor" : 0.6875
-            }
-        },
-        {
-            "doubleSided" : true,
-            "name" : "Shape.909",
-            "pbrMetallicRoughness" : {
-                "baseColorFactor" : [
-                    0.7529410123825073,
-                    1,
-                    0.7529410123825073,
-                    1
-                ],
-                "metallicFactor" : 0,
-                "roughnessFactor" : 0.6899999976158142
+                "roughnessFactor" : 0.02727273292839527
             }
         },
         {
@@ -1554,30 +1528,16 @@
         },
         {
             "doubleSided" : true,
-            "name" : "Shape.934",
+            "name" : "Black Foam Rubber",
             "pbrMetallicRoughness" : {
                 "baseColorFactor" : [
-                    0.2509799897670746,
-                    0.2509799897670746,
-                    0.2509799897670746,
+                    0.0025042195338755846,
+                    0.0025042195338755846,
+                    0.0025042195338755846,
                     1
                 ],
                 "metallicFactor" : 0,
-                "roughnessFactor" : 0.6899999976158142
-            }
-        },
-        {
-            "doubleSided" : true,
-            "name" : "Shape.935",
-            "pbrMetallicRoughness" : {
-                "baseColorFactor" : [
-                    0.2509799897670746,
-                    0.2509799897670746,
-                    0.2509799897670746,
-                    1
-                ],
-                "metallicFactor" : 0,
-                "roughnessFactor" : 0.6899999976158142
+                "roughnessFactor" : 0.33636364340782166
             }
         },
         {
@@ -1620,63 +1580,20 @@
         },
         {
             "doubleSided" : true,
-            "name" : "Shape.984",
+            "name" : "Smooth aluminum",
             "pbrMetallicRoughness" : {
                 "baseColorFactor" : [
-                    0.5019609928131104,
-                    0.5019609928131104,
-                    0.5019609928131104,
+                    0.800000011920929,
+                    0.800000011920929,
+                    0.800000011920929,
                     1
                 ],
-                "metallicFactor" : 0,
-                "roughnessFactor" : 0.6875
+                "roughnessFactor" : 0.6613637208938599
             }
         },
         {
             "doubleSided" : true,
             "name" : "Shape.985",
-            "pbrMetallicRoughness" : {
-                "baseColorFactor" : [
-                    0.5019609928131104,
-                    0.5019609928131104,
-                    0.5019609928131104,
-                    1
-                ],
-                "metallicFactor" : 0,
-                "roughnessFactor" : 0.6875
-            }
-        },
-        {
-            "doubleSided" : true,
-            "name" : "Shape.986",
-            "pbrMetallicRoughness" : {
-                "baseColorFactor" : [
-                    0.5019609928131104,
-                    0.5019609928131104,
-                    0.5019609928131104,
-                    1
-                ],
-                "metallicFactor" : 0,
-                "roughnessFactor" : 0.6875
-            }
-        },
-        {
-            "doubleSided" : true,
-            "name" : "Shape.987",
-            "pbrMetallicRoughness" : {
-                "baseColorFactor" : [
-                    0.5019609928131104,
-                    0.5019609928131104,
-                    0.5019609928131104,
-                    1
-                ],
-                "metallicFactor" : 0,
-                "roughnessFactor" : 0.6875
-            }
-        },
-        {
-            "doubleSided" : true,
-            "name" : "Shape.988",
             "pbrMetallicRoughness" : {
                 "baseColorFactor" : [
                     0.5019609928131104,
@@ -1868,12 +1785,12 @@
         },
         {
             "doubleSided" : true,
-            "name" : "Shape.1148",
+            "name" : "Shape.1149",
             "pbrMetallicRoughness" : {
                 "baseColorFactor" : [
-                    0.5019609928131104,
-                    0.5019609928131104,
-                    0.5019609928131104,
+                    0.03457484766840935,
+                    0.03457484766840935,
+                    0.03527253493666649,
                     1
                 ],
                 "metallicFactor" : 0,
@@ -1882,16 +1799,15 @@
         },
         {
             "doubleSided" : true,
-            "name" : "Shape.1149",
+            "name" : "Dark Aux Metal",
             "pbrMetallicRoughness" : {
                 "baseColorFactor" : [
-                    0.8666669726371765,
-                    0.8666669726371765,
-                    0.8901960253715515,
+                    0.6538220643997192,
+                    0.6538220643997192,
+                    0.6538220643997192,
                     1
                 ],
-                "metallicFactor" : 0,
-                "roughnessFactor" : 0.6875
+                "roughnessFactor" : 0.1931818127632141
             }
         }
     ],
@@ -2166,7 +2082,7 @@
                         }
                     },
                     "indices" : 47,
-                    "material" : 11,
+                    "material" : 10,
                     "mode" : 4
                 }
             ]
@@ -2191,7 +2107,7 @@
                         }
                     },
                     "indices" : 51,
-                    "material" : 12,
+                    "material" : 11,
                     "mode" : 4
                 }
             ]
@@ -2216,7 +2132,7 @@
                         }
                     },
                     "indices" : 55,
-                    "material" : 13,
+                    "material" : 12,
                     "mode" : 4
                 }
             ]
@@ -2241,7 +2157,7 @@
                         }
                     },
                     "indices" : 59,
-                    "material" : 14,
+                    "material" : 13,
                     "mode" : 4
                 }
             ]
@@ -2266,7 +2182,7 @@
                         }
                     },
                     "indices" : 63,
-                    "material" : 15,
+                    "material" : 14,
                     "mode" : 4
                 }
             ]
@@ -2291,7 +2207,7 @@
                         }
                     },
                     "indices" : 67,
-                    "material" : 16,
+                    "material" : 15,
                     "mode" : 4
                 }
             ]
@@ -2316,7 +2232,7 @@
                         }
                     },
                     "indices" : 71,
-                    "material" : 17,
+                    "material" : 16,
                     "mode" : 4
                 }
             ]
@@ -2341,7 +2257,7 @@
                         }
                     },
                     "indices" : 75,
-                    "material" : 18,
+                    "material" : 17,
                     "mode" : 4
                 }
             ]
@@ -2366,7 +2282,7 @@
                         }
                     },
                     "indices" : 79,
-                    "material" : 19,
+                    "material" : 18,
                     "mode" : 4
                 }
             ]
@@ -2391,7 +2307,7 @@
                         }
                     },
                     "indices" : 83,
-                    "material" : 20,
+                    "material" : 18,
                     "mode" : 4
                 }
             ]
@@ -2416,7 +2332,7 @@
                         }
                     },
                     "indices" : 35,
-                    "material" : 21,
+                    "material" : 19,
                     "mode" : 4
                 }
             ]
@@ -2441,7 +2357,7 @@
                         }
                     },
                     "indices" : 90,
-                    "material" : 22,
+                    "material" : 20,
                     "mode" : 4
                 }
             ]
@@ -2466,7 +2382,7 @@
                         }
                     },
                     "indices" : 94,
-                    "material" : 23,
+                    "material" : 21,
                     "mode" : 4
                 }
             ]
@@ -2491,7 +2407,7 @@
                         }
                     },
                     "indices" : 98,
-                    "material" : 24,
+                    "material" : 22,
                     "mode" : 4
                 }
             ]
@@ -2516,7 +2432,7 @@
                         }
                     },
                     "indices" : 102,
-                    "material" : 25,
+                    "material" : 21,
                     "mode" : 4
                 }
             ]
@@ -2541,7 +2457,7 @@
                         }
                     },
                     "indices" : 106,
-                    "material" : 26,
+                    "material" : 21,
                     "mode" : 4
                 }
             ]
@@ -2566,7 +2482,7 @@
                         }
                     },
                     "indices" : 110,
-                    "material" : 27,
+                    "material" : 21,
                     "mode" : 4
                 }
             ]
@@ -2591,7 +2507,7 @@
                         }
                     },
                     "indices" : 114,
-                    "material" : 28,
+                    "material" : 23,
                     "mode" : 4
                 }
             ]
@@ -2616,7 +2532,7 @@
                         }
                     },
                     "indices" : 118,
-                    "material" : 29,
+                    "material" : 24,
                     "mode" : 4
                 }
             ]
@@ -2641,7 +2557,7 @@
                         }
                     },
                     "indices" : 122,
-                    "material" : 30,
+                    "material" : 25,
                     "mode" : 4
                 }
             ]
@@ -2666,7 +2582,7 @@
                         }
                     },
                     "indices" : 126,
-                    "material" : 31,
+                    "material" : 26,
                     "mode" : 4
                 }
             ]
@@ -2691,7 +2607,7 @@
                         }
                     },
                     "indices" : 130,
-                    "material" : 32,
+                    "material" : 27,
                     "mode" : 4
                 }
             ]
@@ -2716,7 +2632,7 @@
                         }
                     },
                     "indices" : 134,
-                    "material" : 33,
+                    "material" : 28,
                     "mode" : 4
                 }
             ]
@@ -2741,7 +2657,7 @@
                         }
                     },
                     "indices" : 138,
-                    "material" : 34,
+                    "material" : 29,
                     "mode" : 4
                 }
             ]
@@ -2766,7 +2682,7 @@
                         }
                     },
                     "indices" : 142,
-                    "material" : 35,
+                    "material" : 30,
                     "mode" : 4
                 }
             ]
@@ -2791,7 +2707,7 @@
                         }
                     },
                     "indices" : 146,
-                    "material" : 36,
+                    "material" : 31,
                     "mode" : 4
                 }
             ]
@@ -2816,7 +2732,7 @@
                         }
                     },
                     "indices" : 150,
-                    "material" : 37,
+                    "material" : 32,
                     "mode" : 4
                 }
             ]
@@ -2841,7 +2757,7 @@
                         }
                     },
                     "indices" : 154,
-                    "material" : 38,
+                    "material" : 33,
                     "mode" : 4
                 }
             ]
@@ -2866,7 +2782,7 @@
                         }
                     },
                     "indices" : 158,
-                    "material" : 39,
+                    "material" : 34,
                     "mode" : 4
                 }
             ]
@@ -2891,7 +2807,7 @@
                         }
                     },
                     "indices" : 162,
-                    "material" : 40,
+                    "material" : 0,
                     "mode" : 4
                 }
             ]
@@ -2916,7 +2832,7 @@
                         }
                     },
                     "indices" : 166,
-                    "material" : 41,
+                    "material" : 35,
                     "mode" : 4
                 }
             ]
@@ -2941,6 +2857,7 @@
                         }
                     },
                     "indices" : 170,
+                    "material" : 36,
                     "mode" : 4
                 }
             ]
@@ -4236,223 +4153,223 @@
     "bufferViews" : [
         {
             "buffer" : 0,
-            "byteLength" : 14844,
+            "byteLength" : 14255,
             "byteOffset" : 0
         },
         {
             "buffer" : 0,
             "byteLength" : 3536,
-            "byteOffset" : 14844
+            "byteOffset" : 14256
         },
         {
             "buffer" : 0,
             "byteLength" : 1947,
-            "byteOffset" : 18380
+            "byteOffset" : 17792
         },
         {
             "buffer" : 0,
             "byteLength" : 1030,
-            "byteOffset" : 20328
+            "byteOffset" : 19740
         },
         {
             "buffer" : 0,
             "byteLength" : 1084,
-            "byteOffset" : 21360
+            "byteOffset" : 20772
         },
         {
             "buffer" : 0,
             "byteLength" : 1905,
-            "byteOffset" : 22444
+            "byteOffset" : 21856
         },
         {
             "buffer" : 0,
             "byteLength" : 1962,
-            "byteOffset" : 24352
+            "byteOffset" : 23764
         },
         {
             "buffer" : 0,
             "byteLength" : 1961,
-            "byteOffset" : 26316
+            "byteOffset" : 25728
         },
         {
             "buffer" : 0,
             "byteLength" : 1669,
-            "byteOffset" : 28280
+            "byteOffset" : 27692
         },
         {
             "buffer" : 0,
             "byteLength" : 6207,
-            "byteOffset" : 29952
+            "byteOffset" : 29364
         },
         {
             "buffer" : 0,
             "byteLength" : 32938,
-            "byteOffset" : 36160
+            "byteOffset" : 35572
         },
         {
             "buffer" : 0,
             "byteLength" : 34962,
-            "byteOffset" : 69100
+            "byteOffset" : 68512
         },
         {
             "buffer" : 0,
             "byteLength" : 11455,
-            "byteOffset" : 104064
+            "byteOffset" : 103476
         },
         {
             "buffer" : 0,
             "byteLength" : 11625,
-            "byteOffset" : 115520
+            "byteOffset" : 114932
         },
         {
             "buffer" : 0,
             "byteLength" : 7535,
-            "byteOffset" : 127148
+            "byteOffset" : 126560
         },
         {
             "buffer" : 0,
             "byteLength" : 7395,
-            "byteOffset" : 134684
+            "byteOffset" : 134096
         },
         {
             "buffer" : 0,
             "byteLength" : 17472,
-            "byteOffset" : 142080
+            "byteOffset" : 141492
         },
         {
             "buffer" : 0,
             "byteLength" : 15380,
-            "byteOffset" : 159552
+            "byteOffset" : 158964
         },
         {
             "buffer" : 0,
             "byteLength" : 5971,
-            "byteOffset" : 174932
+            "byteOffset" : 174344
         },
         {
             "buffer" : 0,
             "byteLength" : 1441,
-            "byteOffset" : 180904
+            "byteOffset" : 180316
         },
         {
             "buffer" : 0,
             "byteLength" : 3393,
-            "byteOffset" : 182348
+            "byteOffset" : 181760
         },
         {
             "buffer" : 0,
             "byteLength" : 1669,
-            "byteOffset" : 185744
+            "byteOffset" : 185156
         },
         {
             "buffer" : 0,
             "byteLength" : 5849,
-            "byteOffset" : 187416
+            "byteOffset" : 186828
         },
         {
             "buffer" : 0,
             "byteLength" : 4600,
-            "byteOffset" : 193268
+            "byteOffset" : 192680
         },
         {
             "buffer" : 0,
             "byteLength" : 10851,
-            "byteOffset" : 197868
+            "byteOffset" : 197280
         },
         {
             "buffer" : 0,
             "byteLength" : 5426,
-            "byteOffset" : 208720
+            "byteOffset" : 208132
         },
         {
             "buffer" : 0,
             "byteLength" : 15316,
-            "byteOffset" : 214148
+            "byteOffset" : 213560
         },
         {
             "buffer" : 0,
             "byteLength" : 8274,
-            "byteOffset" : 229464
+            "byteOffset" : 228876
         },
         {
             "buffer" : 0,
             "byteLength" : 5685,
-            "byteOffset" : 237740
+            "byteOffset" : 237152
         },
         {
             "buffer" : 0,
             "byteLength" : 128305,
-            "byteOffset" : 243428
+            "byteOffset" : 242840
         },
         {
             "buffer" : 0,
             "byteLength" : 128226,
-            "byteOffset" : 371736
+            "byteOffset" : 371148
         },
         {
             "buffer" : 0,
             "byteLength" : 4858,
-            "byteOffset" : 499964
+            "byteOffset" : 499376
         },
         {
             "buffer" : 0,
             "byteLength" : 3856,
-            "byteOffset" : 504824
+            "byteOffset" : 504236
         },
         {
             "buffer" : 0,
             "byteLength" : 2677,
-            "byteOffset" : 508680
+            "byteOffset" : 508092
         },
         {
             "buffer" : 0,
             "byteLength" : 2636,
-            "byteOffset" : 511360
+            "byteOffset" : 510772
         },
         {
             "buffer" : 0,
             "byteLength" : 5700,
-            "byteOffset" : 513996
+            "byteOffset" : 513408
         },
         {
             "buffer" : 0,
             "byteLength" : 128060,
-            "byteOffset" : 519696
+            "byteOffset" : 519108
         },
         {
             "buffer" : 0,
             "byteLength" : 128171,
-            "byteOffset" : 647756
+            "byteOffset" : 647168
         },
         {
             "buffer" : 0,
             "byteLength" : 3895,
-            "byteOffset" : 775928
+            "byteOffset" : 775340
         },
         {
             "buffer" : 0,
             "byteLength" : 4960,
-            "byteOffset" : 779824
+            "byteOffset" : 779236
         },
         {
             "buffer" : 0,
             "byteLength" : 5094,
-            "byteOffset" : 784784
+            "byteOffset" : 784196
         },
         {
             "buffer" : 0,
             "byteLength" : 273,
-            "byteOffset" : 789880
+            "byteOffset" : 789292
         },
         {
             "buffer" : 0,
             "byteLength" : 3363,
-            "byteOffset" : 790156
+            "byteOffset" : 789568
         }
     ],
     "buffers" : [
         {
-            "byteLength" : 793520,
+            "byteLength" : 792932,
             "uri" : "longFlatHatch.bin"
         }
     ]

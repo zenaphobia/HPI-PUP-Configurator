@@ -82,14 +82,14 @@
                 80,
                 81,
                 82,
-                83,
-                84,
-                85
+                83
             ]
         },
         {
             "name" : "Scene.001",
             "nodes" : [
+                84,
+                85,
                 86,
                 87,
                 88,
@@ -100,8 +100,8 @@
                 93,
                 94,
                 95,
-                96,
-                97,
+                110,
+                111,
                 112,
                 113,
                 114,
@@ -110,8 +110,8 @@
                 117,
                 118,
                 119,
-                120,
                 121,
+                122,
                 123,
                 124,
                 125,
@@ -156,11 +156,7 @@
                 164,
                 165,
                 166,
-                167,
-                168,
-                169,
-                170,
-                171
+                167
             ]
         }
     ],
@@ -1519,46 +1515,6 @@
             ]
         },
         {
-            "mesh" : 84,
-            "name" : "Plane",
-            "rotation" : [
-                0,
-                0,
-                0.7071067690849304,
-                0.7071068286895752
-            ],
-            "scale" : [
-                0.09434587508440018,
-                1,
-                0.27280914783477783
-            ],
-            "translation" : [
-                -4.828010559082031,
-                0.25473329424858093,
-                -2.202597141265869
-            ]
-        },
-        {
-            "mesh" : 85,
-            "name" : "Plane.002",
-            "rotation" : [
-                0,
-                0,
-                0.7071067690849304,
-                0.7071068286895752
-            ],
-            "scale" : [
-                0.09434587508440018,
-                1,
-                0.27280914783477783
-            ],
-            "translation" : [
-                -4.828010559082031,
-                0.25473329424858093,
-                2.1689412593841553
-            ]
-        },
-        {
             "mesh" : 0,
             "name" : "Shape_IndexedFaceSet",
             "rotation" : [
@@ -1798,8 +1754,8 @@
         },
         {
             "children" : [
-                99,
-                100
+                97,
+                98
             ],
             "mesh" : 15,
             "name" : "Curve.069",
@@ -1891,21 +1847,21 @@
         },
         {
             "children" : [
-                106
+                104
             ],
             "mesh" : 21,
             "name" : "Shape_IndexedFaceSet.169"
         },
         {
             "children" : [
-                107
+                105
             ],
             "mesh" : 22,
             "name" : "Shape_IndexedFaceSet.167"
         },
         {
             "children" : [
-                108
+                106
             ],
             "mesh" : 23,
             "name" : "Shape_IndexedFaceSet.166",
@@ -1938,13 +1894,13 @@
         },
         {
             "children" : [
+                99,
+                100,
                 101,
                 102,
                 103,
-                104,
-                105,
-                109,
-                110
+                107,
+                108
             ],
             "mesh" : 25,
             "name" : "Shape_IndexedFaceSet.215",
@@ -1962,8 +1918,8 @@
         },
         {
             "children" : [
-                98,
-                111
+                96,
+                109
             ],
             "mesh" : 26,
             "name" : "lowside-hinge",
@@ -2125,7 +2081,7 @@
         },
         {
             "children" : [
-                122
+                120
             ],
             "mesh" : 37,
             "name" : "Shape_IndexedFaceSet.243",
@@ -2909,46 +2865,6 @@
                 1.8683198690414429,
                 0.31971240043640137,
                 3.5129926204681396
-            ]
-        },
-        {
-            "mesh" : 84,
-            "name" : "Plane",
-            "rotation" : [
-                0,
-                0,
-                0.7071067690849304,
-                0.7071068286895752
-            ],
-            "scale" : [
-                0.09434587508440018,
-                1,
-                0.27280914783477783
-            ],
-            "translation" : [
-                -4.828010559082031,
-                0.25473329424858093,
-                -2.202597141265869
-            ]
-        },
-        {
-            "mesh" : 85,
-            "name" : "Plane.002",
-            "rotation" : [
-                0,
-                0,
-                0.7071067690849304,
-                0.7071068286895752
-            ],
-            "scale" : [
-                0.09434587508440018,
-                1,
-                0.27280914783477783
-            ],
-            "translation" : [
-                -4.828010559082031,
-                0.25473329424858093,
-                2.1689412593841553
             ]
         }
     ],
@@ -5132,56 +5048,6 @@
                     },
                     "indices" : 63,
                     "material" : 4,
-                    "mode" : 4
-                }
-            ]
-        },
-        {
-            "name" : "Plane.002",
-            "primitives" : [
-                {
-                    "attributes" : {
-                        "POSITION" : 327,
-                        "NORMAL" : 328,
-                        "TEXCOORD_0" : 329
-                    },
-                    "extensions" : {
-                        "KHR_draco_mesh_compression" : {
-                            "bufferView" : 85,
-                            "attributes" : {
-                                "POSITION" : 0,
-                                "NORMAL" : 1,
-                                "TEXCOORD_0" : 2
-                            }
-                        }
-                    },
-                    "indices" : 330,
-                    "material" : 7,
-                    "mode" : 4
-                }
-            ]
-        },
-        {
-            "name" : "Plane.003",
-            "primitives" : [
-                {
-                    "attributes" : {
-                        "POSITION" : 331,
-                        "NORMAL" : 332,
-                        "TEXCOORD_0" : 333
-                    },
-                    "extensions" : {
-                        "KHR_draco_mesh_compression" : {
-                            "bufferView" : 86,
-                            "attributes" : {
-                                "POSITION" : 0,
-                                "NORMAL" : 1,
-                                "TEXCOORD_0" : 2
-                            }
-                        }
-                    },
-                    "indices" : 330,
-                    "material" : 7,
                     "mode" : 4
                 }
             ]
@@ -7672,61 +7538,6 @@
             "componentType" : 5126,
             "count" : 4,
             "type" : "VEC2"
-        },
-        {
-            "componentType" : 5126,
-            "count" : 184,
-            "max" : [
-                1,
-                0.25372394919395447,
-                0.8267343640327454
-            ],
-            "min" : [
-                -1.000000238418579,
-                0,
-                -0.7304614782333374
-            ],
-            "type" : "VEC3"
-        },
-        {
-            "componentType" : 5126,
-            "count" : 184,
-            "type" : "VEC3"
-        },
-        {
-            "componentType" : 5126,
-            "count" : 184,
-            "type" : "VEC2"
-        },
-        {
-            "componentType" : 5123,
-            "count" : 276,
-            "type" : "SCALAR"
-        },
-        {
-            "componentType" : 5126,
-            "count" : 184,
-            "max" : [
-                1,
-                0.25372394919395447,
-                0.8267343640327454
-            ],
-            "min" : [
-                -1.000000238418579,
-                0,
-                -0.7304614782333374
-            ],
-            "type" : "VEC3"
-        },
-        {
-            "componentType" : 5126,
-            "count" : 184,
-            "type" : "VEC3"
-        },
-        {
-            "componentType" : 5126,
-            "count" : 184,
-            "type" : "VEC2"
         }
     ],
     "bufferViews" : [
@@ -7862,7 +7673,7 @@
         },
         {
             "buffer" : 0,
-            "byteLength" : 17516,
+            "byteLength" : 17515,
             "byteOffset" : 692084
         },
         {
@@ -8154,21 +7965,11 @@
             "buffer" : 0,
             "byteLength" : 186,
             "byteOffset" : 1667288
-        },
-        {
-            "buffer" : 0,
-            "byteLength" : 1049,
-            "byteOffset" : 1667476
-        },
-        {
-            "buffer" : 0,
-            "byteLength" : 1049,
-            "byteOffset" : 1668528
         }
     ],
     "buffers" : [
         {
-            "byteLength" : 1669580,
+            "byteLength" : 1667476,
             "uri" : "shortLowSides.bin"
         }
     ]

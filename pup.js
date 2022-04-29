@@ -78,11 +78,11 @@ function init(){
 
     //load textures
 
-    var lidNormalTexture = new THREE.TextureLoader().load('textures/bdp_bump_2-normal.jpg', texture => {texture.flipY = true});
-    lidNormalTexture.warpS = THREE.repeatWrapping;
-    lidNormalTexture.warpT = THREE.repeatWrapping;
-    // lidNormalTexture.repeat.x = 1;
-    // lidNormalTexture.repeat.y = .1;
+    var lidNormalTexture = new THREE.TextureLoader().load('textures/bdp-noise-better.jpg', texture => {texture.flipY = false});
+    lidNormalTexture.wrapS = THREE.repeatWrapping;
+    lidNormalTexture.wrapT = THREE.repeatWrapping;
+    //lidNormalTexture.repeat.x = 10;
+    //lidNormalTexture.repeat.y = 10;
 
         //Materials
     metalMat = new THREE.MeshPhysicalMaterial({
@@ -94,7 +94,8 @@ function init(){
         color: 0x000000,
         metalness: 1,
         roughness: 0.15,
-        normalMap: lidNormalTexture,
+        bumpScale: .005,
+        bumpMap: lidNormalTexture,
     });
     windowMat = new THREE.MeshPhysicalMaterial({
         color: 0x000000,
@@ -424,6 +425,14 @@ async function addModelsToScene(){
             child.material = redGlassMat;
         }
     });
+    ShortFlatHatch.getObjectByName("Decimated_Hatch").material = testMetal;
+    GullwingModel.getObjectByName("gw-decimated-left-lid").material = testMetal;
+    GullwingModel.getObjectByName("gw-decimated-right-lid").material = testMetal;
+    ShortLowSides.getObjectByName("Shape_IndexedFaceSet215").material = testMetal;
+    ShortLowSides.getObjectByName("Shape_IndexedFaceSet413").material = testMetal;
+    LongLowSides.getObjectByName("Shape_IndexedFaceSet507").material = testMetal;
+    LongLowSides.getObjectByName("Shape_IndexedFaceSet023").material = testMetal;
+    LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").material = testMetal;
 
     //hide models
     HeadacheRackPost.visible = false;
@@ -432,6 +441,7 @@ async function addModelsToScene(){
     LongDomedHatch.visible = false;
     ShortDomedHatch.visible = false;
     LongDomedHatch.visible = false;
+    LadderRack.visible = false;
     console.log("added models");
     //console.log(GullwingModel);
 }
