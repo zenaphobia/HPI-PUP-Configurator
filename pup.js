@@ -433,7 +433,8 @@ async function addModelsToScene(){
     LongLowSides.getObjectByName("Shape_IndexedFaceSet507").material = testMetal;
     LongLowSides.getObjectByName("Shape_IndexedFaceSet023").material = testMetal;
     LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").material = testMetal;
-
+    ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").material = testMetal;
+    LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").material = testMetal;
     //hide models
     HeadacheRackPost.visible = false;
     LongLowSides.visible = false;
