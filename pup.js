@@ -540,6 +540,7 @@ function changeCam(){
 
     //declare animation
     let animation = gsap.to(camera.position, {duration: 2, x:-10, y:2.35, z: 0, ease:"expo"});
+    //controls.minDistance = 5;
     animation.play();
     //will kill animation if somebody clicks any part of the page, otherwise user won't be able to regain control after
     //animation is over.
