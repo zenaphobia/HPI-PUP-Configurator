@@ -149,7 +149,6 @@ function init(){
 
     //Orbit Controls
     controls = new OrbitControls(camera, renderer.domElement);
-    //controls.maxDistance = 3.5;
     controls.minDistance = 10;
     controls.enablePan = false;
     controls.enableDamping = true;
@@ -223,6 +222,7 @@ function init(){
     document.getElementById('post-headache-rack').addEventListener("click", function(){switchToPostHeadacheRack()});
     document.getElementById('hex-headache-rack').addEventListener("click", function(){switchToHexHeadacheRack()});
     document.getElementById('ladder-rack').addEventListener("click", function(){showOrHideLadderRack()});
+    document.getElementById('hr-viewer').addEventListener("mouseover", function(){changeCam()});
 
     
     //document.getElementById('hatches').addEventListener("click", function(){swapHatches()});
@@ -534,4 +534,14 @@ function switchToPostHeadacheRack(){
 function switchToHexHeadacheRack(){
     HeadacheRackHex.visible = true;
     HeadacheRackPost.visible = false;
+}
+
+function changeCam(){
+
+    //declare animation
+    let animation = gsap.to(camera.position, {duration: 2, x:-10, y:2.35, z: 0, ease:"expo"});
+    animation.play();
+    //will kill animation if somebody clicks any part of the page, otherwise user won't be able to regain control after
+    //animation is over.
+    document.getElementById('body').addEventListener("mousedown", function(){animation.kill()});
 }
