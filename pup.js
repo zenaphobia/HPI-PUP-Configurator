@@ -42,7 +42,6 @@ var fragData = frag;
 var isFullLengthPUPLoaded = false;
 //materials
 let metalMat, windowMat, redGlassMat,truckPaintMat, clearGlassMat, testMetal;
-const allMaterials = new Set();
 
 let customShader;
 
