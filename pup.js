@@ -29,7 +29,7 @@ let basemesh, testmesh, windowMesh, truckBaseMesh, testMat, hingePoint, lidTest;
 //Hatches
 var longHatch;
 
-var allModels, TruckModel, GullwingModel, HeadacheRackPost, HeadacheRackHex, LongLowSides, ShortLowSides,LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack;
+var allModels, TruckModel, GullwingModel, HeadacheRackPost, HeadacheRackHex, LongLowSides, ShortLowSides,LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, TruckSlide;
 
 //Lowsides
 
@@ -213,7 +213,7 @@ function init(){
     //#endregion
 
     //functions
-    document.getElementById('change-texture').addEventListener("click", function(){applyHatch('domed')});
+    //document.getElementById('change-texture').addEventListener("click", function(){applyHatch('domed')});
     document.getElementById('hinge').addEventListener("click", function(){openLowSideLid()});
     document.getElementById('pup-pro').addEventListener("click", function(){renderPro()});
     document.getElementById('pup-standard').addEventListener("click", function(){renderStandard()});
@@ -223,6 +223,8 @@ function init(){
     document.getElementById('hex-headache-rack').addEventListener("click", function(){switchToHexHeadacheRack()});
     document.getElementById('ladder-rack').addEventListener("click", function(){showOrHideLadderRack()});
     document.getElementById('hr-viewer').addEventListener("mouseover", function(){changeCam()});
+    //document.getElementById('open-hatch').addEventListener("click", function(){OpenHatch()});
+    document.getElementById('open-tailgate').addEventListener("click", function(){openTailgate()});
 
     
     //document.getElementById('hatches').addEventListener("click", function(){swapHatches()});
@@ -372,7 +374,7 @@ var lidOpen;
 
 async function loadModels(){
     //add all models here
-    var [truckData, gullwingData, hrHexData, hrPostData, LongLSData, shortLSData, longFHData, shortFHdata, longDomedData, shortDomedData, lRData] = await Promise.all([
+    var [truckData, gullwingData, hrHexData, hrPostData, LongLSData, shortLSData, longFHData, shortFHdata, longDomedData, shortDomedData, lRData, TSdata] = await Promise.all([
         loader.loadAsync('models/seperate-models/truck.gltf'),
         loader.loadAsync('models/seperate-models/gullwing.gltf'),
         loader.loadAsync('models/seperate-models/headacheRackHex.gltf'),
@@ -384,6 +386,7 @@ async function loadModels(){
         loader.loadAsync('models/seperate-models/longDomedHatch.gltf'),
         loader.loadAsync('models/seperate-models/shortDomedHatch.gltf'),
         loader.loadAsync('models/seperate-models/ladderRack.gltf'),
+        loader.loadAsync('models/seperate-models/truckslide.gltf'),
     ])
 
     TruckModel = setupModel(truckData);
@@ -397,8 +400,9 @@ async function loadModels(){
     LongDomedHatch = setupModel(longDomedData);
     ShortDomedHatch = setupModel(shortDomedData);
     LadderRack = setupModel(lRData);
+    TruckSlide = setupModel(TSdata);
     console.log("model data set up");
-    return {TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack };
+    return {TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, TruckSlide };
 }
 
 function setupModel(data){
@@ -409,9 +413,9 @@ function setupModel(data){
 
 async function addModelsToScene(){
     //load models, add to scene, assign hinges to variables here
-    var {TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack} = await loadModels();
+    var {TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, TruckSlide} = await loadModels();
 
-    scene.add(TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack);
+    scene.add(TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, TruckSlide);
 
     //adding hinge points
     hingePoint = ShortLowSides.getObjectByName('lowside-hinge');
@@ -546,4 +550,55 @@ function changeCam(){
     //will kill animation if somebody clicks any part of the page, otherwise user won't be able to regain control after
     //animation is over.
     document.getElementById('body').addEventListener("mousedown", function(){animation.kill()});
+}
+
+var isHatchOpen = false;
+
+function OpenHatch(){
+    if(!isHatchOpen){
+        gsap.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (-5 / 360), ease:"expo" });
+        document.getElementById('open-hatch').innerHTML = 'Close Hatch';
+        isHatchOpen = true;
+    }
+    else{
+        gsap.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo" });
+        document.getElementById('open-hatch').innerHTML = 'Open Hatch';
+        isHatchOpen = false;
+    }
+    console.log("Open Hatch was clicked");
+}
+
+function presentTruckslide(){
+    if(!isHatchOpen){
+        gsap.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (-5 / 360), ease:"expo" });
+        document.getElementById('open-hatch').innerHTML = 'Close Hatch';
+        isHatchOpen = true;
+    }
+    else{
+        gsap.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo" });
+        document.getElementById('open-hatch').innerHTML = 'Open Hatch';
+        isHatchOpen = false;
+    }
+    console.log("Open Hatch was clicked");
+}
+
+var isTailgateOpen = false;
+
+function openTailgate(){
+
+    if(!isTailgateOpen){
+        gsap.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (-5 / 360), ease:"expo"});
+        gsap.to(TruckModel.getObjectByName("tailgate").rotation, {duration: 2, x: 2 * Math.PI * (-90 / 360), ease:"expo", delay: .5});
+        gsap.to(TruckSlide.getObjectByName("truckslide").position, {duration: 2, x: -9.55, ease:"expo", delay: 1});
+        document.getElementById('open-tailgate').innerHTML = 'Close tailgate';
+        isTailgateOpen = true;
+    }
+    else{
+        gsap.to(TruckSlide.getObjectByName("truckslide").position, {duration: 2, x: -4.65, ease:"expo"});
+        gsap.to(TruckModel.getObjectByName("tailgate").rotation, {duration: 2, x: 2 * Math.PI * (0 / 360), ease:"expo", delay: .5});
+        gsap.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 1});
+        document.getElementById('open-tailgate').innerHTML = 'Open tailgate';
+        isTailgateOpen = false;
+    }
+    console.log("Button was clicked");
 }
