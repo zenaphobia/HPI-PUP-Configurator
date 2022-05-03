@@ -441,8 +441,9 @@ async function addModelsToScene(){
     LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").material = testMetal;
     //hide models
     HeadacheRackPost.visible = false;
-    LongLowSides.visible = false;
-    LongFlatHatch.visible = false;
+    GullwingModel.visible = false;
+    ShortLowSides.visible = false
+    ShortFlatHatch.visible = false;
     LongDomedHatch.visible = false;
     ShortDomedHatch.visible = false;
     LongDomedHatch.visible = false;
@@ -454,7 +455,7 @@ async function addModelsToScene(){
 function openLowSideLid(){
     if(!lidOpen){
         document.getElementById('hinge').innerHTML = 'Close lid';
-        gsap.to(hingePoint.rotation, {duration: 2, x: 2 * Math.PI * (140 / 360), ease:"expo" })
+        gsap.to(hingePoint.rotation, {duration: 2, x: 2 * Math.PI * (160 / 360), ease:"expo" })
         lidOpen = true;
     }
     else{
@@ -587,9 +588,9 @@ var isTailgateOpen = false;
 function openTailgate(){
 
     if(!isTailgateOpen){
-        gsap.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (-5 / 360), ease:"expo"});
+        gsap.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (-15 / 360), ease:"expo"});
         gsap.to(TruckModel.getObjectByName("tailgate").rotation, {duration: 2, x: 2 * Math.PI * (-90 / 360), ease:"expo", delay: .5});
-        gsap.to(TruckSlide.getObjectByName("truckslide").position, {duration: 2, x: -9.55, ease:"expo", delay: 1});
+        gsap.to(TruckSlide.getObjectByName("truckslide").position, {duration: 2, x: -11, ease:"expo", delay: 1});
         document.getElementById('open-tailgate').innerHTML = 'Close tailgate';
         isTailgateOpen = true;
     }
