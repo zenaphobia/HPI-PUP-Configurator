@@ -441,15 +441,15 @@
     "materials" : [
         {
             "doubleSided" : true,
-            "name" : "Black Powder Coat",
+            "name" : "Black Metal",
             "pbrMetallicRoughness" : {
                 "baseColorFactor" : [
-                    0.00374573259614408,
-                    0.00374573259614408,
-                    0.00374573259614408,
+                    0.010313114151358604,
+                    0.010313114151358604,
+                    0.010313114151358604,
                     1
                 ],
-                "roughnessFactor" : 0.0931818038225174
+                "roughnessFactor" : 0.18636363744735718
             }
         },
         {
@@ -457,11 +457,12 @@
             "name" : "Smooth aluminum",
             "pbrMetallicRoughness" : {
                 "baseColorFactor" : [
-                    0.6514892578125,
-                    0.6514892578125,
-                    0.6514892578125,
+                    0.800000011920929,
+                    0.800000011920929,
+                    0.800000011920929,
                     1
-                ]
+                ],
+                "roughnessFactor" : 0.6613637208938599
             }
         },
         {

@@ -1117,15 +1117,15 @@
         },
         {
             "doubleSided" : true,
-            "name" : "Black Diamond Plate Test 3",
+            "name" : "Black Metal",
             "pbrMetallicRoughness" : {
                 "baseColorFactor" : [
-                    0.00374573259614408,
-                    0.00374573259614408,
-                    0.00374573259614408,
+                    0.010313114151358604,
+                    0.010313114151358604,
+                    0.010313114151358604,
                     1
                 ],
-                "roughnessFactor" : 0.12727271020412445
+                "roughnessFactor" : 0.18636363744735718
             }
         },
         {
@@ -1153,6 +1153,19 @@
                     1
                 ],
                 "roughnessFactor" : 0.02727273292839527
+            }
+        },
+        {
+            "doubleSided" : true,
+            "name" : "Black Diamond Plate Test 3",
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.00374573259614408,
+                    0.00374573259614408,
+                    0.00374573259614408,
+                    1
+                ],
+                "roughnessFactor" : 0.12727271020412445
             }
         }
     ],
@@ -2055,6 +2068,7 @@
                         }
                     },
                     "indices" : 147,
+                    "material" : 5,
                     "mode" : 4
                 }
             ]
@@ -2079,7 +2093,7 @@
                         }
                     },
                     "indices" : 151,
-                    "material" : 5,
+                    "material" : 8,
                     "mode" : 4
                 }
             ]

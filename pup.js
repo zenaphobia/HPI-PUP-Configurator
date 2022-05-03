@@ -29,7 +29,7 @@ let basemesh, testmesh, windowMesh, truckBaseMesh, testMat, hingePoint, lidTest;
 //All Models
 var allModels, TruckModel, GullwingModel, HeadacheRackPost, HeadacheRackHex, LongLowSides, ShortLowSides,LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, TruckSlide;
 //Textures
-var bdpNormalTexture, dpNormlTexture;
+var bdpBumpTexture, dpBumpTexture;
 //#endregion
 
 //Lazy Load files
@@ -38,7 +38,7 @@ var vertexData = vert;
 var fragData = frag;
 var isFullLengthPUPLoaded = false;
 //materials
-let metalMat, windowMat, redGlassMat,truckPaintMat, clearGlassMat, testMetal;
+let metalMat, windowMat, redGlassMat,truckPaintMat, clearGlassMat, bdpMaterial, dpMaterial;
 const allMaterials = new Set();
 
 let customShader;
@@ -75,23 +75,33 @@ function init(){
 
     //load textures
 
-    bdpNormalTexture = new THREE.TextureLoader().load('textures/bdp-noise-better.jpg', texture => {texture.flipY = false});
-    bdpNormalTexture = new THREE.TextureLoader().load('textures/dp-bump.jpg', texture => {texture.flipY = false});
-    bdpNormalTexture.wrapS = THREE.repeatWrapping;
-    bdpNormalTexture.wrapT = THREE.repeatWrapping;
+    bdpBumpTexture = new THREE.TextureLoader().load('textures/bdp-noise-better.jpg', texture => {texture.flipY = false});
+    dpBumpTexture = new THREE.TextureLoader().load('textures/dp-bump.jpg', texture => {texture.flipY = false});
+
+    bdpBumpTexture.wrapS = THREE.repeatWrapping;
+    bdpBumpTexture.wrapT = THREE.repeatWrapping;
+    dpBumpTexture.wrapS = THREE.repeatWrapping;
+    dpBumpTexture.wrapT = THREE.repeatWrapping;
 
         //Materials
     metalMat = new THREE.MeshPhysicalMaterial({
         color: 0xffffff,
         metalness: 1,
-        roughness: 0,
+        roughness: .1,
     });
-    testMetal = new THREE.MeshPhysicalMaterial({
+    bdpMaterial = new THREE.MeshPhysicalMaterial({
         color: 0x000000,
         metalness: 1,
         roughness: 0.15,
         bumpScale: .005,
-        bumpMap: bdpNormalTexture,
+        bumpMap: bdpBumpTexture,
+    });
+    dpMaterial = new THREE.MeshPhysicalMaterial({
+        color: 0xffffff,
+        metalness: 1,
+        roughness: 0.15,
+        bumpScale: .005,
+        bumpMap: dpBumpTexture,
     });
     windowMat = new THREE.MeshPhysicalMaterial({
         color: 0x000000,
@@ -221,6 +231,7 @@ function init(){
     document.getElementById('hr-viewer').addEventListener("mouseover", function(){changeCam()});
     //document.getElementById('open-hatch').addEventListener("click", function(){OpenHatch()});
     document.getElementById('open-tailgate').addEventListener("click", function(){openTailgate()});
+    document.getElementById('change-material').addEventListener("click", function(){switchToDiamondPlate()});
 
     
     //document.getElementById('hatches').addEventListener("click", function(){swapHatches()});
@@ -422,16 +433,16 @@ async function addModelsToScene(){
             child.material = redGlassMat;
         }
     });
-    ShortFlatHatch.getObjectByName("Decimated_Hatch").material = testMetal;
-    GullwingModel.getObjectByName("gw-decimated-left-lid").material = testMetal;
-    GullwingModel.getObjectByName("gw-decimated-right-lid").material = testMetal;
-    ShortLowSides.getObjectByName("Shape_IndexedFaceSet215").material = testMetal;
-    ShortLowSides.getObjectByName("Shape_IndexedFaceSet413").material = testMetal;
-    LongLowSides.getObjectByName("Shape_IndexedFaceSet507").material = testMetal;
-    LongLowSides.getObjectByName("Shape_IndexedFaceSet023").material = testMetal;
-    LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").material = testMetal;
-    ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").material = testMetal;
-    LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").material = testMetal;
+    ShortFlatHatch.getObjectByName("Decimated_Hatch").material = bdpMaterial;
+    GullwingModel.getObjectByName("gw-decimated-left-lid").material = bdpMaterial;
+    GullwingModel.getObjectByName("gw-decimated-right-lid").material = bdpMaterial;
+    ShortLowSides.getObjectByName("Shape_IndexedFaceSet215").material = bdpMaterial;
+    ShortLowSides.getObjectByName("Shape_IndexedFaceSet413").material = bdpMaterial;
+    LongLowSides.getObjectByName("Shape_IndexedFaceSet507").material = bdpMaterial;
+    LongLowSides.getObjectByName("Shape_IndexedFaceSet023").material = bdpMaterial;
+    LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").material = bdpMaterial;
+    ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").material = bdpMaterial;
+    LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").material = bdpMaterial;
     //hide models
     HeadacheRackPost.visible = false;
     GullwingModel.visible = false;
@@ -595,4 +606,23 @@ function openTailgate(){
         isTailgateOpen = false;
     }
     console.log("Button was clicked");
+}
+
+function switchToDiamondPlate(){
+    ShortFlatHatch.getObjectByName("Decimated_Hatch").material = dpMaterial;
+    GullwingModel.getObjectByName("gw-decimated-left-lid").material = dpMaterial;
+    GullwingModel.getObjectByName("gw-decimated-right-lid").material = dpMaterial;
+    ShortLowSides.getObjectByName("Shape_IndexedFaceSet215").material = dpMaterial;
+    ShortLowSides.getObjectByName("Shape_IndexedFaceSet413").material = dpMaterial;
+    LongLowSides.getObjectByName("Shape_IndexedFaceSet507").material = dpMaterial;
+    LongLowSides.getObjectByName("Shape_IndexedFaceSet023").material = dpMaterial;
+    LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").material = dpMaterial;
+    ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").material = dpMaterial;
+    LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").material = dpMaterial;
+
+    scene.traverse(function(child){
+        if(child.material && child.material.name === 'Black Metal'){
+            child.material = metalMat;
+        }
+    });
 }

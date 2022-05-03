@@ -2588,6 +2588,19 @@
                 "metallicFactor" : 0,
                 "roughnessFactor" : 0.6875
             }
+        },
+        {
+            "doubleSided" : true,
+            "name" : "Black Metal",
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.010313114151358604,
+                    0.010313114151358604,
+                    0.010313114151358604,
+                    1
+                ],
+                "roughnessFactor" : 0.18636363744735718
+            }
         }
     ],
     "meshes" : [
@@ -4926,7 +4939,7 @@
                         }
                     },
                     "indices" : 398,
-                    "material" : 6,
+                    "material" : 85,
                     "mode" : 4
                 }
             ]
@@ -4951,7 +4964,7 @@
                         }
                     },
                     "indices" : 402,
-                    "material" : 6,
+                    "material" : 85,
                     "mode" : 4
                 }
             ]

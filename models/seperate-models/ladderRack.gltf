@@ -250,15 +250,15 @@
         },
         {
             "doubleSided" : true,
-            "name" : "Black Powder Coat",
+            "name" : "Black Metal",
             "pbrMetallicRoughness" : {
                 "baseColorFactor" : [
-                    0.00374573259614408,
-                    0.00374573259614408,
-                    0.00374573259614408,
+                    0.010313114151358604,
+                    0.010313114151358604,
+                    0.010313114151358604,
                     1
                 ],
-                "roughnessFactor" : 0.0931818038225174
+                "roughnessFactor" : 0.18636363744735718
             }
         }
     ],
@@ -561,7 +561,7 @@
     "buffers" : [
         {
             "byteLength" : 8660,
-            "uri" : "LadderRack.bin"
+            "uri" : "ladderRack.bin"
         }
     ]
 }
