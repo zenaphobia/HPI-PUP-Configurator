@@ -3,6 +3,11 @@ import { GLTFLoader } from '/js/GLTFLoader.js';
 import { OrbitControls } from '/js/OrbitControls.js';
 import { DRACOLoader } from '/js/DRACOLoader.js';
 import { EXRLoader } from '/js/EXRLoader.js';
+// import * as THREE from 'https://highwayproducts.com/wp-content/uploads/resources/TestEnvironment/js/three.module.js';
+// import { GLTFLoader } from 'https://highwayproducts.com/wp-content/uploads/resources/TestEnvironment/js/GLTFLoader.js';
+// import { OrbitControls } from 'https://highwayproducts.com/wp-content/uploads/resources/TestEnvironment/js/OrbitControls.js';
+// import { DRACOLoader } from 'https://highwayproducts.com/wp-content/uploads/resources/TestEnvironment/js/DRACOLoader.js'
+// import { EXRLoader } from 'https://highwayproducts.com/wp-content/uploads/resources/TestEnvironment/js/EXRLoader.js'
 
 //#region custom shaders
 const vert = `
@@ -29,7 +34,7 @@ let basemesh, testmesh, windowMesh, truckBaseMesh, testMat, hingePoint, lidTest;
 //All Models
 var allModels, TruckModel, GullwingModel, HeadacheRackPost, HeadacheRackHex, LongLowSides, ShortLowSides,LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, TruckSlide;
 //Textures
-var bdpBumpTexture, dpBumpTexture;
+var bdpBumpTexture, dpBumpTexture, patriotTexture;
 //#endregion
 
 //Lazy Load files
@@ -38,7 +43,7 @@ var vertexData = vert;
 var fragData = frag;
 var isFullLengthPUPLoaded = false;
 //materials
-let metalMat, windowMat, redGlassMat,truckPaintMat, clearGlassMat, bdpMaterial, dpMaterial, blackMetalMat, leopardMaterial;
+let metalMat, windowMat, redGlassMat,truckPaintMat, clearGlassMat, bdpMaterial, dpMaterial, blackMetalMat, leopardMaterial, patriotMat;
 
 init();
 animate();
@@ -72,13 +77,16 @@ function init(){
 
     //load textures
 
-    bdpBumpTexture = new THREE.TextureLoader().load('textures/bdp-noise-better.jpg', texture => {texture.flipY = false});
-    dpBumpTexture = new THREE.TextureLoader().load('textures/dp-bump.jpg', texture => {texture.flipY = false});
+    bdpBumpTexture = new THREE.TextureLoader().load('textures/bdp-best-bump.jpg', texture => {texture.flipY = false});
+    dpBumpTexture = new THREE.TextureLoader().load('textures/dp-pattern.jpg', texture => {texture.flipY = false});
+    patriotTexture = new THREE.TextureLoader().load('textures/star-bump.jpg', texture => {texture.flipY = false});
 
     bdpBumpTexture.wrapS = THREE.repeatWrapping;
     bdpBumpTexture.wrapT = THREE.repeatWrapping;
     dpBumpTexture.wrapS = THREE.repeatWrapping;
     dpBumpTexture.wrapT = THREE.repeatWrapping;
+    patriotTexture.wrapS = THREE.repeatWrapping;
+    patriotTexture.wrapT = THREE.repeatWrapping;
 
         //Materials
     metalMat = new THREE.MeshPhysicalMaterial({
@@ -97,6 +105,13 @@ function init(){
         roughness: 0.15,
         bumpScale: .005,
         bumpMap: bdpBumpTexture,
+    });
+    patriotMat = new THREE.MeshPhysicalMaterial({
+        color: 0x000000,
+        metalness: 1,
+        roughness: 0.15,
+        bumpScale: .005,
+        bumpMap: patriotTexture,
     });
     leopardMaterial = new THREE.MeshPhysicalMaterial({
         color: 0xffffff,
@@ -133,12 +148,6 @@ function init(){
         roughness: 0,
         //transmission: .015, //doubles the draw calls! don't include for now.
         opacity: .55,
-    });
-
-    customShader = new THREE.ShaderMaterial({
-        uniforms:{},
-        vertexShader: vertexData,
-        fragmentShader: fragData
     });
 
     truckPaintMat = new THREE.MeshPhysicalMaterial({
@@ -244,6 +253,7 @@ function init(){
     document.getElementById('dp').addEventListener("click", function(){switchToDiamondPlate()});
     document.getElementById('black-dp').addEventListener("click", function(){switchToBlackDiamondPlate()});
     document.getElementById('leopard').addEventListener("click", function(){switchToLeopard()});
+    document.getElementById('patriot').addEventListener("click", function(){switchToPatriot()});
 
     
     //document.getElementById('hatches').addEventListener("click", function(){swapHatches()});
@@ -645,6 +655,14 @@ function switchToDiamondPlate(){
             _accentColor = metalMat
             console.log("accent color is dp");
             break;
+        case leopardMaterial:
+            _accentColor = blackMetalMat;
+            console.log("accent color is bdp");
+            break;
+        case patriotMat:
+            _accentColor = blackMetalMat;
+            console.log("accent color is bdp");
+            break;
         default:
             console.log("unknown accent color");
             break;
@@ -678,6 +696,14 @@ function switchToBlackDiamondPlate(){
         case dpMaterial:
             _accentColor = metalMat
             console.log("accent color is dp");
+            break;
+        case leopardMaterial:
+            _accentColor = blackMetalMat;
+            console.log("accent color is bdp");
+            break;
+        case patriotMat:
+            _accentColor = blackMetalMat;
+            console.log("accent color is bdp");
             break;
         default:
             console.log("unknown accent color");
@@ -713,6 +739,14 @@ function switchToLeopard(){
             _accentColor = metalMat
             console.log("accent color is dp");
             break;
+        case leopardMaterial:
+            _accentColor = blackMetalMat;
+            console.log("accent color is bdp");
+            break;
+        case patriotMat:
+            _accentColor = blackMetalMat;
+            console.log("accent color is bdp");
+            break;
         default:
             console.log("unknown accent color");
             break;
@@ -727,6 +761,47 @@ function switchToLeopard(){
     LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").material = leopardMaterial;
     ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").material = leopardMaterial;
     LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").material = leopardMaterial;
+
+    scene.traverse(function(child){
+        if(child.material === _accentColor){
+            child.material = blackMetalMat;
+        }
+    });
+}
+function switchToPatriot(){
+    var _accentColor = null;
+
+    switch(ShortFlatHatch.getObjectByName("Decimated_Hatch").material){
+        case bdpMaterial:
+            _accentColor = blackMetalMat;
+            console.log("accent color is bdp");
+            break;
+        case dpMaterial:
+            _accentColor = metalMat
+            console.log("accent color is dp");
+            break;
+        case leopardMaterial:
+            _accentColor = blackMetalMat;
+            console.log("accent color is bdp");
+            break;
+        case patriotMat:
+            _accentColor = blackMetalMat;
+            console.log("accent color is bdp");
+            break;
+        default:
+            console.log("unknown accent color");
+            break;
+    }
+    ShortFlatHatch.getObjectByName("Decimated_Hatch").material = patriotMat;
+    GullwingModel.getObjectByName("gw-decimated-left-lid").material = patriotMat;
+    GullwingModel.getObjectByName("gw-decimated-right-lid").material = patriotMat;
+    ShortLowSides.getObjectByName("Shape_IndexedFaceSet215").material = patriotMat;
+    ShortLowSides.getObjectByName("Shape_IndexedFaceSet413").material = patriotMat;
+    LongLowSides.getObjectByName("Shape_IndexedFaceSet507").material = patriotMat;
+    LongLowSides.getObjectByName("Shape_IndexedFaceSet023").material = patriotMat;
+    LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").material = patriotMat;
+    ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").material = patriotMat;
+    LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").material = patriotMat;
 
     scene.traverse(function(child){
         if(child.material === _accentColor){
