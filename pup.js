@@ -38,10 +38,7 @@ var vertexData = vert;
 var fragData = frag;
 var isFullLengthPUPLoaded = false;
 //materials
-let metalMat, windowMat, redGlassMat,truckPaintMat, clearGlassMat, bdpMaterial, dpMaterial;
-const allMaterials = new Set();
-
-let customShader;
+let metalMat, windowMat, redGlassMat,truckPaintMat, clearGlassMat, bdpMaterial, dpMaterial, blackMetalMat, leopardMaterial;
 
 init();
 animate();
@@ -89,8 +86,21 @@ function init(){
         metalness: 1,
         roughness: .1,
     });
+    blackMetalMat = new THREE.MeshPhysicalMaterial({
+        color: 0x000000,
+        metalness: 1,
+        roughness: .1,
+    });
     bdpMaterial = new THREE.MeshPhysicalMaterial({
         color: 0x000000,
+        metalness: 1,
+        roughness: 0.15,
+        bumpScale: .005,
+        bumpMap: bdpBumpTexture,
+    });
+    leopardMaterial = new THREE.MeshPhysicalMaterial({
+        color: 0xffffff,
+        map: dpBumpTexture,
         metalness: 1,
         roughness: 0.15,
         bumpScale: .005,
@@ -228,10 +238,12 @@ function init(){
     document.getElementById('post-headache-rack').addEventListener("click", function(){switchToPostHeadacheRack()});
     document.getElementById('hex-headache-rack').addEventListener("click", function(){switchToHexHeadacheRack()});
     document.getElementById('ladder-rack').addEventListener("click", function(){showOrHideLadderRack()});
-    document.getElementById('hr-viewer').addEventListener("mouseover", function(){changeCam()});
+    //document.getElementById('hr-viewer').addEventListener("mouseover", function(){changeCam()});
     //document.getElementById('open-hatch').addEventListener("click", function(){OpenHatch()});
     document.getElementById('open-tailgate').addEventListener("click", function(){openTailgate()});
-    document.getElementById('change-material').addEventListener("click", function(){switchToDiamondPlate()});
+    document.getElementById('dp').addEventListener("click", function(){switchToDiamondPlate()});
+    document.getElementById('black-dp').addEventListener("click", function(){switchToBlackDiamondPlate()});
+    document.getElementById('leopard').addEventListener("click", function(){switchToLeopard()});
 
     
     //document.getElementById('hatches').addEventListener("click", function(){swapHatches()});
@@ -433,6 +445,11 @@ async function addModelsToScene(){
             child.material = redGlassMat;
         }
     });
+    scene.traverse(function(child){
+        if(child.material && child.material.name === 'accent color'){
+            child.material = blackMetalMat;
+        }
+    });
     ShortFlatHatch.getObjectByName("Decimated_Hatch").material = bdpMaterial;
     GullwingModel.getObjectByName("gw-decimated-left-lid").material = bdpMaterial;
     GullwingModel.getObjectByName("gw-decimated-right-lid").material = bdpMaterial;
@@ -443,6 +460,7 @@ async function addModelsToScene(){
     LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").material = bdpMaterial;
     ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").material = bdpMaterial;
     LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").material = bdpMaterial;
+    console.log(TruckSlide.getObjectByName("Shape_IndexedFaceSet1773"));
     //hide models
     HeadacheRackPost.visible = false;
     GullwingModel.visible = false;
@@ -453,18 +471,19 @@ async function addModelsToScene(){
     LongDomedHatch.visible = false;
     LadderRack.visible = false;
     console.log("added models");
-    //console.log(GullwingModel);
 }
 
 function openLowSideLid(){
     if(!lidOpen){
         document.getElementById('hinge').innerHTML = 'Close lid';
-        gsap.to(hingePoint.rotation, {duration: 2, x: 2 * Math.PI * (160 / 360), ease:"expo" })
+        gsap.to(hingePoint.rotation, {duration: 2, x: 2 * Math.PI * (160 / 360), ease:"expo" });
+        gsap.to(LongLowSides.getObjectByName('Shape_IndexedFaceSet506').rotation, {duration: 2, x: 2 * Math.PI * (160 / 360), ease:"expo" });
         lidOpen = true;
     }
     else{
         document.getElementById('hinge').innerHTML = 'Open Lid';
-        gsap.to(hingePoint.rotation, {duration: 2, x: 2 * Math.PI * (90 / 360), ease:"expo" })
+        gsap.to(hingePoint.rotation, {duration: 2, x: 2 * Math.PI * (90 / 360), ease:"expo" });
+        gsap.to(LongLowSides.getObjectByName('Shape_IndexedFaceSet506').rotation, {duration: 2, x: 2 * Math.PI * (90 / 360), ease:"expo" });
         lidOpen = false;
     }
 }
@@ -593,6 +612,9 @@ function openTailgate(){
 
     if(!isTailgateOpen){
         gsap.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (-15 / 360), ease:"expo"});
+        gsap.to(LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").rotation, {duration: 2, y: 2 * Math.PI * (-10 / 360), ease:"expo"});
+        gsap.to(LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").rotation, {duration: 2, y: 2 * Math.PI * (-10 / 360), ease:"expo"});
+        gsap.to(ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").rotation, {duration: 2, y: 2 * Math.PI * (-15 / 360), ease:"expo"});
         gsap.to(TruckModel.getObjectByName("tailgate").rotation, {duration: 2, x: 2 * Math.PI * (-90 / 360), ease:"expo", delay: .5});
         gsap.to(TruckSlide.getObjectByName("truckslide").position, {duration: 2, x: -11, ease:"expo", delay: 1});
         document.getElementById('open-tailgate').innerHTML = 'Close tailgate';
@@ -602,6 +624,9 @@ function openTailgate(){
         gsap.to(TruckSlide.getObjectByName("truckslide").position, {duration: 2, x: -4.65, ease:"expo"});
         gsap.to(TruckModel.getObjectByName("tailgate").rotation, {duration: 2, x: 2 * Math.PI * (0 / 360), ease:"expo", delay: .5});
         gsap.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 1});
+        gsap.to(LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 1});
+        gsap.to(LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 1});
+        gsap.to(ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 1});
         document.getElementById('open-tailgate').innerHTML = 'Open tailgate';
         isTailgateOpen = false;
     }
@@ -609,6 +634,21 @@ function openTailgate(){
 }
 
 function switchToDiamondPlate(){
+    var _accentColor = null;
+
+    switch(ShortFlatHatch.getObjectByName("Decimated_Hatch").material){
+        case bdpMaterial:
+            _accentColor = blackMetalMat;
+            console.log("accent color is bdp");
+            break;
+        case dpMaterial:
+            _accentColor = metalMat
+            console.log("accent color is dp");
+            break;
+        default:
+            console.log("unknown accent color");
+            break;
+    }
     ShortFlatHatch.getObjectByName("Decimated_Hatch").material = dpMaterial;
     GullwingModel.getObjectByName("gw-decimated-left-lid").material = dpMaterial;
     GullwingModel.getObjectByName("gw-decimated-right-lid").material = dpMaterial;
@@ -621,8 +661,76 @@ function switchToDiamondPlate(){
     LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").material = dpMaterial;
 
     scene.traverse(function(child){
-        if(child.material && child.material.name === 'Black Metal'){
+        if(child.material === _accentColor){
             child.material = metalMat;
+        }
+    });
+}
+
+function switchToBlackDiamondPlate(){
+    var _accentColor = null;
+
+    switch(ShortFlatHatch.getObjectByName("Decimated_Hatch").material){
+        case bdpMaterial:
+            _accentColor = blackMetalMat;
+            console.log("accent color is bdp");
+            break;
+        case dpMaterial:
+            _accentColor = metalMat
+            console.log("accent color is dp");
+            break;
+        default:
+            console.log("unknown accent color");
+            break;
+    }
+    ShortFlatHatch.getObjectByName("Decimated_Hatch").material = bdpMaterial;
+    GullwingModel.getObjectByName("gw-decimated-left-lid").material = bdpMaterial;
+    GullwingModel.getObjectByName("gw-decimated-right-lid").material = bdpMaterial;
+    ShortLowSides.getObjectByName("Shape_IndexedFaceSet215").material = bdpMaterial;
+    ShortLowSides.getObjectByName("Shape_IndexedFaceSet413").material = bdpMaterial;
+    LongLowSides.getObjectByName("Shape_IndexedFaceSet507").material = bdpMaterial;
+    LongLowSides.getObjectByName("Shape_IndexedFaceSet023").material = bdpMaterial;
+    LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").material = bdpMaterial;
+    ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").material = bdpMaterial;
+    LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").material = bdpMaterial;
+
+    scene.traverse(function(child){
+        if(child.material === _accentColor){
+            child.material = blackMetalMat;
+        }
+    });
+}
+
+function switchToLeopard(){
+    var _accentColor = null;
+
+    switch(ShortFlatHatch.getObjectByName("Decimated_Hatch").material){
+        case bdpMaterial:
+            _accentColor = blackMetalMat;
+            console.log("accent color is bdp");
+            break;
+        case dpMaterial:
+            _accentColor = metalMat
+            console.log("accent color is dp");
+            break;
+        default:
+            console.log("unknown accent color");
+            break;
+    }
+    ShortFlatHatch.getObjectByName("Decimated_Hatch").material = leopardMaterial;
+    GullwingModel.getObjectByName("gw-decimated-left-lid").material = leopardMaterial;
+    GullwingModel.getObjectByName("gw-decimated-right-lid").material = leopardMaterial;
+    ShortLowSides.getObjectByName("Shape_IndexedFaceSet215").material = leopardMaterial;
+    ShortLowSides.getObjectByName("Shape_IndexedFaceSet413").material = leopardMaterial;
+    LongLowSides.getObjectByName("Shape_IndexedFaceSet507").material = leopardMaterial;
+    LongLowSides.getObjectByName("Shape_IndexedFaceSet023").material = leopardMaterial;
+    LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").material = leopardMaterial;
+    ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").material = leopardMaterial;
+    LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").material = leopardMaterial;
+
+    scene.traverse(function(child){
+        if(child.material === _accentColor){
+            child.material = blackMetalMat;
         }
     });
 }

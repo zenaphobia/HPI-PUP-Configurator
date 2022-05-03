@@ -279,7 +279,7 @@
     "materials" : [
         {
             "doubleSided" : true,
-            "name" : "Black Metal",
+            "name" : "accent color",
             "pbrMetallicRoughness" : {
                 "baseColorFactor" : [
                     0.010313114151358604,
