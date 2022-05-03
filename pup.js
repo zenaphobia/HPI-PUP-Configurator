@@ -26,13 +26,10 @@ let loader, fileLoader, scene, container, camera, renderer, controls, dracoLoade
 
 //#region INIT FILES
 let basemesh, testmesh, windowMesh, truckBaseMesh, testMat, hingePoint, lidTest;
-//Hatches
-var longHatch;
-
+//All Models
 var allModels, TruckModel, GullwingModel, HeadacheRackPost, HeadacheRackHex, LongLowSides, ShortLowSides,LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, TruckSlide;
-
-//Lowsides
-
+//Textures
+var bdpNormalTexture, dpNormlTexture;
 //#endregion
 
 //Lazy Load files
@@ -78,11 +75,10 @@ function init(){
 
     //load textures
 
-    var lidNormalTexture = new THREE.TextureLoader().load('textures/bdp-noise-better.jpg', texture => {texture.flipY = false});
-    lidNormalTexture.wrapS = THREE.repeatWrapping;
-    lidNormalTexture.wrapT = THREE.repeatWrapping;
-    //lidNormalTexture.repeat.x = 10;
-    //lidNormalTexture.repeat.y = 10;
+    bdpNormalTexture = new THREE.TextureLoader().load('textures/bdp-noise-better.jpg', texture => {texture.flipY = false});
+    bdpNormalTexture = new THREE.TextureLoader().load('textures/dp-bump.jpg', texture => {texture.flipY = false});
+    bdpNormalTexture.wrapS = THREE.repeatWrapping;
+    bdpNormalTexture.wrapT = THREE.repeatWrapping;
 
         //Materials
     metalMat = new THREE.MeshPhysicalMaterial({
@@ -95,7 +91,7 @@ function init(){
         metalness: 1,
         roughness: 0.15,
         bumpScale: .005,
-        bumpMap: lidNormalTexture,
+        bumpMap: bdpNormalTexture,
     });
     windowMat = new THREE.MeshPhysicalMaterial({
         color: 0x000000,
@@ -232,12 +228,9 @@ function init(){
 
     //Window resizing
     window.addEventListener( 'resize', onWindowResize );
-
     function onWindowResize(){
-
     camera.aspect = container.offsetWidth / container.offsetHeight;
     camera.updateProjectionMatrix();
-
     renderer.setSize( container.offsetWidth , container.offsetHeight );
 
 }
