@@ -3,6 +3,9 @@ import { GLTFLoader } from '/js/GLTFLoader.js';
 import { OrbitControls } from '/js/OrbitControls.js';
 import { DRACOLoader } from '/js/DRACOLoader.js';
 import { EXRLoader } from '/js/EXRLoader.js';
+// import { EffectComposer } from '/js/EffectComposer.js';
+// import { RenderPass } from '/js/RenderPass.js';
+// import { SAOPass } from '/js/SAOPass.js';
 // import * as THREE from 'https://highwayproducts.com/wp-content/uploads/resources/TestEnvironment/js/three.module.js';
 // import { GLTFLoader } from 'https://highwayproducts.com/wp-content/uploads/resources/TestEnvironment/js/GLTFLoader.js';
 // import { OrbitControls } from 'https://highwayproducts.com/wp-content/uploads/resources/TestEnvironment/js/OrbitControls.js';
@@ -35,6 +38,12 @@ let basemesh, testmesh, windowMesh, truckBaseMesh, testMat, hingePoint, lidTest;
 var allModels, TruckModel, GullwingModel, HeadacheRackPost, HeadacheRackHex, LongLowSides, ShortLowSides,LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, TruckSlide;
 //Textures
 var bdpBumpTexture, dpBumpTexture, patriotTexture;
+
+let composer, renderPass, SaoPass;
+
+var clock;
+
+clock = new THREE.Clock();
 //#endregion
 
 //Lazy Load files
@@ -69,10 +78,45 @@ function init(){
     renderer.setSize(container.offsetWidth, container.offsetHeight);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.physicallyCorrectLights = true;
+
+    // composer = new EffectComposer(renderer);
+    // renderPass = new RenderPass(scene, camera);
+    // composer.addPass(renderPass);
+    // //SaoPass = new SAOPass(scene, camera, false, true);
+    // SaoPass = new SAOPass(scene, camera, false, true);
+
+    // SaoPass.OUTPUT = SaoPass.OUTPUT.Default;
+    // SaoPass.params.saoBias = -1;
+    // SaoPass.params.saoIntensity = .165;
+    // SaoPass.params.saoScale = .1;
+    // SaoPass.params.saoKernalRadius = 100;
+    // SaoPass.params.saoMinResolution = .005;
+    // SaoPass.params.saoBlur = true;
+    // SaoPass.params.saoBlurRadius = 20;
+    // SaoPass.params.saoBlurStdDev = 35;
+    // SaoPass.params.saoBlurDepthCutoff = .027;
+
+    // composer.addPass(SaoPass);
+
+    // console.log(SaoPass);
+
 
     //initialize objects
 
-    const light = new THREE.PointLight( 0xFFFFFF, 5, 100 );
+    const light = new THREE.PointLight( 0xFFFFFF, 5, 100, 2 );
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(0,.32,-3);
+    light.castShadow = true;
+    light.shadow.camera.top = 4;
+    light.shadow.camera.bottom = - 4;
+    light.shadow.camera.left = - 4;
+    light.shadow.camera.right = 4;
+    light.shadow.camera.near = 0.1;
+    light.shadow.camera.far = 40;
+    light.shadow.camera.far = 40;
+    light.shadow.bias = - 0.002;
+    scene.add(light);
 
 
     //load textures
@@ -174,6 +218,7 @@ function init(){
 
     //Orbit Controls
     controls = new OrbitControls(camera, renderer.domElement);
+
     controls.minDistance = 10;
     controls.enablePan = false;
     controls.enableDamping = true;
@@ -271,9 +316,13 @@ function init(){
     //Math function to convert angle to Radian
     //radian = 2 * Math.PI * (p_angle / 360);
 }
+
+
 function animate() {
     requestAnimationFrame( animate );
     renderer.render( scene, camera );
+    //var delta = clock.getDelta();
+    //composer.render(delta);
     controls.update();
     //console.log(container.offsetWidth);
     //console.log(controls.getPolarAngle());
@@ -459,6 +508,11 @@ async function addModelsToScene(){
         if(child.material && child.material.name === 'accent color'){
             child.material = blackMetalMat;
         }
+        if(child.isMesh){
+            child.castShadow = true;
+            child.receieveShadow = true;
+            console.log("shadow casted");
+        }
     });
     ShortFlatHatch.getObjectByName("Decimated_Hatch").material = bdpMaterial;
     GullwingModel.getObjectByName("gw-decimated-left-lid").material = bdpMaterial;
@@ -470,7 +524,9 @@ async function addModelsToScene(){
     LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").material = bdpMaterial;
     ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").material = bdpMaterial;
     LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").material = bdpMaterial;
-    console.log(TruckSlide.getObjectByName("Shape_IndexedFaceSet1773"));
+
+
+    //console.log(TruckSlide.getObjectByName("Shape_IndexedFaceSet1773"));
     //hide models
     HeadacheRackPost.visible = false;
     GullwingModel.visible = false;
