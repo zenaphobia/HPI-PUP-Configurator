@@ -3,6 +3,7 @@ import { GLTFLoader } from '/js/GLTFLoader.js';
 import { OrbitControls } from '/js/OrbitControls.js';
 import { DRACOLoader } from '/js/DRACOLoader.js';
 import { EXRLoader } from '/js/EXRLoader.js';
+//import { Sky } from '/js/Sky.js';
 // import { EffectComposer } from '/js/EffectComposer.js';
 // import { RenderPass } from '/js/RenderPass.js';
 // import { SAOPass } from '/js/SAOPass.js';
@@ -41,6 +42,8 @@ var bdpBumpTexture, dpBumpTexture, patriotTexture;
 
 let composer, renderPass, SaoPass;
 
+var sun = new THREE.Vector3();
+
 var clock;
 
 clock = new THREE.Clock();
@@ -63,6 +66,7 @@ function init(){
     loader = new GLTFLoader();
     fileLoader = new THREE.FileLoader();
     scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0xffffff, .01);
     container = document.getElementById('myCanvas');
     camera = new THREE.PerspectiveCamera( 35, container.offsetWidth / container.offsetHeight, 0.1, 1000 );
     camera.aspect = container.offsetWidth / container.offsetHeight;
@@ -78,7 +82,8 @@ function init(){
     renderer.setSize(container.offsetWidth, container.offsetHeight);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.outputEncoding = THREE.sRGBEncoding;
-    renderer.physicallyCorrectLights = true;
+    renderer.physicallyCorrectdirectionalLights = true;
+    renderer.shadowMap.enabled = true;
 
     // composer = new EffectComposer(renderer);
     // renderPass = new RenderPass(scene, camera);
@@ -104,19 +109,21 @@ function init(){
 
     //initialize objects
 
-    const light = new THREE.PointLight( 0xFFFFFF, 5, 100, 2 );
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    light.position.set(0,.32,-3);
-    light.castShadow = true;
-    light.shadow.camera.top = 4;
-    light.shadow.camera.bottom = - 4;
-    light.shadow.camera.left = - 4;
-    light.shadow.camera.right = 4;
-    light.shadow.camera.near = 0.1;
-    light.shadow.camera.far = 40;
-    light.shadow.camera.far = 40;
-    light.shadow.bias = - 0.002;
-    scene.add(light);
+    const directionalLight = new THREE.DirectionalLight( 0xFFFFFF, 1 );
+    //const directionaldirectionalLight = new THREE.DirectionaldirectionalLight(0xffffff, 1);
+    directionalLight.position.set(5,12,7.5);
+    directionalLight.castShadow = true;
+    directionalLight.shadow.camera.top = 10000;
+    directionalLight.shadow.camera.bottom = - 10000;
+    directionalLight.shadow.camera.left = - 10000;
+    directionalLight.shadow.camera.right = 10000;
+    directionalLight.shadow.camera.near = 0.0001;
+    directionalLight.shadow.camera.far = 1000000;
+    directionalLight.shadow.bias = - 0.002;
+    directionalLight.shadow.mapSize.width = 1024 *4;
+    directionalLight.shadow.mapSize.height = 1024 *4;
+
+    scene.add(directionalLight);
 
 
     //load textures
@@ -199,13 +206,13 @@ function init(){
         roughness: .05,
     });
 
-    //Lights
+    //directionalLights
 
     pmremGenerator = new THREE.PMREMGenerator(renderer);
     pmremGenerator.compileEquirectangularShader();
 
     new EXRLoader()
-    .load( 'hdrs/air_museum_playground_1k.exr', function ( texture ) {
+    .load( 'hdrs/sunset_jhbcentral_1k.exr', function ( texture ) {
 
         var exrCubeRenderTarget = pmremGenerator.fromEquirectangular(texture);
 
@@ -213,8 +220,7 @@ function init(){
 
         texture.dispose();
         pmremGenerator.dispose();
-    } );
-
+    });
 
     //Orbit Controls
     controls = new OrbitControls(camera, renderer.domElement);
@@ -274,7 +280,7 @@ function init(){
         Gullwing: true,
         HeadacheRack: 'None',
         LadderRack: true,
-        LEDLighting: 'None', //'battery', 'wired'
+        LEDdirectionalLighting: 'None', //'battery', 'wired'
         AdditionalGullwingTray: false,
         AdditionalLowSideTray: 'None', //1, 2
         LidFinshes: 'DiamondPlate', //BlackDiamondPlate, Leopard, Gladiator, Patriot
@@ -388,14 +394,14 @@ function renderPup(pupObject){
             console.log("Removing Ladder Rack");
             break;
     }
-    switch(clientPUP.LEDLighting){
+    switch(clientPUP.LEDdirectionalLighting){
         //Do we need Wired and Battery as options?
-        //If not, simplify LED lighting to boolean options
+        //If not, simplify LED directionalLighting to boolean options
         case 'None':
-            console.log("Unload LED Lighting");
+            console.log("Unload LED directionalLighting");
             break;
         case 'Wired':
-            console.log("Load Lighting");
+            console.log("Load directionalLighting");
     }
     switch(clientPUP.AdditionalGullwingTray){
         case true:
@@ -462,7 +468,7 @@ async function loadModels(){
         loader.loadAsync('models/seperate-models/shortDomedHatch.gltf'),
         loader.loadAsync('models/seperate-models/ladderRack.gltf'),
         loader.loadAsync('models/seperate-models/truckslide.gltf'),
-    ])
+    ]);
 
     TruckModel = setupModel(truckData);
     GullwingModel = setupModel(gullwingData);
