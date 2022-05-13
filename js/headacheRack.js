@@ -308,9 +308,18 @@ class HeadacheRack{
         switch(x){
             case "StandardBedRails":
                 this._feet = StandardBedRails;
+                if(this._uprights === BeastUprights){
+                    this._feet = BeastBedRails;
+                }
+                if(this.uprights === SavageUprights){
+                    this._feet = SavageBedRails;
+                }
                 break;
             case "SavageBedRails":
                 this._feet = SavageBedRails;
+                if(this._uprights !== SavageUprights){
+                    //switch case for validation here
+                }
                 break;
             case "BeastBedRails":
                 this._feet = BeastBedRails;
@@ -328,7 +337,7 @@ class HeadacheRack{
                 this._feet = BeastFeet;
                 break;
             default:
-                throw new TypeError("TypeError: Invalid finish selection");
+                throw new TypeError("TypeError: Invalid feet selection");
         }
     }
     set lights(x){
