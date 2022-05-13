@@ -59,7 +59,13 @@ var isFullLengthPUPLoaded = false;
 let metalMat, windowMat, redGlassMat,truckPaintMat, clearGlassMat, bdpMaterial, dpMaterial, blackMetalMat, leopardMaterial, patriotMat;
 
 var clientHeadacheRack = new HeadacheRack("Size1", "OpenPost", "GuardianUprights", "SmoothBlack", "BeastFeet", true);
-console.log(clientHeadacheRack.getPartNumber());
+clientHeadacheRack.mesh = "OpenWave";
+clientHeadacheRack.finish = "PolishedAluminum";
+clientHeadacheRack.feet = "SavageFeet";
+clientHeadacheRack.lights = "HDLightsOn";
+console.log(clientHeadacheRack);
+console.log(clientHeadacheRack.getPrice());
+console.log(findActiveObject(ShortLowSides));
 
 init();
 animate();
@@ -309,7 +315,7 @@ function init(){
     document.getElementById('black-dp').addEventListener("click", function(){switchToBlackDiamondPlate()});
     document.getElementById('leopard').addEventListener("click", function(){switchToLeopard()});
     document.getElementById('patriot').addEventListener("click", function(){switchToPatriot()});
-    document.getElementById('hide').addEventListener("click", function(){findActiveObject()});
+    document.getElementById('hide').addEventListener("click", function(){findActiveObject(GullwingModel)});
 
     
     //document.getElementById('hatches').addEventListener("click", function(){swapHatches()});
@@ -332,11 +338,7 @@ function init(){
 function animate() {
     requestAnimationFrame( animate );
     renderer.render( scene, camera );
-    //var delta = clock.getDelta();
-    //composer.render(delta);
     controls.update();
-    //console.log(container.offsetWidth);
-    //console.log(controls.getPolarAngle());
         //Observe a scene or a renderer
         if (typeof __THREE_DEVTOOLS__ !== 'undefined') {
             __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: scene }));
@@ -877,13 +879,29 @@ function switchToPatriot(){
     });
 }
 
-function findActiveObject(){
-    if(GullwingModel !== undefined ){
-        for(let i = 0; i <= GullwingModel.children.length - 1; i++){
-            if(GullwingModel.children[i].visible){
-                console.log(GullwingModel.children[i]);
-                //return GullwingModel.children[i];
-                GullwingModel.children[i].visible = false;
+//Returns all active objects in a group
+function findAllActiveObjects(x){
+    var group;
+
+    if(x !== undefined ){
+        for(let i = 0; i <= x.children.length - 1; i++){
+            if(x.children[i].visible){
+                console.log(x.children[i]);
+                group += x.children[i];
+                //x.children[i].visible = false;
+            }
+        }
+        return group;
+    }
+}
+//Returns the first child that is visible in a given group
+function findActiveObject(x){
+    if(x !== undefined ){
+        for(let i = 0; i <= x.children.length - 1; i++){
+            if(x.children[i].visible){
+                console.log(x.children[i]);
+                return x.children[i];
+                //x.children[i].visible = false;
             }
         }
     }
