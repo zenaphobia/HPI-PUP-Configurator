@@ -309,6 +309,7 @@ function init(){
     document.getElementById('black-dp').addEventListener("click", function(){switchToBlackDiamondPlate()});
     document.getElementById('leopard').addEventListener("click", function(){switchToLeopard()});
     document.getElementById('patriot').addEventListener("click", function(){switchToPatriot()});
+    document.getElementById('hide').addEventListener("click", function(){findActiveObject()});
 
     
     //document.getElementById('hatches').addEventListener("click", function(){swapHatches()});
@@ -874,4 +875,16 @@ function switchToPatriot(){
             child.material = blackMetalMat;
         }
     });
+}
+
+function findActiveObject(){
+    if(GullwingModel !== undefined ){
+        for(let i = 0; i <= GullwingModel.children.length - 1; i++){
+            if(GullwingModel.children[i].visible){
+                console.log(GullwingModel.children[i]);
+                //return GullwingModel.children[i];
+                GullwingModel.children[i].visible = false;
+            }
+        }
+    }
 }
