@@ -318,23 +318,95 @@ class HeadacheRack{
             case "SavageBedRails":
                 this._feet = SavageBedRails;
                 if(this._uprights !== SavageUprights){
-                    //switch case for validation here
+                    switch(this._uprights){
+                        case GuardianUprights || HoneycombUprights:
+                            this._feet = StandardBedRails;
+                            console.log("Savage Bed Rails are only compatible with Savage uprights, applying standard bed rails");
+                            break;
+                        case BeastUprights:
+                            this._feet = BeastBedRails;
+                            console.log("Savage Bed Rails are only compatible with Savage uprights, applying Beast bed rails");
+                            break;
+                    }
                 }
                 break;
             case "BeastBedRails":
                 this._feet = BeastBedRails;
+                if(this._uprights !== BeastUprights){
+                    switch(this._uprights){
+                        case GuardianUprights || HoneycombUprights:
+                            this._feet = StandardBedRails;
+                            console.log("Savage Bed Rails are only compatible with Savage uprights, applying standard bed rails");
+                            break;
+                        case SavageUprights:
+                            this._feet = SavageBedRails;
+                            console.log("Savage Bed Rails are only compatible with Savage uprights, applying Beast bed rails");
+                            break;
+                    }
+                }
                 break;
             case "HoneycombFeet":
                 this._feet = HoneycombFeet;
+                if(this._uprights !== HoneycombUprights){
+                    switch(this._uprights){
+                        case SavageUprights:
+                            this._feet = SavageFeet;
+                            break;
+                        case BeastFeet:
+                            this._feet = BeastFeet;
+                            break;
+                        case GuardianFeet:
+                            this._feet = GuardianFeet;
+                    }
+                }
                 break;
             case "GuardianFeet":
                 this._feet = GuardianFeet;
+                if(this._uprights !== GuardianUprights){
+                    switch(this._uprights){
+                        case SavageUprights:
+                            this._feet = SavageFeet;
+                            break;
+                        case BeastFeet:
+                            this._feet = BeastFeet;
+                            break;
+                        case HoneycombFeet:
+                            this._feet = HoneycombFeet;
+                            break;
+                    }
+                }
                 break;
             case "SavageFeet":
                 this._feet = SavageFeet;
+                if(this._uprights !== SavageUprights){
+                    switch(this._uprights){
+                        case HoneycombUprights:
+                            this._feet = HoneycombFeet;
+                            break;
+                        case GuardianUprights:
+                            this._feet = GuardianFeet;
+                            break;
+                        case BeastUprights:
+                            this._feet = BeastFeet;
+                            break;
+                    }
+                }
                 break;
             case "BeastFeet":
                 this._feet = BeastFeet;
+                if(this._uprights !== BeastUprights){
+                    switch(this._uprights){
+                        case HoneycombUprights:
+                            this._feet = HoneycombFeet;
+                            break;
+                        case GuardianUprights:
+                            this._feet = GuardianFeet;
+                            break;
+                        case SavageUprights:
+                            this._feet = SavageFeet;
+                            break;
+                    }
+                }
                 break;
             default:
                 throw new TypeError("TypeError: Invalid feet selection");
