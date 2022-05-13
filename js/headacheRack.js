@@ -78,7 +78,7 @@ const HoneycombFeet = {
     name: "Honeycomb Feet",
     price: 0
 }
-const GuardianbFeet = {
+const GuardianFeet = {
     name: "Guardian Feet",
     price: 0
 }
@@ -102,7 +102,7 @@ const HDLightsOff = {
 }
 
 class HeadacheRack{
-    constructor(size, mesh, uprights, finish, lights){
+    constructor(size, mesh, uprights, finish, feet, lights){
         switch(size){
             case "Size1":
                 this._size = Size1;
@@ -169,6 +169,31 @@ class HeadacheRack{
                 break;
             case "Leopard":
                 this._finish = Leopard;
+                break;
+            default:
+                throw new TypeError("TypeError: Invalid finish selection");
+        }
+        switch(feet){
+            case "StandardBedRails":
+                this._feet = StandardBedRails;
+                break;
+            case "SavageBedRails":
+                this._feet = SavageBedRails;
+                break;
+            case "BeastBedRails":
+                this._feet = BeastBedRails;
+                break;
+            case "HoneycombFeet":
+                this._feet = HoneycombFeet;
+                break;
+            case "GuardianFeet":
+                this._feet = GuardianFeet;
+                break;
+            case "SavageFeet":
+                this._feet = SavageFeet;
+                break;
+            case "BeastFeet":
+                this._feet = BeastFeet;
                 break;
             default:
                 throw new TypeError("TypeError: Invalid finish selection");
@@ -274,6 +299,33 @@ class HeadacheRack{
                 if(this._uprights !== HoneycombUprights){
                     this._finish = SmoothBlack;
                 }
+                break;
+            default:
+                throw new TypeError("TypeError: Invalid finish selection");
+        }
+    }
+    set feet(x){
+        switch(x){
+            case "StandardBedRails":
+                this._feet = StandardBedRails;
+                break;
+            case "SavageBedRails":
+                this._feet = SavageBedRails;
+                break;
+            case "BeastBedRails":
+                this._feet = BeastBedRails;
+                break;
+            case "HoneycombFeet":
+                this._feet = HoneycombFeet;
+                break;
+            case "GuardianFeet":
+                this._feet = GuardianFeet;
+                break;
+            case "SavageFeet":
+                this._feet = SavageFeet;
+                break;
+            case "BeastFeet":
+                this._feet = BeastFeet;
                 break;
             default:
                 throw new TypeError("TypeError: Invalid finish selection");
