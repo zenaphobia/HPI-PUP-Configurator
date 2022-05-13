@@ -427,7 +427,7 @@ class HeadacheRack{
         }
     }
 
-    getPartNumber(HRObject){
+    getPartNumber(){
         switch(this._uprights){
             case GuardianUprights:
                 if(this._size === Size1 && this._mesh === OpenPost && this._lights === HDLightsOn)
