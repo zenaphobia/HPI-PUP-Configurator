@@ -49,15 +49,15 @@ const HoneycombUprights = {
     price: 25
 }
 const GuardianUprights = {
-    name: "Guardian Legs",
+    name: "Guardian Uprights",
     price: 25
 }
 const SavageUprights = {
-    name: "Savage Legs",
+    name: "Savage Uprights",
     price: 25
 }
 const BeastUprights = {
-    name: "Beast Legs",
+    name: "Beast Uprights",
     price: 25
 }
 
@@ -123,7 +123,7 @@ class HeadacheRack{
                 this._size = Size7;
                 break;
             default:
-                throw new TypeError("TypeError: Invalid size selection");
+                throw new TypeError("TypeError: Invalid initial size selection");
         }
         switch(mesh){
             case "OpenPost":
@@ -142,7 +142,7 @@ class HeadacheRack{
                 this._mesh = FullWave;
                 break;
             default:
-                throw new TypeError("TypeError: Invalid mesh selection");
+                throw new TypeError("TypeError: Invalid initial mesh selection");
         }
         switch(uprights){
             case "HoneycombUprights":
@@ -158,7 +158,7 @@ class HeadacheRack{
                 this._uprights = SavageUprights;
                 break;
             default:
-                throw new TypeError("TypeError: Invalid upright selection");
+                throw new TypeError("TypeError: Invalid initial upright selection");
         }
         switch(finish){
             case "PolishedAluminum":
@@ -171,7 +171,7 @@ class HeadacheRack{
                 this._finish = Leopard;
                 break;
             default:
-                throw new TypeError("TypeError: Invalid finish selection");
+                throw new TypeError("TypeError: Invalid initial finish selection");
         }
         switch(feet){
             case "StandardBedRails":
@@ -196,7 +196,7 @@ class HeadacheRack{
                 this._feet = BeastFeet;
                 break;
             default:
-                throw new TypeError("TypeError: Invalid finish selection");
+                throw new TypeError("TypeError: Invalid initial feet selection");
         }
         switch(lights){
             case true:
@@ -424,6 +424,15 @@ class HeadacheRack{
                 this._lights = HDLightsOff;
             default:
                 this._lights = HDLightsOff;
+        }
+    }
+
+    getPartNumber(HRObject){
+        switch(this._uprights){
+            case GuardianUprights:
+                if(this._size === Size1 && this._mesh === OpenPost && this._lights === HDLightsOn)
+                    return "4012-028-BK62";
+            break;
         }
     }
 }

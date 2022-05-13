@@ -58,12 +58,8 @@ var isFullLengthPUPLoaded = false;
 //materials
 let metalMat, windowMat, redGlassMat,truckPaintMat, clearGlassMat, bdpMaterial, dpMaterial, blackMetalMat, leopardMaterial, patriotMat;
 
-var clientHeadacheRack = new HeadacheRack("Size1", "OpenPost", "GuardianUprights", "SmoothBlack", false);
-clientHeadacheRack.mesh = "OpenMesh";
-clientHeadacheRack.size = "Size2";
-clientHeadacheRack.finish = "PolishedAluminum";
-clientHeadacheRack.mesh = "FullWave";
-console.log(clientHeadacheRack);
+var clientHeadacheRack = new HeadacheRack("Size1", "OpenPost", "GuardianUprights", "SmoothBlack", "BeastFeet", true);
+console.log(clientHeadacheRack.getPartNumber());
 
 init();
 animate();
@@ -555,13 +551,13 @@ async function addModelsToScene(){
 
 function openLowSideLid(){
     if(!lidOpen){
-        document.getElementById('hinge').innerHTML = 'Close lid';
+        document.getElementById('hinge').textContent = 'Close lid';
         gsap.to(hingePoint.rotation, {duration: 2, x: 2 * Math.PI * (160 / 360), ease:"expo" });
         gsap.to(LongLowSides.getObjectByName('Shape_IndexedFaceSet506').rotation, {duration: 2, x: 2 * Math.PI * (160 / 360), ease:"expo" });
         lidOpen = true;
     }
     else{
-        document.getElementById('hinge').innerHTML = 'Open Lid';
+        document.getElementById('hinge').textContent = 'Open Lid';
         gsap.to(hingePoint.rotation, {duration: 2, x: 2 * Math.PI * (90 / 360), ease:"expo" });
         gsap.to(LongLowSides.getObjectByName('Shape_IndexedFaceSet506').rotation, {duration: 2, x: 2 * Math.PI * (90 / 360), ease:"expo" });
         lidOpen = false;
@@ -570,11 +566,11 @@ function openLowSideLid(){
 
 function showOrHideLadderRack(){
     if(LadderRack.visible){
-        document.getElementById('ladder-rack').innerHTML = 'Add Ladder Rack';
+        document.getElementById('ladder-rack').textContent = 'Add Ladder Rack';
         LadderRack.visible = false;
     }
     else if(!LadderRack.visible){
-        document.getElementById('ladder-rack').innerHTML = 'Remove Ladder Rack';
+        document.getElementById('ladder-rack').textContent = 'Remove Ladder Rack';
         LadderRack.visible = true;
     }
 };
@@ -661,12 +657,12 @@ var isHatchOpen = false;
 function OpenHatch(){
     if(!isHatchOpen){
         gsap.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (-5 / 360), ease:"expo" });
-        document.getElementById('open-hatch').innerHTML = 'Close Hatch';
+        document.getElementById('open-hatch').textContent = 'Close Hatch';
         isHatchOpen = true;
     }
     else{
         gsap.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo" });
-        document.getElementById('open-hatch').innerHTML = 'Open Hatch';
+        document.getElementById('open-hatch').textContent = 'Open Hatch';
         isHatchOpen = false;
     }
     console.log("Open Hatch was clicked");
@@ -675,12 +671,12 @@ function OpenHatch(){
 function presentTruckslide(){
     if(!isHatchOpen){
         gsap.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (-5 / 360), ease:"expo" });
-        document.getElementById('open-hatch').innerHTML = 'Close Hatch';
+        document.getElementById('open-hatch').textContent = 'Close Hatch';
         isHatchOpen = true;
     }
     else{
         gsap.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo" });
-        document.getElementById('open-hatch').innerHTML = 'Open Hatch';
+        document.getElementById('open-hatch').textContent = 'Open Hatch';
         isHatchOpen = false;
     }
     console.log("Open Hatch was clicked");
@@ -697,7 +693,7 @@ function openTailgate(){
         gsap.to(ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").rotation, {duration: 2, y: 2 * Math.PI * (-15 / 360), ease:"expo"});
         gsap.to(TruckModel.getObjectByName("tailgate").rotation, {duration: 2, x: 2 * Math.PI * (-90 / 360), ease:"expo", delay: .5});
         gsap.to(TruckSlide.getObjectByName("truckslide").position, {duration: 2, x: -11, ease:"expo", delay: 1});
-        document.getElementById('open-tailgate').innerHTML = 'Close tailgate';
+        document.getElementById('open-tailgate').textContent = 'Close tailgate';
         isTailgateOpen = true;
     }
     else{
@@ -707,7 +703,7 @@ function openTailgate(){
         gsap.to(LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 1});
         gsap.to(LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 1});
         gsap.to(ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 1});
-        document.getElementById('open-tailgate').innerHTML = 'Open tailgate';
+        document.getElementById('open-tailgate').textContent = 'Open tailgate';
         isTailgateOpen = false;
     }
     console.log("Button was clicked");
