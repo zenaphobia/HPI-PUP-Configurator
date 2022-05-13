@@ -3,6 +3,7 @@ import { GLTFLoader } from '/js/GLTFLoader.js';
 import { OrbitControls } from '/js/OrbitControls.js';
 import { DRACOLoader } from '/js/DRACOLoader.js';
 import { EXRLoader } from '/js/EXRLoader.js';
+import HeadacheRack from '/js/headacheRack.js';
 //import { Sky } from '/js/Sky.js';
 // import { EffectComposer } from '/js/EffectComposer.js';
 // import { RenderPass } from '/js/RenderPass.js';
@@ -56,6 +57,13 @@ var fragData = frag;
 var isFullLengthPUPLoaded = false;
 //materials
 let metalMat, windowMat, redGlassMat,truckPaintMat, clearGlassMat, bdpMaterial, dpMaterial, blackMetalMat, leopardMaterial, patriotMat;
+
+var clientHeadacheRack = new HeadacheRack("Size1", "OpenPost", "GuardianUprights", "SmoothBlack", false);
+clientHeadacheRack.mesh = "OpenMesh";
+clientHeadacheRack.size = "Size2";
+clientHeadacheRack.finish = "PolishedAluminum";
+clientHeadacheRack.mesh = "FullWave";
+console.log(clientHeadacheRack);
 
 init();
 animate();
