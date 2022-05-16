@@ -58,14 +58,9 @@ var isFullLengthPUPLoaded = false;
 //materials
 let metalMat, windowMat, redGlassMat,truckPaintMat, clearGlassMat, bdpMaterial, dpMaterial, blackMetalMat, leopardMaterial, patriotMat;
 
-var clientHeadacheRack = new HeadacheRack("Size1", "OpenPost", "GuardianUprights", "SmoothBlack", "BeastFeet", true);
-clientHeadacheRack.mesh = "OpenWave";
-clientHeadacheRack.finish = "PolishedAluminum";
-clientHeadacheRack.feet = "SavageFeet";
-clientHeadacheRack.lights = "HDLightsOn";
+var clientHeadacheRack = new HeadacheRack("Size1", "OpenPost", "GuardianUprights", "SmoothBlack", "BeastFeet", false);
 console.log(clientHeadacheRack);
 console.log(clientHeadacheRack.getPrice());
-console.log(findActiveObject(ShortLowSides));
 
 init();
 animate();
@@ -495,7 +490,6 @@ async function loadModels(){
 
 function setupModel(data){
     const model = data.scene;
-    console.log("setup() finished");
     return model;
 }
 
@@ -523,7 +517,7 @@ async function addModelsToScene(){
         }
         if(child.isMesh){
             child.castShadow = true;
-            child.receieveShadow = true;
+            child.receiveShadow = true;
             console.log("shadow casted");
         }
     });

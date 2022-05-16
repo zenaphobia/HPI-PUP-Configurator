@@ -92,11 +92,11 @@ const BeastFeet = {
 }
 
 //Lights
-const HDLightsOn = {
+const HDLightsOff = {
     name: "No HD Lights",
     price: 0
 }
-const HDLightsOff = {
+const HDLightsOn = {
     name: "HD Lights enabled",
     price: 255
 }
@@ -203,7 +203,7 @@ class HeadacheRack{
                 this._lights = HDLightsOn;
                 break;
             case false:
-                this._lights = HDLightsOff
+                this._lights = HDLightsOff;
         }
     }
 
