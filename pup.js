@@ -311,6 +311,7 @@ function init(){
     document.getElementById('leopard').addEventListener("click", function(){switchToLeopard()});
     document.getElementById('patriot').addEventListener("click", function(){switchToPatriot()});
     document.getElementById('hide').addEventListener("click", function(){findActiveObject(GullwingModel)});
+    document.getElementById('open-gullwing').addEventListener("click", function(){findActiveObject(GullwingModel)});
 
     
     //document.getElementById('hatches').addEventListener("click", function(){swapHatches()});
@@ -704,6 +705,10 @@ function openTailgate(){
         isTailgateOpen = false;
     }
     console.log("Button was clicked");
+}
+
+function openGullwing(){
+    gsap.to(GullwingModel.getObjectByName("gw-decimated-left-lid").position, {duration: 2, x: -4.65, ease:"expo"});
 }
 
 function switchToDiamondPlate(){
