@@ -37,11 +37,16 @@ let loader, fileLoader, scene, container, camera, renderer, controls, dracoLoade
 //#region INIT FILES
 let basemesh, testmesh, windowMesh, truckBaseMesh, testMat, hingePoint, lidTest;
 //All Models
-var allModels, TruckModel, GullwingModel, HeadacheRackPost, HeadacheRackHex, LongLowSides, ShortLowSides,LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, XT1200Truckslide, XT2000Truckslide;
+var allModels, TruckModel, GullwingModel, HeadacheRackPost, HeadacheRackHex, LongLowSides, ShortLowSides,LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, XTBase, XT1200Truckslide, XT2000Truckslide;
 //Textures
 var bdpBumpTexture, dpBumpTexture, patriotTexture;
 
 let composer, renderPass, SaoPass;
+
+var isHatchOpen = false;
+var isTailgateOpen = false;
+var isTruckslideOpen = false;
+
 
 var sun = new THREE.Vector3();
 
@@ -57,10 +62,6 @@ var fragData = frag;
 var isFullLengthPUPLoaded = false;
 //materials
 let metalMat, windowMat, redGlassMat,truckPaintMat, clearGlassMat, bdpMaterial, dpMaterial, blackMetalMat, leopardMaterial, patriotMat;
-
-var clientHeadacheRack = new HeadacheRack("Size1", "OpenPost", "GuardianUprights", "SmoothBlack", "BeastFeet", false);
-console.log(clientHeadacheRack);
-console.log(clientHeadacheRack.getPrice());
 
 init();
 animate();
@@ -310,10 +311,13 @@ function init(){
     document.getElementById('black-dp').addEventListener("click", function(){switchToBlackDiamondPlate()});
     document.getElementById('leopard').addEventListener("click", function(){switchToLeopard()});
     document.getElementById('patriot').addEventListener("click", function(){switchToPatriot()});
-    document.getElementById('hide').addEventListener("click", function(){findActiveObject(GullwingModel)});
+    // document.getElementById('hide').addEventListener("click", function(){findActiveObject(GullwingModel)});
     document.getElementById('open-gullwing').addEventListener("click", function(){openGullwing()});
     document.getElementById('xt1200').addEventListener("click", function(){chooseXT1200()});
     document.getElementById('xt2000').addEventListener("click", function(){chooseXT2000()});
+    document.getElementById('open-hatch').addEventListener("click", function(){openHatch()});
+    document.getElementById('open-truckslide').addEventListener("click", function(){openTruckslide()});
+    document.getElementById('hide-truckslide').addEventListener("click", function(){hideTruckslide()});
 
     //document.getElementById('hatches').addEventListener("click", function(){swapHatches()});
 
@@ -459,7 +463,7 @@ var lidOpen;
 
 async function loadModels(){
     //add all models here
-    var [truckData, gullwingData, hrHexData, hrPostData, LongLSData, shortLSData, longFHData, shortFHdata, longDomedData, shortDomedData, lRData, TSData1200, TSData2000] = await Promise.all([
+    var [truckData, gullwingData, hrHexData, hrPostData, LongLSData, shortLSData, longFHData, shortFHdata, longDomedData, shortDomedData, lRData, TSBaseData, TSData1200, TSData2000] = await Promise.all([
         loader.loadAsync('models/seperate-models/truck.gltf'),
         loader.loadAsync('models/seperate-models/gullwing.gltf'),
         loader.loadAsync('models/seperate-models/headacheRackHex.gltf'),
@@ -471,6 +475,7 @@ async function loadModels(){
         loader.loadAsync('models/seperate-models/longDomedHatch.gltf'),
         loader.loadAsync('models/seperate-models/shortDomedHatch.gltf'),
         loader.loadAsync('models/seperate-models/ladderRack.gltf'),
+        loader.loadAsync('models/seperate-models/truckslide-base.gltf'),
         loader.loadAsync('models/seperate-models/truckslide-xt1200.gltf'),
         loader.loadAsync('models/seperate-models/truckslide-xt2000.gltf'),
     ]);
@@ -486,10 +491,11 @@ async function loadModels(){
     LongDomedHatch = setupModel(longDomedData);
     ShortDomedHatch = setupModel(shortDomedData);
     LadderRack = setupModel(lRData);
+    XTBase = setupModel(TSBaseData);
     XT1200Truckslide = setupModel(TSData1200);
     XT2000Truckslide = setupModel(TSData2000);
     console.log("model data set up");
-    return {TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, XT1200Truckslide, XT2000Truckslide };
+    return {TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, XTBase, XT1200Truckslide, XT2000Truckslide };
 }
 
 function setupModel(data){
@@ -499,9 +505,9 @@ function setupModel(data){
 
 async function addModelsToScene(){
     //load models, add to scene, assign hinges to variables here
-    var {TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, XT1200Truckslide, XT2000Truckslide} = await loadModels();
+    var {TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, XTBase, XT1200Truckslide, XT2000Truckslide} = await loadModels();
 
-    scene.add(TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, XT1200Truckslide, XT2000Truckslide);
+    scene.add(TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, XTBase, XT1200Truckslide, XT2000Truckslide);
 
     //adding hinge points
     hingePoint = ShortLowSides.getObjectByName('lowside-hinge');
@@ -653,21 +659,6 @@ function changeCam(){
     document.getElementById('body').addEventListener("mousedown", function(){animation.kill()});
 }
 
-var isHatchOpen = false;
-
-function OpenHatch(){
-    if(!isHatchOpen){
-        gsap.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (-5 / 360), ease:"expo" });
-        document.getElementById('open-hatch').textContent = 'Close Hatch';
-        isHatchOpen = true;
-    }
-    else{
-        gsap.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo" });
-        document.getElementById('open-hatch').textContent = 'Open Hatch';
-        isHatchOpen = false;
-    }
-    console.log("Open Hatch was clicked");
-}
 
 function presentXT1200Truckslide(){
     if(!isHatchOpen){
@@ -683,37 +674,9 @@ function presentXT1200Truckslide(){
     console.log("Open Hatch was clicked");
 }
 
-var isTailgateOpen = false;
-
-function openTailgate(){
-
-    if(!isTailgateOpen){
-        gsap.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (-15 / 360), ease:"expo"});
-        gsap.to(LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").rotation, {duration: 2, y: 2 * Math.PI * (-10 / 360), ease:"expo"});
-        gsap.to(LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").rotation, {duration: 2, y: 2 * Math.PI * (-10 / 360), ease:"expo"});
-        gsap.to(ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").rotation, {duration: 2, y: 2 * Math.PI * (-15 / 360), ease:"expo"});
-        gsap.to(TruckModel.getObjectByName("tailgate").rotation, {duration: 2, x: 2 * Math.PI * (-90 / 360), ease:"expo", delay: .5});
-        gsap.to(XT1200Truckslide.getObjectByName("truckslide").position, {duration: 2, x: -11, ease:"expo", delay: 1});
-        gsap.to(XT2000Truckslide.getObjectByName("Truckslide_XT200").position, {duration: 2, x: -11, ease:"expo", delay: 1});
-        document.getElementById('open-tailgate').textContent = 'Close tailgate';
-        isTailgateOpen = true;
-    }
-    else{
-        gsap.to(XT1200Truckslide.getObjectByName("truckslide").position, {duration: 2, x: -4.65, ease:"expo"});
-        gsap.to(XT2000Truckslide.getObjectByName("Truckslide_XT200").position, {duration: 2, x: -4.65, ease:"expo"});
-        gsap.to(TruckModel.getObjectByName("tailgate").rotation, {duration: 2, x: 2 * Math.PI * (0 / 360), ease:"expo", delay: .5});
-        gsap.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 1});
-        gsap.to(LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 1});
-        gsap.to(LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 1});
-        gsap.to(ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 1});
-        document.getElementById('open-tailgate').textContent = 'Open tailgate';
-        isTailgateOpen = false;
-    }
-    console.log("Button was clicked");
-}
-
 function chooseXT1200(){
     if(XT1200Truckslide.visible !== true){
+        XTBase.visible = true;
         XT2000Truckslide.visible = false;
         XT1200Truckslide.visible = true;
     }
@@ -721,15 +684,69 @@ function chooseXT1200(){
 
 function chooseXT2000(){
     if(XT2000Truckslide.visible !== true){
+        XTBase.visible = true;
         XT2000Truckslide.visible = true;
         XT1200Truckslide.visible = false;
+    }
+}
+
+function openHatch(){
+
+    if(!isHatchOpen){
+        gsap.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (-15 / 360), ease:"expo"});
+        gsap.to(LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").rotation, {duration: 2, y: 2 * Math.PI * (-10 / 360), ease:"expo"});
+        gsap.to(LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").rotation, {duration: 2, y: 2 * Math.PI * (-10 / 360), ease:"expo"});
+        gsap.to(ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").rotation, {duration: 2, y: 2 * Math.PI * (-15 / 360), ease:"expo"});
+        document.getElementById("open-hatch").innerText = "Close Hatch";
+        isHatchOpen = true;
+    }
+    else{
+        gsap.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 0});
+        gsap.to(LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 0});
+        gsap.to(LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 0});
+        gsap.to(ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 0});
+        document.getElementById("open-hatch").innerText = "Open Hatch";
+        isHatchOpen = false;
+    }
+}
+
+function openTailgate(){
+    if(!isTailgateOpen && isHatchOpen){
+        gsap.to(TruckModel.getObjectByName("tailgate").rotation, {duration: 2, x: 2 * Math.PI * (-90 / 360), ease:"expo"});
+        isTailgateOpen = true;
+    }
+    else if(isTailgateOpen && isHatchOpen && !isTruckslideOpen){
+        gsap.to(TruckModel.getObjectByName("tailgate").rotation, {duration: 2, x: 2 * Math.PI * (0 / 360), ease:"expo"});
+        isTailgateOpen = false;
+    }
+}
+
+function hideTruckslide(){
+    XTBase.visible = false;
+    XT1200Truckslide.visible = false;
+    XT2000Truckslide.visible = false;
+}
+
+function openTruckslide(){
+    if(!isTruckslideOpen && isTailgateOpen){
+        gsap.to(XTBase.getObjectByName("truckslide_movingBase").position, {duration: 2, x: -11, ease:"expo"});
+        gsap.to(XT2000Truckslide.getObjectByName("Truckslide_XT2000").position, {duration: 2, x: -11, ease:"expo"});
+        gsap.to(XT1200Truckslide.getObjectByName("Truckslide_XT1200").position, {duration: 2, x: -11, ease:"expo"});
+        document.getElementById('open-truckslide').innerText = "Close Truckslide";
+        isTruckslideOpen = true;
+    }
+    else if(isTruckslideOpen && isTailgateOpen){
+        gsap.to(XTBase.getObjectByName("truckslide_movingBase").position, {duration: 2, x: -4.65, ease:"expo"});
+        gsap.to(XT1200Truckslide.getObjectByName("Truckslide_XT1200").position, {duration: 2, x: -4.65, ease:"expo"});
+        gsap.to(XT2000Truckslide.getObjectByName("Truckslide_XT2000").position, {duration: 2, x: -4.65, ease:"expo"});
+        document.getElementById('open-truckslide').innerText = "Open Truckslide";
+        isTruckslideOpen = false;
     }
 }
 
 function openGullwing(){
     if(GullwingModel.getObjectByName("gw-decimated-left-lid").rotation.x < 2 ){
         gsap.to(GullwingModel.getObjectByName("gw-decimated-left-lid").rotation, {duration: 2, x: 135 * (Math.PI / 180), ease:"expo"});
-
     }
     else{
         gsap.to(GullwingModel.getObjectByName("gw-decimated-left-lid").rotation, {duration: 2, x: 90 * (Math.PI / 180), ease:"expo"});

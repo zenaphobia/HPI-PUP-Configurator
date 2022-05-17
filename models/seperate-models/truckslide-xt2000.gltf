@@ -133,7 +133,7 @@
                 6
             ],
             "mesh" : 7,
-            "name" : "Truckslide XT200",
+            "name" : "Truckslide XT2000",
             "rotation" : [
                 -0.5000001788139343,
                 0.49999985098838806,
@@ -146,7 +146,7 @@
                 0.10000000149011612
             ],
             "translation" : [
-                -4.377631664276123,
+                -4.619999885559082,
                 -1.7579946517944336,
                 0.00754016637802124
             ]
@@ -445,18 +445,18 @@
     "images" : [
         {
             "mimeType" : "image/png",
-            "name" : "1200-middle-taper",
-            "uri" : "1200-middle-taper.png"
+            "name" : "2000-middle-taper",
+            "uri" : "2000-middle-taper.png"
         },
         {
             "mimeType" : "image/png",
-            "name" : "1200-right-side",
-            "uri" : "1200-right-side.png"
+            "name" : "2000-right-side",
+            "uri" : "2000-right-side.png"
         },
         {
             "mimeType" : "image/png",
-            "name" : "1200-left-side",
-            "uri" : "1200-left-side.png"
+            "name" : "2000-left-side",
+            "uri" : "2000-left-side.png"
         }
     ],
     "accessors" : [
