@@ -37,7 +37,7 @@ let loader, fileLoader, scene, container, camera, renderer, controls, dracoLoade
 //#region INIT FILES
 let basemesh, testmesh, windowMesh, truckBaseMesh, testMat, hingePoint, lidTest;
 //All Models
-var allModels, TruckModel, GullwingModel, HeadacheRackPost, HeadacheRackHex, LongLowSides, ShortLowSides,LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, TruckSlide;
+var allModels, TruckModel, GullwingModel, HeadacheRackPost, HeadacheRackHex, LongLowSides, ShortLowSides,LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, XT1200Truckslide, XT2000Truckslide;
 //Textures
 var bdpBumpTexture, dpBumpTexture, patriotTexture;
 
@@ -289,7 +289,7 @@ function init(){
         AdditionalGullwingTray: false,
         AdditionalLowSideTray: 'None', //1, 2
         LidFinshes: 'DiamondPlate', //BlackDiamondPlate, Leopard, Gladiator, Patriot
-        TruckSlide: '1200',
+        XT1200Truckslide: '1200',
     };
     //#endregion
 
@@ -311,9 +311,10 @@ function init(){
     document.getElementById('leopard').addEventListener("click", function(){switchToLeopard()});
     document.getElementById('patriot').addEventListener("click", function(){switchToPatriot()});
     document.getElementById('hide').addEventListener("click", function(){findActiveObject(GullwingModel)});
-    document.getElementById('open-gullwing').addEventListener("click", function(){findActiveObject(GullwingModel)});
+    document.getElementById('open-gullwing').addEventListener("click", function(){openGullwing()});
+    document.getElementById('xt1200').addEventListener("click", function(){chooseXT1200()});
+    document.getElementById('xt2000').addEventListener("click", function(){chooseXT2000()});
 
-    
     //document.getElementById('hatches').addEventListener("click", function(){swapHatches()});
 
 
@@ -439,15 +440,15 @@ function renderPup(pupObject){
             console.log("Loading patriot");
             break;
     }
-    switch(clientPUP.TruckSlide){
+    switch(clientPUP.XT1200Truckslide){
         case '1200':
-            console.log("Loading 1200XT truckslide");
+            console.log("Loading 1200XT XT1200Truckslide");
             break;
         case '2000':
-            console.log("Loading 2000XT truckslide");
+            console.log("Loading 2000XT XT1200Truckslide");
             break;
         case '4000':
-            console.log("Loading 4000XT truckslide");
+            console.log("Loading 4000XT XT1200Truckslide");
             break;
     }
     console.log("PUP rendered successfully")
@@ -458,7 +459,7 @@ var lidOpen;
 
 async function loadModels(){
     //add all models here
-    var [truckData, gullwingData, hrHexData, hrPostData, LongLSData, shortLSData, longFHData, shortFHdata, longDomedData, shortDomedData, lRData, TSdata] = await Promise.all([
+    var [truckData, gullwingData, hrHexData, hrPostData, LongLSData, shortLSData, longFHData, shortFHdata, longDomedData, shortDomedData, lRData, TSData1200, TSData2000] = await Promise.all([
         loader.loadAsync('models/seperate-models/truck.gltf'),
         loader.loadAsync('models/seperate-models/gullwing.gltf'),
         loader.loadAsync('models/seperate-models/headacheRackHex.gltf'),
@@ -470,7 +471,8 @@ async function loadModels(){
         loader.loadAsync('models/seperate-models/longDomedHatch.gltf'),
         loader.loadAsync('models/seperate-models/shortDomedHatch.gltf'),
         loader.loadAsync('models/seperate-models/ladderRack.gltf'),
-        loader.loadAsync('models/seperate-models/truckslide.gltf'),
+        loader.loadAsync('models/seperate-models/truckslide-xt1200.gltf'),
+        loader.loadAsync('models/seperate-models/truckslide-xt2000.gltf'),
     ]);
 
     TruckModel = setupModel(truckData);
@@ -484,9 +486,10 @@ async function loadModels(){
     LongDomedHatch = setupModel(longDomedData);
     ShortDomedHatch = setupModel(shortDomedData);
     LadderRack = setupModel(lRData);
-    TruckSlide = setupModel(TSdata);
+    XT1200Truckslide = setupModel(TSData1200);
+    XT2000Truckslide = setupModel(TSData2000);
     console.log("model data set up");
-    return {TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, TruckSlide };
+    return {TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, XT1200Truckslide, XT2000Truckslide };
 }
 
 function setupModel(data){
@@ -496,9 +499,9 @@ function setupModel(data){
 
 async function addModelsToScene(){
     //load models, add to scene, assign hinges to variables here
-    var {TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, TruckSlide} = await loadModels();
+    var {TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, XT1200Truckslide, XT2000Truckslide} = await loadModels();
 
-    scene.add(TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, TruckSlide);
+    scene.add(TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, XT1200Truckslide, XT2000Truckslide);
 
     //adding hinge points
     hingePoint = ShortLowSides.getObjectByName('lowside-hinge');
@@ -521,6 +524,7 @@ async function addModelsToScene(){
             child.receiveShadow = true;
             console.log("shadow casted");
         }
+        
     });
     ShortFlatHatch.getObjectByName("Decimated_Hatch").material = bdpMaterial;
     GullwingModel.getObjectByName("gw-decimated-left-lid").material = bdpMaterial;
@@ -533,8 +537,7 @@ async function addModelsToScene(){
     ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").material = bdpMaterial;
     LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").material = bdpMaterial;
 
-
-    //console.log(TruckSlide.getObjectByName("Shape_IndexedFaceSet1773"));
+    //console.log(XT1200Truckslide.getObjectByName("Shape_IndexedFaceSet1773"));
     //hide models
     HeadacheRackPost.visible = false;
     GullwingModel.visible = false;
@@ -544,7 +547,7 @@ async function addModelsToScene(){
     ShortDomedHatch.visible = false;
     LongDomedHatch.visible = false;
     LadderRack.visible = false;
-    console.log("added models");
+    XT2000Truckslide.visible = false;
 }
 
 function openLowSideLid(){
@@ -666,7 +669,7 @@ function OpenHatch(){
     console.log("Open Hatch was clicked");
 }
 
-function presentTruckslide(){
+function presentXT1200Truckslide(){
     if(!isHatchOpen){
         gsap.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (-5 / 360), ease:"expo" });
         document.getElementById('open-hatch').textContent = 'Close Hatch';
@@ -690,12 +693,14 @@ function openTailgate(){
         gsap.to(LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").rotation, {duration: 2, y: 2 * Math.PI * (-10 / 360), ease:"expo"});
         gsap.to(ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").rotation, {duration: 2, y: 2 * Math.PI * (-15 / 360), ease:"expo"});
         gsap.to(TruckModel.getObjectByName("tailgate").rotation, {duration: 2, x: 2 * Math.PI * (-90 / 360), ease:"expo", delay: .5});
-        gsap.to(TruckSlide.getObjectByName("truckslide").position, {duration: 2, x: -11, ease:"expo", delay: 1});
+        gsap.to(XT1200Truckslide.getObjectByName("truckslide").position, {duration: 2, x: -11, ease:"expo", delay: 1});
+        gsap.to(XT2000Truckslide.getObjectByName("Truckslide_XT200").position, {duration: 2, x: -11, ease:"expo", delay: 1});
         document.getElementById('open-tailgate').textContent = 'Close tailgate';
         isTailgateOpen = true;
     }
     else{
-        gsap.to(TruckSlide.getObjectByName("truckslide").position, {duration: 2, x: -4.65, ease:"expo"});
+        gsap.to(XT1200Truckslide.getObjectByName("truckslide").position, {duration: 2, x: -4.65, ease:"expo"});
+        gsap.to(XT2000Truckslide.getObjectByName("Truckslide_XT200").position, {duration: 2, x: -4.65, ease:"expo"});
         gsap.to(TruckModel.getObjectByName("tailgate").rotation, {duration: 2, x: 2 * Math.PI * (0 / 360), ease:"expo", delay: .5});
         gsap.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 1});
         gsap.to(LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 1});
@@ -707,8 +712,28 @@ function openTailgate(){
     console.log("Button was clicked");
 }
 
+function chooseXT1200(){
+    if(XT1200Truckslide.visible !== true){
+        XT2000Truckslide.visible = false;
+        XT1200Truckslide.visible = true;
+    }
+}
+
+function chooseXT2000(){
+    if(XT2000Truckslide.visible !== true){
+        XT2000Truckslide.visible = true;
+        XT1200Truckslide.visible = false;
+    }
+}
+
 function openGullwing(){
-    gsap.to(GullwingModel.getObjectByName("gw-decimated-left-lid").position, {duration: 2, x: -4.65, ease:"expo"});
+    if(GullwingModel.getObjectByName("gw-decimated-left-lid").rotation.x < 2 ){
+        gsap.to(GullwingModel.getObjectByName("gw-decimated-left-lid").rotation, {duration: 2, x: 135 * (Math.PI / 180), ease:"expo"});
+
+    }
+    else{
+        gsap.to(GullwingModel.getObjectByName("gw-decimated-left-lid").rotation, {duration: 2, x: 90 * (Math.PI / 180), ease:"expo"});
+    }
 }
 
 function switchToDiamondPlate(){
