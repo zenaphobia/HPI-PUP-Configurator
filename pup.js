@@ -4,9 +4,9 @@ import { OrbitControls } from '/js/OrbitControls.js';
 import { DRACOLoader } from '/js/DRACOLoader.js';
 import { EXRLoader } from '/js/EXRLoader.js';
 import HeadacheRack from '/js/headacheRack.js';
-//import { Sky } from '/js/Sky.js';
-// import { EffectComposer } from '/js/EffectComposer.js';
-// import { RenderPass } from '/js/RenderPass.js';
+import { UnrealBloomPass } from '/js/UnrealBloomPass.js';
+import { EffectComposer } from '/js/EffectComposer.js';
+import { RenderPass } from '/js/RenderPass.js';
 // import { SAOPass } from '/js/SAOPass.js';
 // import * as THREE from 'https://highwayproducts.com/wp-content/uploads/resources/TestEnvironment/js/three.module.js';
 // import { GLTFLoader } from 'https://highwayproducts.com/wp-content/uploads/resources/TestEnvironment/js/GLTFLoader.js';
@@ -61,7 +61,7 @@ var vertexData = vert;
 var fragData = frag;
 var isFullLengthPUPLoaded = false;
 //materials
-let metalMat, windowMat, redGlassMat,truckPaintMat, clearGlassMat, bdpMaterial, dpMaterial, blackMetalMat, leopardMaterial, patriotMat;
+let metalMat, windowMat, redGlassMat,truckPaintMat, clearGlassMat, bdpMaterial, dpMaterial, blackMetalMat, leopardMaterial, patriotMat, emissiveLight;
 
 init();
 animate();
@@ -72,7 +72,7 @@ function init(){
     loader = new GLTFLoader();
     fileLoader = new THREE.FileLoader();
     scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0xffffff, .01);
+    //scene.fog = new THREE.FogExp2(0xffffff, .01);
     container = document.getElementById('myCanvas');
     camera = new THREE.PerspectiveCamera( 35, container.offsetWidth / container.offsetHeight, 0.1, 1000 );
     camera.aspect = container.offsetWidth / container.offsetHeight;
@@ -81,6 +81,7 @@ function init(){
     camera.position.x = -15;
 
     renderer = new THREE.WebGLRenderer({canvas: container, antialias: true, alpha: true});
+    renderer.setClearColor( 0x000000, 0 );
     renderer.localClippingEnabled = true;
 
     renderer.setClearColor(0x000000,0);
@@ -91,9 +92,6 @@ function init(){
     renderer.physicallyCorrectdirectionalLights = true;
     renderer.shadowMap.enabled = true;
 
-    // composer = new EffectComposer(renderer);
-    // renderPass = new RenderPass(scene, camera);
-    // composer.addPass(renderPass);
     // //SaoPass = new SAOPass(scene, camera, false, true);
     // SaoPass = new SAOPass(scene, camera, false, true);
 
@@ -115,21 +113,21 @@ function init(){
 
     //initialize objects
 
-    const directionalLight = new THREE.DirectionalLight( 0xFFFFFF, 1 );
-    //const directionaldirectionalLight = new THREE.DirectionaldirectionalLight(0xffffff, 1);
-    directionalLight.position.set(5,12,7.5);
-    directionalLight.castShadow = true;
-    directionalLight.shadow.camera.top = 10000;
-    directionalLight.shadow.camera.bottom = - 10000;
-    directionalLight.shadow.camera.left = - 10000;
-    directionalLight.shadow.camera.right = 10000;
-    directionalLight.shadow.camera.near = 0.0001;
-    directionalLight.shadow.camera.far = 1000000;
-    directionalLight.shadow.bias = - 0.002;
-    directionalLight.shadow.mapSize.width = 1024 *4;
-    directionalLight.shadow.mapSize.height = 1024 *4;
+    // const directionalLight = new THREE.DirectionalLight( 0xFFFFFF, 1 );
+    // //const directionaldirectionalLight = new THREE.DirectionaldirectionalLight(0xffffff, 1);
+    // directionalLight.position.set(5,12,7.5);
+    // directionalLight.castShadow = true;
+    // directionalLight.shadow.camera.top = 10000;
+    // directionalLight.shadow.camera.bottom = - 10000;
+    // directionalLight.shadow.camera.left = - 10000;
+    // directionalLight.shadow.camera.right = 10000;
+    // directionalLight.shadow.camera.near = 0.0001;
+    // directionalLight.shadow.camera.far = 1000000;
+    // directionalLight.shadow.bias = - 0.002;
+    // directionalLight.shadow.mapSize.width = 1024 *4;
+    // directionalLight.shadow.mapSize.height = 1024 *4;
 
-    scene.add(directionalLight);
+    // scene.add(directionalLight);
 
 
     //load textures
@@ -211,6 +209,11 @@ function init(){
         color: 0x606060,
         roughness: .05,
     });
+    emissiveLight = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        emissive: 0xffffff,
+        emissiveIntensity: 100,
+    })
 
     //directionalLights
 
@@ -339,6 +342,7 @@ function init(){
 function animate() {
     requestAnimationFrame( animate );
     renderer.render( scene, camera );
+    //composer.render();
     controls.update();
         //Observe a scene or a renderer
         if (typeof __THREE_DEVTOOLS__ !== 'undefined') {
@@ -542,6 +546,9 @@ async function addModelsToScene(){
     LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").material = bdpMaterial;
     ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").material = bdpMaterial;
     LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").material = bdpMaterial;
+    ShortLowSides.getObjectByName("Shape_IndexedFaceSet118").material = clearGlassMat;
+    ShortLowSides.getObjectByName("Icosphere").material = emissiveLight;
+
 
     //console.log(XT1200Truckslide.getObjectByName("Shape_IndexedFaceSet1773"));
     //hide models
