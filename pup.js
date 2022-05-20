@@ -37,9 +37,9 @@ let loader, fileLoader, scene, container, camera, renderer, controls, dracoLoade
 //#region INIT FILES
 let basemesh, testmesh, windowMesh, truckBaseMesh, testMat, hingePoint, lidTest;
 //All Models
-var allModels, TruckModel, GullwingModel, HeadacheRackPost, HeadacheRackHex, LongLowSides, ShortLowSides,LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, XTBase, XT1200Truckslide, XT2000Truckslide;
+var allModels, TruckModel, GullwingModel, HeadacheRackPost, HeadacheRackHex, LongLowSides, ShortLowSides,LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, shortGladiatorFH, longGladiatorFH, shortGladiatorDH, longGladiatorDH, LadderRack, XTBase, XT1200Truckslide, XT2000Truckslide;
 //Textures
-var bdpBumpTexture, dpBumpTexture, patriotTexture;
+var bdpBumpTexture, dpBumpTexture, patriotTexture, BK62BumpTexture;
 
 let composer, renderPass, SaoPass;
 
@@ -61,7 +61,7 @@ var vertexData = vert;
 var fragData = frag;
 var isFullLengthPUPLoaded = false;
 //materials
-let metalMat, windowMat, redGlassMat,truckPaintMat, clearGlassMat, bdpMaterial, dpMaterial, blackMetalMat, leopardMaterial, patriotMat, emissiveLight;
+let metalMat, windowMat, redGlassMat,truckPaintMat, clearGlassMat, bdpMaterial, dpMaterial, blackMetalMat, leopardMaterial, patriotMat, emissiveLight, BK62Mat;
 
 init();
 animate();
@@ -135,6 +135,7 @@ function init(){
     bdpBumpTexture = new THREE.TextureLoader().load('textures/bdp-best-bump.jpg', texture => {texture.flipY = false});
     dpBumpTexture = new THREE.TextureLoader().load('textures/dp-pattern.jpg', texture => {texture.flipY = false});
     patriotTexture = new THREE.TextureLoader().load('textures/star-bump.jpg', texture => {texture.flipY = false});
+    BK62BumpTexture = new THREE.TextureLoader().load('textures/dp-bump-final.jpg', texture => {texture.flipY = false});
 
     bdpBumpTexture.wrapS = THREE.repeatWrapping;
     bdpBumpTexture.wrapT = THREE.repeatWrapping;
@@ -214,6 +215,13 @@ function init(){
         emissive: 0xffffff,
         emissiveIntensity: 100,
     })
+    BK62Mat = new THREE.MeshStandardMaterial({
+        color: 0x000000,
+        metalness: 1,
+        roughness: .15,
+        bumpScale: .005,
+        bumpMap: BK62BumpTexture,
+    })
 
     //directionalLights
 
@@ -258,7 +266,7 @@ function init(){
     //         basemesh = gltf.scene;
     //         testmesh = gltf.scene.getObjectByName('hatch');
     //         hingePoint = gltf.scene.getObjectByName('lowside-hinge');
-    //         lidTest = gltf.scene.getObjectByName('Shape_IndexedFaceSet215');
+    //         lidTest = gltf.scene.getObjectByName('standard-left-lid');
 
     //         //Traverse method to change materials
     //         gltf.scene.traverse(function(child){
@@ -292,7 +300,7 @@ function init(){
         LEDdirectionalLighting: 'None', //'battery', 'wired'
         AdditionalGullwingTray: false,
         AdditionalLowSideTray: 'None', //1, 2
-        LidFinshes: 'DiamondPlate', //BlackDiamondPlate, Leopard, Gladiator, Patriot
+        LidFinishes: "DiamondPlate", //BlackDiamondPlate, Leopard, Gladiator, Patriot
         XT1200Truckslide: '1200',
     };
     //#endregion
@@ -321,6 +329,7 @@ function init(){
     document.getElementById('open-hatch').addEventListener("click", function(){openHatch()});
     document.getElementById('open-truckslide').addEventListener("click", function(){openTruckslide()});
     document.getElementById('hide-truckslide').addEventListener("click", function(){hideTruckslide()});
+    document.getElementById('test').addEventListener("click", function(){swapMeshes()});
 
     //document.getElementById('hatches').addEventListener("click", function(){swapHatches()});
 
@@ -431,7 +440,7 @@ function renderPup(pupObject){
             console.log("Adding another tray");
             break;
     }
-    switch(clientPUP.LidFinshes){
+    switch(clientPUP.LidFinishes){
         case 'DiamondPlate':
             console.log("Loading diamond plate");
             break;
@@ -467,7 +476,7 @@ var lidOpen;
 
 async function loadModels(){
     //add all models here
-    var [truckData, gullwingData, hrHexData, hrPostData, LongLSData, shortLSData, longFHData, shortFHdata, longDomedData, shortDomedData, lRData, TSBaseData, TSData1200, TSData2000] = await Promise.all([
+    var [truckData, gullwingData, hrHexData, hrPostData, LongLSData, shortLSData, longFHData, shortFHdata, longDomedData, shortDomedData, shortGladFHData, longGladFHData, shortGladDHData, longGladDHData, lRData, TSBaseData, TSData1200, TSData2000] = await Promise.all([
         loader.loadAsync('models/seperate-models/truck.gltf'),
         loader.loadAsync('models/seperate-models/gullwing.gltf'),
         loader.loadAsync('models/seperate-models/headacheRackHex.gltf'),
@@ -478,6 +487,10 @@ async function loadModels(){
         loader.loadAsync('models/seperate-models/shortFlatHatch.gltf'),
         loader.loadAsync('models/seperate-models/longDomedHatch.gltf'),
         loader.loadAsync('models/seperate-models/shortDomedHatch.gltf'),
+        loader.loadAsync('models/seperate-models/shortGladiatorFlatHatch.gltf'),
+        loader.loadAsync('models/seperate-models/longGladiatorFlatHatch.gltf'),
+        loader.loadAsync('models/seperate-models/shortGladiatorDomedHatch.gltf'),
+        loader.loadAsync('models/seperate-models/longGladiatorDomedHatch.gltf'),
         loader.loadAsync('models/seperate-models/ladderRack.gltf'),
         loader.loadAsync('models/seperate-models/truckslide-base.gltf'),
         loader.loadAsync('models/seperate-models/truckslide-xt1200.gltf'),
@@ -494,12 +507,16 @@ async function loadModels(){
     ShortFlatHatch = setupModel(shortFHdata);
     LongDomedHatch = setupModel(longDomedData);
     ShortDomedHatch = setupModel(shortDomedData);
+    shortGladiatorFH = setupModel(shortGladFHData);
+    longGladiatorFH = setupModel(longGladFHData);
+    shortGladiatorDH = setupModel(shortGladDHData);
+    longGladiatorDH = setupModel(longGladDHData);
     LadderRack = setupModel(lRData);
     XTBase = setupModel(TSBaseData);
     XT1200Truckslide = setupModel(TSData1200);
     XT2000Truckslide = setupModel(TSData2000);
     console.log("model data set up");
-    return {TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, XTBase, XT1200Truckslide, XT2000Truckslide };
+    return {TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, shortGladiatorFH, longGladiatorFH, shortGladiatorDH, longGladiatorDH, LadderRack, XTBase, XT1200Truckslide, XT2000Truckslide };
 }
 
 function setupModel(data){
@@ -509,9 +526,9 @@ function setupModel(data){
 
 async function addModelsToScene(){
     //load models, add to scene, assign hinges to variables here
-    var {TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, XTBase, XT1200Truckslide, XT2000Truckslide} = await loadModels();
+    var {TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, shortGladiatorFH, longGladiatorFH, shortGladiatorDH, longGladiatorDH, LadderRack, XTBase, XT1200Truckslide, XT2000Truckslide} = await loadModels();
 
-    scene.add(TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, LadderRack, XTBase, XT1200Truckslide, XT2000Truckslide);
+    scene.add(TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, shortGladiatorFH, longGladiatorFH, shortGladiatorDH, longGladiatorDH, LadderRack, XTBase, XT1200Truckslide, XT2000Truckslide);
 
     //adding hinge points
     hingePoint = ShortLowSides.getObjectByName('lowside-hinge');
@@ -539,10 +556,10 @@ async function addModelsToScene(){
     ShortFlatHatch.getObjectByName("Decimated_Hatch").material = bdpMaterial;
     GullwingModel.getObjectByName("gw-decimated-left-lid").material = bdpMaterial;
     GullwingModel.getObjectByName("gw-decimated-right-lid").material = bdpMaterial;
-    ShortLowSides.getObjectByName("Shape_IndexedFaceSet215").material = bdpMaterial;
-    ShortLowSides.getObjectByName("Shape_IndexedFaceSet413").material = bdpMaterial;
-    LongLowSides.getObjectByName("Shape_IndexedFaceSet507").material = bdpMaterial;
-    LongLowSides.getObjectByName("Shape_IndexedFaceSet023").material = bdpMaterial;
+    ShortLowSides.getObjectByName("standard-left-lid").material = bdpMaterial;
+    ShortLowSides.getObjectByName("standard-right-lid").material = bdpMaterial;
+    LongLowSides.getObjectByName("standard-long-left-lid").material = bdpMaterial;
+    LongLowSides.getObjectByName("standard-long-right-lid").material = bdpMaterial;
     LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").material = bdpMaterial;
     ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").material = bdpMaterial;
     LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").material = bdpMaterial;
@@ -554,11 +571,21 @@ async function addModelsToScene(){
     //hide models
     HeadacheRackPost.visible = false;
     GullwingModel.visible = false;
+    GullwingModel.getObjectByName("GL-gw-left-lid").visible = false;
+    GullwingModel.getObjectByName("GL-gw-right-lid").visible = false;
+    ShortLowSides.getObjectByName("GL-left-lid").visible = false;
+    ShortLowSides.getObjectByName("GL-right-lid").visible = false;
+    LongLowSides.getObjectByName("GL-ls-left-lid").visible = false;
+    LongLowSides.getObjectByName("GL-ls-right-lid").visible = false;
     ShortLowSides.visible = false
     ShortFlatHatch.visible = false;
     LongDomedHatch.visible = false;
     ShortDomedHatch.visible = false;
     LongDomedHatch.visible = false;
+    shortGladiatorFH.visible = false;
+    longGladiatorFH.visible = false;
+    shortGladiatorDH.visible = false;
+    longGladiatorDH.visible = false;
     LadderRack.visible = false;
     XT2000Truckslide.visible = false;
 }
@@ -590,6 +617,30 @@ function showOrHideLadderRack(){
 };
 
 function renderPro(){
+
+    clientPUP.Gullwing = true;
+
+    swapMeshes();
+
+    if(clientPUP.LidFinishes === "Gladiator"){
+        //render gladiator
+    }
+
+    else{
+        ShortLowSides.visible = true;
+        LongLowSides.visible = false;
+        if(!GullwingModel.visible){
+            GullwingModel.visible = true;
+            if(LongFlatHatch.visible){
+                LongFlatHatch.visible = false;
+                ShortFlatHatch.visible = true;
+            }
+            else if(LongDomedHatch.visible){
+                LongDomedHatch.visible = false;
+                ShortDomedHatch.visible = true;
+            }
+        }
+    }
 
     ShortLowSides.visible = true;
     LongLowSides.visible = false;
@@ -787,10 +838,10 @@ function switchToDiamondPlate(){
     ShortFlatHatch.getObjectByName("Decimated_Hatch").material = dpMaterial;
     GullwingModel.getObjectByName("gw-decimated-left-lid").material = dpMaterial;
     GullwingModel.getObjectByName("gw-decimated-right-lid").material = dpMaterial;
-    ShortLowSides.getObjectByName("Shape_IndexedFaceSet215").material = dpMaterial;
-    ShortLowSides.getObjectByName("Shape_IndexedFaceSet413").material = dpMaterial;
-    LongLowSides.getObjectByName("Shape_IndexedFaceSet507").material = dpMaterial;
-    LongLowSides.getObjectByName("Shape_IndexedFaceSet023").material = dpMaterial;
+    ShortLowSides.getObjectByName("standard-left-lid").material = dpMaterial;
+    ShortLowSides.getObjectByName("standard-right-lid").material = dpMaterial;
+    LongLowSides.getObjectByName("standard-long-left-lid").material = dpMaterial;
+    LongLowSides.getObjectByName("standard-long-right-lid").material = dpMaterial;
     LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").material = dpMaterial;
     ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").material = dpMaterial;
     LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").material = dpMaterial;
@@ -829,10 +880,10 @@ function switchToBlackDiamondPlate(){
     ShortFlatHatch.getObjectByName("Decimated_Hatch").material = bdpMaterial;
     GullwingModel.getObjectByName("gw-decimated-left-lid").material = bdpMaterial;
     GullwingModel.getObjectByName("gw-decimated-right-lid").material = bdpMaterial;
-    ShortLowSides.getObjectByName("Shape_IndexedFaceSet215").material = bdpMaterial;
-    ShortLowSides.getObjectByName("Shape_IndexedFaceSet413").material = bdpMaterial;
-    LongLowSides.getObjectByName("Shape_IndexedFaceSet507").material = bdpMaterial;
-    LongLowSides.getObjectByName("Shape_IndexedFaceSet023").material = bdpMaterial;
+    ShortLowSides.getObjectByName("standard-left-lid").material = bdpMaterial;
+    ShortLowSides.getObjectByName("standard-right-lid").material = bdpMaterial;
+    LongLowSides.getObjectByName("standard-long-left-lid").material = bdpMaterial;
+    LongLowSides.getObjectByName("standard-long-right-lid").material = bdpMaterial;
     LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").material = bdpMaterial;
     ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").material = bdpMaterial;
     LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").material = bdpMaterial;
@@ -847,44 +898,46 @@ function switchToBlackDiamondPlate(){
 function switchToLeopard(){
     var _accentColor = null;
 
-    switch(ShortFlatHatch.getObjectByName("Decimated_Hatch").material){
-        case bdpMaterial:
-            _accentColor = blackMetalMat;
-            console.log("accent color is bdp");
-            break;
-        case dpMaterial:
-            _accentColor = metalMat
-            console.log("accent color is dp");
-            break;
-        case leopardMaterial:
-            _accentColor = blackMetalMat;
-            console.log("accent color is bdp");
-            break;
-        case patriotMat:
-            _accentColor = blackMetalMat;
-            console.log("accent color is bdp");
-            break;
-        default:
-            console.log("unknown accent color");
-            break;
-    }
+    // switch(ShortFlatHatch.getObjectByName("Decimated_Hatch").material){
+    //     case bdpMaterial:
+    //         _accentColor = blackMetalMat;
+    //         console.log("accent color is bdp");
+    //         break;
+    //     case dpMaterial:
+    //         _accentColor = metalMat
+    //         console.log("accent color is dp");
+    //         break;
+    //     case leopardMaterial:
+    //         _accentColor = blackMetalMat;
+    //         console.log("accent color is bdp");
+    //         break;
+    //     case patriotMat:
+    //         _accentColor = blackMetalMat;
+    //         console.log("accent color is bdp");
+    //         break;
+    //     default:
+    //         console.log("unknown accent color");
+    //         break;
+    // }
     ShortFlatHatch.getObjectByName("Decimated_Hatch").material = leopardMaterial;
     GullwingModel.getObjectByName("gw-decimated-left-lid").material = leopardMaterial;
     GullwingModel.getObjectByName("gw-decimated-right-lid").material = leopardMaterial;
-    ShortLowSides.getObjectByName("Shape_IndexedFaceSet215").material = leopardMaterial;
-    ShortLowSides.getObjectByName("Shape_IndexedFaceSet413").material = leopardMaterial;
-    LongLowSides.getObjectByName("Shape_IndexedFaceSet507").material = leopardMaterial;
-    LongLowSides.getObjectByName("Shape_IndexedFaceSet023").material = leopardMaterial;
+    ShortLowSides.getObjectByName("standard-left-lid").material = leopardMaterial;
+    ShortLowSides.getObjectByName("standard-right-lid").material = leopardMaterial;
+    LongLowSides.getObjectByName("standard-long-left-lid").material = leopardMaterial;
+    LongLowSides.getObjectByName("standard-long-right-lid").material = leopardMaterial;
     LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").material = leopardMaterial;
     ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").material = leopardMaterial;
     LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").material = leopardMaterial;
 
     scene.traverse(function(child){
-        if(child.material === _accentColor){
+        if(child.material === "accentColor"){
             child.material = blackMetalMat;
         }
     });
 }
+
+console.log(blackMetalMat);
 function switchToPatriot(){
     var _accentColor = null;
 
@@ -912,10 +965,10 @@ function switchToPatriot(){
     ShortFlatHatch.getObjectByName("Decimated_Hatch").material = patriotMat;
     GullwingModel.getObjectByName("gw-decimated-left-lid").material = patriotMat;
     GullwingModel.getObjectByName("gw-decimated-right-lid").material = patriotMat;
-    ShortLowSides.getObjectByName("Shape_IndexedFaceSet215").material = patriotMat;
-    ShortLowSides.getObjectByName("Shape_IndexedFaceSet413").material = patriotMat;
-    LongLowSides.getObjectByName("Shape_IndexedFaceSet507").material = patriotMat;
-    LongLowSides.getObjectByName("Shape_IndexedFaceSet023").material = patriotMat;
+    ShortLowSides.getObjectByName("standard-left-lid").material = patriotMat;
+    ShortLowSides.getObjectByName("standard-right-lid").material = patriotMat;
+    LongLowSides.getObjectByName("standard-long-left-lid").material = patriotMat;
+    LongLowSides.getObjectByName("standard-long-right-lid").material = patriotMat;
     LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").material = patriotMat;
     ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").material = patriotMat;
     LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").material = patriotMat;
@@ -927,6 +980,95 @@ function switchToPatriot(){
     });
 }
 
+function switchToGladiator(){
+    var _accentColor = null;
+
+    clientPUP.LidFinishes = "Gladiator";
+    swapMeshes();
+
+    switch(ShortFlatHatch.getObjectByName("Decimated_Hatch").material){
+        case bdpMaterial:
+            _accentColor = blackMetalMat;
+            console.log("accent color is bdp");
+            break;
+        case dpMaterial:
+            _accentColor = metalMat
+            console.log("accent color is dp");
+            break;
+        case leopardMaterial:
+            _accentColor = blackMetalMat;
+            console.log("accent color is bdp");
+            break;
+        case patriotMat:
+            _accentColor = blackMetalMat;
+            console.log("accent color is bdp");
+            break;
+        default:
+            console.log("unknown accent color");
+            break;
+    }
+
+
+    scene.traverse(function(child){
+        if(child.material === _accentColor){
+            child.material = blackMetalMat;
+        }
+    });
+}
+function swapMeshes(){
+    if(clientPUP.LidFinishes === "DiamondPlate" || clientPUP.LidFinishes === "Leopard" || clientPUP.LidFinishes === "BlackDiamondPlate"){
+        ShortFlatHatch.visible = true;
+        GullwingModel.getObjectByName("gw-decimated-right-lid").visible = true;
+        GullwingModel.getObjectByName("gw-decimated-left-lid").visible = true;
+        ShortLowSides.getObjectByName("standard-left-lid").visible = true;
+        ShortLowSides.getObjectByName("standard-right-lid").visible = true;
+        LongLowSides.getObjectByName("standard-long-left-lid").visible = true;
+        LongLowSides.getObjectByName("standard-long-right-lid").visible = true;
+        LongFlatHatch.visible = true;
+        ShortDomedHatch.visible = true;
+        LongDomedHatch.visible = true;
+
+        GullwingModel.getObjectByName("GL-gw-left-lid").visible = false;
+        GullwingModel.getObjectByName("GL-gw-right-lid").visible = false;
+        ShortLowSides.getObjectByName("GL-left-lid").visible = false;
+        ShortLowSides.getObjectByName("GL-right-lid").visible = false;
+        LongLowSides.getObjectByName("GL-ls-left-lid").visible = false;
+        LongLowSides.getObjectByName("GL-ls-right-lid").visible = false;
+        shortGladiatorFH.visible = false;
+        longGladiatorFH.visible = false;
+        shortGladiatorDH.visible = false;
+        longGladiatorDH.visible = false;
+
+        console.log("true");
+    }
+    else{
+        {
+            ShortFlatHatch.visible = true;
+            GullwingModel.getObjectByName("gw-decimated-right-lid").visible = false;
+            GullwingModel.getObjectByName("gw-decimated-left-lid").visible = false;
+            ShortLowSides.getObjectByName("standard-left-lid").visible = false;
+            ShortLowSides.getObjectByName("standard-right-lid").visible = false;
+            LongLowSides.getObjectByName("standard-long-left-lid").visible = false;
+            LongLowSides.getObjectByName("standard-long-right-lid").visible = false;
+            LongFlatHatch.visible = false;
+            ShortDomedHatch.visible = false;
+            LongDomedHatch.visible = false;
+    
+            GullwingModel.getObjectByName("GL-gw-left-lid").visible = true;
+            GullwingModel.getObjectByName("GL-gw-right-lid").visible = true;
+            ShortLowSides.getObjectByName("GL-left-lid").visible = true;
+            ShortLowSides.getObjectByName("GL-right-lid").visible = true;
+            LongLowSides.getObjectByName("GL-ls-left-lid").visible = true;
+            LongLowSides.getObjectByName("GL-ls-right-lid").visible = true;
+            shortGladiatorFH.visible = true;
+            longGladiatorFH.visible = true;
+            shortGladiatorDH.visible = true;
+            longGladiatorDH.visible = true;
+    
+            console.log("false");
+        }
+    }
+}
 //Returns all active objects in a group
 function findAllActiveObjects(x){
     var group;
