@@ -621,22 +621,26 @@ function renderPro(){
 
     clientPUP.Gullwing = true;
 
+    ShortLowSides.getObjectByName("GL-left-lid").visible  = true;
+    ShortLowSides.getObjectByName("GL-right-lid").visible = true;
+    LongLowSides.getObjectByName("GL-ls-left-lid").visible = false;
+    LongLowSides.getObjectByName("GL-ls-right-lid").visible = false;
+    GullwingModel.getObjectByName("gw-decimated-right-lid").visible = false;
+    GullwingModel.getObjectByName("gw-decimated-left-lid").visible = false;
+    ShortLowSides.getObjectByName("standard-left-lid").visible = false;
+    ShortLowSides.getObjectByName("standard-right-lid").visible = false;
+    LongLowSides.getObjectByName("standard-long-left-lid").visible = false;
+    LongLowSides.getObjectByName("standard-long-right-lid").visible = false;
+
+    //If it's a Gladiator, reconstruct the whole damn thing
     if(clientPUP.LidFinishes === "Gladiator"){
-        ShortLowSides.getObjectByName("GL-left-lid").visible  = true;
-        ShortLowSides.getObjectByName("GL-right-lid").visible = true;
-        LongLowSides.getObjectByName("GL-ls-left-lid").visible = false;
-        LongLowSides.getObjectByName("GL-ls-right-lid").visible = false;
-        GullwingModel.getObjectByName("gw-decimated-right-lid").visible = false;
-        GullwingModel.getObjectByName("gw-decimated-left-lid").visible = false;
-        ShortLowSides.getObjectByName("standard-left-lid").visible = false;
-        ShortLowSides.getObjectByName("standard-right-lid").visible = false;
-        LongLowSides.getObjectByName("standard-long-left-lid").visible = false;
-        LongLowSides.getObjectByName("standard-long-right-lid").visible = false;
+
+        //If Gullwing is not loaded, add to scene
         if(!GullwingModel.visible){
             GullwingModel.visible = true;
             GullwingModel.getObjectByName("GL-gw-left-lid").visible = true;
             GullwingModel.getObjectByName("GL-gw-right-lid").visible = true;
-            GullwingModel.getObjectByName("gw-decimated-let-lid").visible = false;
+            GullwingModel.getObjectByName("gw-decimated-left-lid").visible = false;
             GullwingModel.getObjectByName("gw-decimated-right-lid").visible = false;
             if(LongFlatHatch.visible){
                 LongFlatHatch.visible = false;
@@ -646,11 +650,37 @@ function renderPro(){
                 LongDomedHatch.visible = false;
                 ShortDomedHatch.visible = true;
             }
-            else if(longGladiatorFH){
-                longGladiatorDH.visible = false;
+            else if(longGladiatorDH.visible){
+                LongDomedHatch.visible = false;
                 shortGladiatorDH.visible = true;
             }
-            else if(longGladiatorFH){
+            else if(longGladiatorFH.visible){
+                longGladiatorFH.visible = false;
+                shortGladiatorFH.visible = true;
+            }
+            else{
+                throw new Error("Unknown status of hatch?...");
+            }
+        }
+        //If already added, replace gullwing meshes
+        else{
+            GullwingModel.getObjectByName("GL-gw-left-lid").visible = true;
+            GullwingModel.getObjectByName("GL-gw-right-lid").visible = true;
+            GullwingModel.getObjectByName("gw-decimated-left-lid").visible = false;
+            GullwingModel.getObjectByName("gw-decimated-right-lid").visible = false;
+            if(LongFlatHatch.visible){
+                LongFlatHatch.visible = false;
+                ShortFlatHatch.visible = true;
+            }
+            else if(LongDomedHatch.visible){
+                LongDomedHatch.visible = false;
+                ShortDomedHatch.visible = true;
+            }
+            else if(longGladiatorDH.visible){
+                LongDomedHatch.visible = false;
+                shortGladiatorDH.visible = true;
+            }
+            else if(longGladiatorFH.visible){
                 longGladiatorFH.visible = false;
                 shortGladiatorFH.visible = true;
             }
@@ -665,7 +695,7 @@ function renderPro(){
         ShortLowSides.getObjectByName("GL-right-lid").visible = false;
         LongLowSides.getObjectByName("GL-ls-left-lid").visible = false;
         LongLowSides.getObjectByName("GL-ls-right-lid").visible = false;
-        GullwingModel.getObjectByName("gw-decimated-let-lid").visible = true;
+        GullwingModel.getObjectByName("gw-decimated-left-lid").visible = true;
         GullwingModel.getObjectByName("gw-decimated-right-lid").visible = true;
         ShortLowSides.visible = true;
         LongLowSides.visible = false;
@@ -732,53 +762,67 @@ function renderStandard(){
 function renderDomedHatch(){
 
     clientPUP.Hatch = "Domed";
-    if(LongFlatHatch.visible || longGladiatorFH.visible){
-        LongFlatHatch.visible = false;
-        LongDomedHatch.visible = true;
-        longGladiatorDH.visible = true;
-    }
-    else if(ShortFlatHatch.visible || shortGladiatorFH.visible){
-        ShortFlatHatch.visible = false;
-        ShortDomedHatch.visible = true;
-        shortGladiatorDH.visible = true;
-    }
-    else{
-        throw new Error("No hatches are visible?...");
-    }
+    //determine if PUP w/ Gullwing or PUP w/o Gullwing
+    //render correct Hatch
 
-    if(clientPUP.LidFinishes === "Gladiator"){
-        LongDomedHatch.visible = false;
-        ShortDomedHatch.visible = false;
+    LongFlatHatch.visible = false;
+    ShortFlatHatch.visible = false;
+    LongDomedHatch.visible = false;
+    ShortDomedHatch.visible = false;
+    longGladiatorDH.visible = false;
+    shortGladiatorDH.visible = false;
+    longGladiatorFH.visible = false;
+    shortGladiatorFH.visible = false;
+
+    if(GullwingModel.visible){
+        if(clientPUP.LidFinishes === "Gladiator"){
+            shortGladiatorDH.visible = true;
+        }
+        else{
+            ShortDomedHatch.visible = true;
+        }
     }
+    //If PUP w/o Gullwing
     else{
-        longGladiatorDH.visible = false;
-        shortGladiatorDH.visible = false;
+        if(clientPUP.LidFinishes === "Gladiator"){
+            longGladiatorDH.visible = true;
+        }
+        else{
+
+            LongDomedHatch.visible = true;
+        }
     }
 }
 
 function renderFlatHatch(){
     clientPUP.Hatch = "Flat";
-    if(LongDomedHatch.visible || longGladiatorDH.visible){
-        LongDomedHatch.visible = false;
-        LongFlatHatch.visible = true;
-        longGladiatorFH.visible = true;
+    //determine if PUP w/ Gullwing or PUP w/o Gullwing
+    //render correct Hatch
+    LongFlatHatch.visible = false;
+    ShortFlatHatch.visible = false;
+    LongDomedHatch.visible = false;
+    ShortDomedHatch.visible = false;
+    longGladiatorDH.visible = false;
+    shortGladiatorDH.visible = false;
+    longGladiatorFH.visible = false;
+    shortGladiatorFH.visible = false;
+    //If PUP w/Gullwing
+    if(GullwingModel.visible){
+        if(clientPUP.LidFinishes === "Gladiator"){
+            shortGladiatorFH.visible = true;
+        }
+        else{
+            ShortFlatHatch.visible = true;
+        }
     }
-    else if(ShortDomedHatch.visible || shortGladiatorDH.visible){
-        ShortDomedHatch.visible = false;
-        ShortFlatHatch.visible = true;
-        shortGladiatorFH.visible = true;
-    }
+    //If PUP w/o Gullwing
     else{
-        throw new Error("No hatches are visible?...");
-    }
-
-    if(clientPUP.LidFinishes === "Gladiator"){
-        LongFlatHatch.visible = false;
-        ShortFlatHatch.visible = false;
-    }
-    else{
-        longGladiatorFH.visible = false;
-        shortGladiatorFH = false;
+        if(clientPUP.LidFinishes === "Gladiator"){
+            longGladiatorFH.visible = true;
+        }
+        else{
+            LongFlatHatch.visible = true;
+        }
     }
 }
 
@@ -1087,8 +1131,6 @@ function switchToPatriot(){
 function switchToGladiator(){
     var _accentColor = null;
 
-    clientPUP.LidFinishes = "Gladiator";
-
     switch(clientPUP.LidFinishes){
         case "BlackDiamondPlate":
             _accentColor = blackMetalMat;
@@ -1120,6 +1162,8 @@ function switchToGladiator(){
         }
     });
 
+    clientPUP.LidFinishes = "Gladiator"
+
     switch(clientPUP.Hatch){
         case "Flat":
             renderFlatHatch();
@@ -1128,7 +1172,7 @@ function switchToGladiator(){
             renderDomedHatch();
             break;
         default:
-            throw new Error("Uknown Hatch type");
+            throw new Error("Unknown Hatch type");
     }
     switch(clientPUP.Gullwing){
         case true:
@@ -1138,8 +1182,6 @@ function switchToGladiator(){
             renderStandard();
             break;
     }
-
-    clientPUP.LidFinishes = "Gladiator"
 }
 function swapMeshes(){
     if(LidFinishes === "DiamondPlate" || clientPUP.LidFinishes === "Leopard" || clientPUP.LidFinishes === "BlackDiamondPlate"){
@@ -1179,7 +1221,7 @@ function swapMeshes(){
             LongFlatHatch.visible = false;
             ShortDomedHatch.visible = false;
             LongDomedHatch.visible = false;
-    
+
             GullwingModel.getObjectByName("GL-gw-left-lid").visible = true;
             GullwingModel.getObjectByName("GL-gw-right-lid").visible = true;
             ShortLowSides.getObjectByName("GL-left-lid").visible = true;
@@ -1190,7 +1232,7 @@ function swapMeshes(){
             longGladiatorFH.visible = true;
             shortGladiatorDH.visible = true;
             longGladiatorDH.visible = true;
-    
+
             console.log("false");
         }
     }
