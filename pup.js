@@ -293,15 +293,15 @@ function init(){
 
     //#region Basic PUP object implementation
     clientPUP = {
-        Hatch: 'flat',
-        Gullwing: true,
-        HeadacheRack: 'None',
-        LadderRack: true,
-        LEDdirectionalLighting: 'None', //'battery', 'wired'
+        Hatch: "Flat",
+        Gullwing: false,
+        HeadacheRack: "Hex",
+        LadderRack: false,
+        LEDdirectionalLighting: "None", //'battery', 'wired'
         AdditionalGullwingTray: false,
-        AdditionalLowSideTray: 'None', //1, 2
-        LidFinishes: "DiamondPlate", //BlackDiamondPlate, Leopard, Gladiator, Patriot
-        XT1200Truckslide: '1200',
+        AdditionalLowSideTray: "None", //1, 2
+        LidFinishes: "BlackDiamondPlate", //BlackDiamondPlate, Leopard, Gladiator, Patriot
+        Truckslide: "None",
     };
     //#endregion
 
@@ -321,7 +321,7 @@ function init(){
     document.getElementById('dp').addEventListener("click", function(){switchToDiamondPlate()});
     document.getElementById('black-dp').addEventListener("click", function(){switchToBlackDiamondPlate()});
     document.getElementById('leopard').addEventListener("click", function(){switchToLeopard()});
-    document.getElementById('patriot').addEventListener("click", function(){switchToPatriot()});
+    document.getElementById('gladiator').addEventListener("click", function(){switchToGladiator()});
     // document.getElementById('hide').addEventListener("click", function(){findActiveObject(GullwingModel)});
     document.getElementById('open-gullwing').addEventListener("click", function(){openGullwing()});
     document.getElementById('xt1200').addEventListener("click", function(){chooseXT1200()});
@@ -360,25 +360,26 @@ function animate() {
           }
 }
 
-function applyHatch(hatchSelection){
-
-    clientPUP.Hatch = hatchSelection;
-    console.log("Hatch is selected");
-    testmesh.visible = !testmesh.visible;
-    renderPup(clientPUP);
-
-}
-
-function renderPup(pupObject){
+function renderPup(){
 
     //switch cases with dependencies go here
     //this function should be called after every change in selection
     switch(clientPUP.Hatch){
         case 'flat':
-            console.log("flat hatch is selected");
+            renderFlatHatch();
+            if(clientPUP.LidFinishes === "Gladiator"){
+                LongFlatHatch.visible = false;
+                ShortFlatHatch.visible = false;
+                longGladiatorFH.visible = true;
+                shortGladiatorFH.visible = true;
+            }
             break;
         case 'domed':
-            console.log("domed hatch is selected");
+            renderDomedHatch();
+            if(clientPUP.LidFinishes === "Gladiator"){
+                LongDomedHatch.visible = false;
+
+            }
             break;
         default:
         console.log("invalid selection");
@@ -620,13 +621,52 @@ function renderPro(){
 
     clientPUP.Gullwing = true;
 
-    swapMeshes();
-
     if(clientPUP.LidFinishes === "Gladiator"){
-        //render gladiator
+        ShortLowSides.getObjectByName("GL-left-lid").visible  = true;
+        ShortLowSides.getObjectByName("GL-right-lid").visible = true;
+        LongLowSides.getObjectByName("GL-ls-left-lid").visible = false;
+        LongLowSides.getObjectByName("GL-ls-right-lid").visible = false;
+        GullwingModel.getObjectByName("gw-decimated-right-lid").visible = false;
+        GullwingModel.getObjectByName("gw-decimated-left-lid").visible = false;
+        ShortLowSides.getObjectByName("standard-left-lid").visible = false;
+        ShortLowSides.getObjectByName("standard-right-lid").visible = false;
+        LongLowSides.getObjectByName("standard-long-left-lid").visible = false;
+        LongLowSides.getObjectByName("standard-long-right-lid").visible = false;
+        if(!GullwingModel.visible){
+            GullwingModel.visible = true;
+            GullwingModel.getObjectByName("GL-gw-left-lid").visible = true;
+            GullwingModel.getObjectByName("GL-gw-right-lid").visible = true;
+            GullwingModel.getObjectByName("gw-decimated-let-lid").visible = false;
+            GullwingModel.getObjectByName("gw-decimated-right-lid").visible = false;
+            if(LongFlatHatch.visible){
+                LongFlatHatch.visible = false;
+                ShortFlatHatch.visible = true;
+            }
+            else if(LongDomedHatch.visible){
+                LongDomedHatch.visible = false;
+                ShortDomedHatch.visible = true;
+            }
+            else if(longGladiatorFH){
+                longGladiatorDH.visible = false;
+                shortGladiatorDH.visible = true;
+            }
+            else if(longGladiatorFH){
+                longGladiatorFH.visible = false;
+                shortGladiatorFH.visible = true;
+            }
+            else{
+                throw new Error("Unknown status of hatch?...");
+            }
+        }
     }
 
     else{
+        ShortLowSides.getObjectByName("GL-left-lid").visible  = false;
+        ShortLowSides.getObjectByName("GL-right-lid").visible = false;
+        LongLowSides.getObjectByName("GL-ls-left-lid").visible = false;
+        LongLowSides.getObjectByName("GL-ls-right-lid").visible = false;
+        GullwingModel.getObjectByName("gw-decimated-let-lid").visible = true;
+        GullwingModel.getObjectByName("gw-decimated-right-lid").visible = true;
         ShortLowSides.visible = true;
         LongLowSides.visible = false;
         if(!GullwingModel.visible){
@@ -642,57 +682,103 @@ function renderPro(){
         }
     }
 
-    ShortLowSides.visible = true;
-    LongLowSides.visible = false;
-    if(!GullwingModel.visible){
-        GullwingModel.visible = true;
-        if(LongFlatHatch.visible){
-            LongFlatHatch.visible = false;
-            ShortFlatHatch.visible = true;
-        }
-        else if(LongDomedHatch.visible){
-            LongDomedHatch.visible = false;
-            ShortDomedHatch.visible = true;
-        }
-    }
+    // ShortLowSides.visible = true;
+    // LongLowSides.visible = false;
+    // if(!GullwingModel.visible){
+    //     GullwingModel.visible = true;
+    //     if(LongFlatHatch.visible){
+    //         LongFlatHatch.visible = false;
+    //         ShortFlatHatch.visible = true;
+    //     }
+    //     else if(LongDomedHatch.visible){
+    //         LongDomedHatch.visible = false;
+    //         ShortDomedHatch.visible = true;
+    //     }
+    // }
 }
 
 function renderStandard(){
 
-    ShortLowSides.visible =false;
+    clientPUP.Gullwing = false;
+
+    ShortLowSides.visible = false;
     LongLowSides.visible = true;
     if(GullwingModel.visible){
         GullwingModel.visible = false;
         if(ShortFlatHatch.visible){
             LongFlatHatch.visible = true;
             ShortFlatHatch.visible = false;
+            shortGladiatorFH.visible = false;
         }
         else if(ShortDomedHatch.visible){
             LongDomedHatch.visible = true;
             ShortDomedHatch.visible = false;
+            shortGladiatorDH.visible = false;
+        }
+        else if(shortGladiatorFH.visible){
+            shortGladiatorFH.visible = false;
+            longGladiatorFH.visible = true;
+        }
+        else if(shortGladiatorDH.visible){
+            shortGladiatorDH.visible = false;
+            longGladiatorDH.visible = true;
+        }
+        else{
+            throw new Error("Unexpected event");
         }
     }
 }
 
 function renderDomedHatch(){
-    if(LongFlatHatch.visible){
+
+    clientPUP.Hatch = "Domed";
+    if(LongFlatHatch.visible || longGladiatorFH.visible){
         LongFlatHatch.visible = false;
         LongDomedHatch.visible = true;
+        longGladiatorDH.visible = true;
     }
-    else if(ShortFlatHatch.visible){
+    else if(ShortFlatHatch.visible || shortGladiatorFH.visible){
         ShortFlatHatch.visible = false;
         ShortDomedHatch.visible = true;
+        shortGladiatorDH.visible = true;
+    }
+    else{
+        throw new Error("No hatches are visible?...");
+    }
+
+    if(clientPUP.LidFinishes === "Gladiator"){
+        LongDomedHatch.visible = false;
+        ShortDomedHatch.visible = false;
+    }
+    else{
+        longGladiatorDH.visible = false;
+        shortGladiatorDH.visible = false;
     }
 }
 
 function renderFlatHatch(){
-    if(LongDomedHatch.visible){
+    clientPUP.Hatch = "Flat";
+    if(LongDomedHatch.visible || longGladiatorDH.visible){
         LongDomedHatch.visible = false;
         LongFlatHatch.visible = true;
+        longGladiatorFH.visible = true;
     }
-    else if(ShortDomedHatch.visible){
+    else if(ShortDomedHatch.visible || shortGladiatorDH.visible){
         ShortDomedHatch.visible = false;
         ShortFlatHatch.visible = true;
+        shortGladiatorFH.visible = true;
+    }
+    else{
+        throw new Error("No hatches are visible?...");
+    }
+
+    if(clientPUP.LidFinishes === "Gladiator"){
+        LongFlatHatch.visible = false;
+        ShortFlatHatch.visible = false;
+    }
+    else{
+        longGladiatorFH.visible = false;
+        shortGladiatorFH = false;
     }
 }
 
@@ -814,22 +900,25 @@ function openGullwing(){
 function switchToDiamondPlate(){
     var _accentColor = null;
 
-    switch(ShortFlatHatch.getObjectByName("Decimated_Hatch").material){
-        case bdpMaterial:
+    switch(clientPUP.LidFinishes){
+        case "BlackDiamondPlate":
             _accentColor = blackMetalMat;
             console.log("accent color is bdp");
             break;
-        case dpMaterial:
+        case "DiamondPlate":
             _accentColor = metalMat
             console.log("accent color is dp");
             break;
-        case leopardMaterial:
+        case "Leopard":
             _accentColor = blackMetalMat;
             console.log("accent color is bdp");
             break;
-        case patriotMat:
+        case "Patriot":
             _accentColor = blackMetalMat;
             console.log("accent color is bdp");
+            break;
+        case "Gladiator":
+            _accentColor = blackMetalMat;
             break;
         default:
             console.log("unknown accent color");
@@ -851,27 +940,31 @@ function switchToDiamondPlate(){
             child.material = metalMat;
         }
     });
+    clientPUP.LidFinishes = "DiamondPlate";
 }
 
 function switchToBlackDiamondPlate(){
     var _accentColor = null;
 
-    switch(ShortFlatHatch.getObjectByName("Decimated_Hatch").material){
-        case bdpMaterial:
+    switch(clientPUP.LidFinishes){
+        case "BlackDiamondPlate":
             _accentColor = blackMetalMat;
             console.log("accent color is bdp");
             break;
-        case dpMaterial:
+        case "DiamondPlate":
             _accentColor = metalMat
             console.log("accent color is dp");
             break;
-        case leopardMaterial:
+        case "Leopard":
             _accentColor = blackMetalMat;
             console.log("accent color is bdp");
             break;
-        case patriotMat:
+        case "Patriot":
             _accentColor = blackMetalMat;
             console.log("accent color is bdp");
+            break;
+        case "Gladiator":
+            _accentColor = blackMetalMat;
             break;
         default:
             console.log("unknown accent color");
@@ -893,32 +986,36 @@ function switchToBlackDiamondPlate(){
             child.material = blackMetalMat;
         }
     });
+    clientPUP.LidFinishes = "BlackDiamondPlate";
 }
 
 function switchToLeopard(){
     var _accentColor = null;
 
-    // switch(ShortFlatHatch.getObjectByName("Decimated_Hatch").material){
-    //     case bdpMaterial:
-    //         _accentColor = blackMetalMat;
-    //         console.log("accent color is bdp");
-    //         break;
-    //     case dpMaterial:
-    //         _accentColor = metalMat
-    //         console.log("accent color is dp");
-    //         break;
-    //     case leopardMaterial:
-    //         _accentColor = blackMetalMat;
-    //         console.log("accent color is bdp");
-    //         break;
-    //     case patriotMat:
-    //         _accentColor = blackMetalMat;
-    //         console.log("accent color is bdp");
-    //         break;
-    //     default:
-    //         console.log("unknown accent color");
-    //         break;
-    // }
+    switch(clientPUP.LidFinishes){
+        case "BlackDiamondPlate":
+            _accentColor = blackMetalMat;
+            console.log("accent color is bdp");
+            break;
+        case "DiamondPlate":
+            _accentColor = metalMat
+            console.log("accent color is dp");
+            break;
+        case "Leopard":
+            _accentColor = blackMetalMat;
+            console.log("accent color is bdp");
+            break;
+        case "Patriot":
+            _accentColor = blackMetalMat;
+            console.log("accent color is bdp");
+            break;
+        case "Gladiator":
+            _accentColor = blackMetalMat;
+            break;
+        default:
+            console.log("unknown accent color");
+            break;
+    }
     ShortFlatHatch.getObjectByName("Decimated_Hatch").material = leopardMaterial;
     GullwingModel.getObjectByName("gw-decimated-left-lid").material = leopardMaterial;
     GullwingModel.getObjectByName("gw-decimated-right-lid").material = leopardMaterial;
@@ -931,32 +1028,37 @@ function switchToLeopard(){
     LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").material = leopardMaterial;
 
     scene.traverse(function(child){
-        if(child.material === "accentColor"){
+        if(child.material === _accentColor){
             child.material = blackMetalMat;
         }
     });
+
+    clientPUP.LidFinishes = "Leopard";
 }
 
-console.log(blackMetalMat);
 function switchToPatriot(){
+
     var _accentColor = null;
 
-    switch(ShortFlatHatch.getObjectByName("Decimated_Hatch").material){
-        case bdpMaterial:
+    switch(clientPUP.LidFinishes){
+        case "BlackDiamondPlate":
             _accentColor = blackMetalMat;
             console.log("accent color is bdp");
             break;
-        case dpMaterial:
+        case "DiamondPlate":
             _accentColor = metalMat
             console.log("accent color is dp");
             break;
-        case leopardMaterial:
+        case "Leopard":
             _accentColor = blackMetalMat;
             console.log("accent color is bdp");
             break;
-        case patriotMat:
+        case "Patriot":
             _accentColor = blackMetalMat;
             console.log("accent color is bdp");
+            break;
+        case "Gladiator":
+            _accentColor = blackMetalMat;
             break;
         default:
             console.log("unknown accent color");
@@ -978,45 +1080,69 @@ function switchToPatriot(){
             child.material = blackMetalMat;
         }
     });
+
+    clientPUP.LidFinishes = "Patriot"
 }
 
 function switchToGladiator(){
     var _accentColor = null;
 
     clientPUP.LidFinishes = "Gladiator";
-    swapMeshes();
 
-    switch(ShortFlatHatch.getObjectByName("Decimated_Hatch").material){
-        case bdpMaterial:
+    switch(clientPUP.LidFinishes){
+        case "BlackDiamondPlate":
             _accentColor = blackMetalMat;
             console.log("accent color is bdp");
             break;
-        case dpMaterial:
+        case "DiamondPlate":
             _accentColor = metalMat
             console.log("accent color is dp");
             break;
-        case leopardMaterial:
+        case "Leopard":
             _accentColor = blackMetalMat;
             console.log("accent color is bdp");
             break;
-        case patriotMat:
+        case "Patriot":
             _accentColor = blackMetalMat;
             console.log("accent color is bdp");
+            break;
+        case "Gladiator":
+            _accentColor = blackMetalMat;
             break;
         default:
             console.log("unknown accent color");
             break;
     }
 
-
     scene.traverse(function(child){
         if(child.material === _accentColor){
             child.material = blackMetalMat;
         }
     });
+
+    switch(clientPUP.Hatch){
+        case "Flat":
+            renderFlatHatch();
+            break;
+        case "Domed":
+            renderDomedHatch();
+            break;
+        default:
+            throw new Error("Uknown Hatch type");
+    }
+    switch(clientPUP.Gullwing){
+        case true:
+            renderPro();
+            break;
+        case false:
+            renderStandard();
+            break;
+    }
+
+    clientPUP.LidFinishes = "Gladiator"
 }
 function swapMeshes(){
-    if(clientPUP.LidFinishes === "DiamondPlate" || clientPUP.LidFinishes === "Leopard" || clientPUP.LidFinishes === "BlackDiamondPlate"){
+    if(LidFinishes === "DiamondPlate" || clientPUP.LidFinishes === "Leopard" || clientPUP.LidFinishes === "BlackDiamondPlate"){
         ShortFlatHatch.visible = true;
         GullwingModel.getObjectByName("gw-decimated-right-lid").visible = true;
         GullwingModel.getObjectByName("gw-decimated-left-lid").visible = true;
@@ -1068,6 +1194,7 @@ function swapMeshes(){
             console.log("false");
         }
     }
+
 }
 //Returns all active objects in a group
 function findAllActiveObjects(x){
