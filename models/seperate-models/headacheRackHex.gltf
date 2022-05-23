@@ -441,27 +441,15 @@
     "materials" : [
         {
             "doubleSided" : true,
-            "name" : "Black Powder Coat",
+            "name" : "accent color",
             "pbrMetallicRoughness" : {
                 "baseColorFactor" : [
-                    0.00374573259614408,
-                    0.00374573259614408,
-                    0.00374573259614408,
+                    0.010313114151358604,
+                    0.010313114151358604,
+                    0.010313114151358604,
                     1
                 ],
-                "roughnessFactor" : 0.0931818038225174
-            }
-        },
-        {
-            "doubleSided" : true,
-            "name" : "Smooth aluminum",
-            "pbrMetallicRoughness" : {
-                "baseColorFactor" : [
-                    0.6514892578125,
-                    0.6514892578125,
-                    0.6514892578125,
-                    1
-                ]
+                "roughnessFactor" : 0.18636363744735718
             }
         },
         {
@@ -574,7 +562,7 @@
                         }
                     },
                     "indices" : 11,
-                    "material" : 1,
+                    "material" : 0,
                     "mode" : 4
                 }
             ]
@@ -747,7 +735,7 @@
                         }
                     },
                     "indices" : 39,
-                    "material" : 2,
+                    "material" : 1,
                     "mode" : 4
                 }
             ]
@@ -772,7 +760,7 @@
                         }
                     },
                     "indices" : 43,
-                    "material" : 3,
+                    "material" : 2,
                     "mode" : 4
                 }
             ]
@@ -797,7 +785,7 @@
                         }
                     },
                     "indices" : 47,
-                    "material" : 4,
+                    "material" : 3,
                     "mode" : 4
                 }
             ]

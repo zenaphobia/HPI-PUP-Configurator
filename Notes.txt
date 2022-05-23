@@ -1,13 +1,11 @@
 Notes for PUP design
 
-PUP Load order and logic:
-1)Hatch - Domed or Flat (maybe do a low poly custom shader for this portion)
-2)Gullwing - Standard or Gullwing (Will determine if full length hatch and lowsides will be loaded)
-    a)If gullwing is selected, load gullwing and shorter low sides and hatch
-    b)If Standard is selected, load full length hatch and lowsides
-    c)Upon selection, load actual model (already downloaded)
-3)Headache Rack
-    a)If yes is selected, load hex by default
-        i)Hex is selected already
-        ii)if Post is selected, load Post, replace Hex.
-4)
+Bugs:
+When clicking on the Gladiator, left side T-handle and accessories disappear.
+    //Solution: Remove parent (Low side lids) from the rest of the meshes (T-handle, hatch stiffener, etc.)
+
+To-Do:
+1) Add BK62 texture to gladiator meshes.
+2) Replace DP textures (Need to replace textures in code)
+3) Fix Bugs - see above
+4) Need to add function to add lights

@@ -1,11 +1,8 @@
 .UIWrapper {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     margin: auto;
-    background-image: url(bkg.jpg);
-    background-size: cover;
-    background-repeat: no-repeat;
     width: 99vw;
     height: 99vh;
 }
@@ -15,6 +12,7 @@
     display: flex;
     flex-direction: column;
     font-family: 'Poppins';
+    max-width: 30vw;
     margin-top: 7em;
     margin-right: 5em;
     margin-left: 5em;
@@ -35,6 +33,10 @@
 
 .Buttons {
 
+}
+
+.Buttons2 {
+    margin-top: 25px;
 }
 
 .btn-reg {
@@ -59,8 +61,8 @@
 .btn-reg:hover {
     background-color: #e92027;
     color: white;
-    padding-left: 35px;
-    padding-right: 35px;
+    padding-left: 25px;
+    padding-right: 25px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -77,11 +79,11 @@
 
 #myCanvas {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     flex-wrap: wrap;
     margin: auto;
-    max-width: 90vw;
-    min-width: 90vw;
+    max-width: 60vw;
+    min-width: 60vw;
     max-height: calc(90vw / 2);
     min-height: calc(90vw / 2) ;
     object-fit: cover;
