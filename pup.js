@@ -131,11 +131,16 @@ function init(){
 
 
     //load textures
+        //old Textures
+    // bdpBumpTexture = new THREE.TextureLoader().load('textures/bdp-best-bump.jpg', texture => {texture.flipY = false});
+    // dpBumpTexture = new THREE.TextureLoader().load('textures/dp-pattern.jpg', texture => {texture.flipY = false});
+    // patriotTexture = new THREE.TextureLoader().load('textures/star-bump.jpg', texture => {texture.flipY = false});
+    // BK62BumpTexture = new THREE.TextureLoader().load('textures/BK62-bump.jpg', texture => {texture.flipY = false});
 
-    bdpBumpTexture = new THREE.TextureLoader().load('textures/bdp-best-bump.jpg', texture => {texture.flipY = false});
-    dpBumpTexture = new THREE.TextureLoader().load('textures/dp-pattern.jpg', texture => {texture.flipY = false});
+    bdpBumpTexture = new THREE.TextureLoader().load('textures/bdp-final.jpg', texture => {texture.flipY = false});
+    dpBumpTexture = new THREE.TextureLoader().load('textures/dp-pattern-final.jpg', texture => {texture.flipY = false});
     patriotTexture = new THREE.TextureLoader().load('textures/star-bump.jpg', texture => {texture.flipY = false});
-    BK62BumpTexture = new THREE.TextureLoader().load('textures/dp-bump-final.jpg', texture => {texture.flipY = false});
+    BK62BumpTexture = new THREE.TextureLoader().load('textures/BK62-bump.jpg', texture => {texture.flipY = false});
 
     bdpBumpTexture.wrapS = THREE.repeatWrapping;
     bdpBumpTexture.wrapT = THREE.repeatWrapping;
@@ -143,6 +148,8 @@ function init(){
     dpBumpTexture.wrapT = THREE.repeatWrapping;
     patriotTexture.wrapS = THREE.repeatWrapping;
     patriotTexture.wrapT = THREE.repeatWrapping;
+    BK62BumpTexture.wrapS = THREE.repeatWrapping;
+    BK62BumpTexture.wrapT = THREE.repeatWrapping;
 
         //Materials
     metalMat = new THREE.MeshPhysicalMaterial({
@@ -154,6 +161,8 @@ function init(){
         color: 0x000000,
         metalness: 1,
         roughness: .1,
+        bumpScale: .005,
+        bumpMap: BK62BumpTexture,
     });
     bdpMaterial = new THREE.MeshPhysicalMaterial({
         color: 0x000000,
@@ -552,7 +561,9 @@ async function addModelsToScene(){
             child.receiveShadow = true;
             console.log("shadow casted");
         }
-        
+        if(child.material && child.material.name === 'Black Diamond Plate Test 3'){
+            child.material = BK62Mat;
+        }
     });
     ShortFlatHatch.getObjectByName("Decimated_Hatch").material = bdpMaterial;
     GullwingModel.getObjectByName("gw-decimated-left-lid").material = bdpMaterial;
@@ -595,13 +606,13 @@ function openLowSideLid(){
     if(!lidOpen){
         document.getElementById('hinge').textContent = 'Close lid';
         gsap.to(hingePoint.rotation, {duration: 2, x: 2 * Math.PI * (160 / 360), ease:"expo" });
-        gsap.to(LongLowSides.getObjectByName('Shape_IndexedFaceSet506').rotation, {duration: 2, x: 2 * Math.PI * (160 / 360), ease:"expo" });
+        gsap.to(LongLowSides.getObjectByName('long-ls-left-hinge').rotation, {duration: 2, x: 2 * Math.PI * (160 / 360), ease:"expo" });
         lidOpen = true;
     }
     else{
         document.getElementById('hinge').textContent = 'Open Lid';
         gsap.to(hingePoint.rotation, {duration: 2, x: 2 * Math.PI * (90 / 360), ease:"expo" });
-        gsap.to(LongLowSides.getObjectByName('Shape_IndexedFaceSet506').rotation, {duration: 2, x: 2 * Math.PI * (90 / 360), ease:"expo" });
+        gsap.to(LongLowSides.getObjectByName('long-ls-left-hinge').rotation, {duration: 2, x: 2 * Math.PI * (90 / 360), ease:"expo" });
         lidOpen = false;
     }
 }
@@ -655,7 +666,7 @@ function renderPro(){
                 ShortDomedHatch.visible = true;
             }
             else if(longGladiatorDH.visible){
-                LongDomedHatch.visible = false;
+                longGladiatorDH.visible = false;
                 shortGladiatorDH.visible = true;
             }
             else if(longGladiatorFH.visible){
@@ -906,6 +917,10 @@ function openHatch(){
         gsap.to(LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").rotation, {duration: 2, y: 2 * Math.PI * (-10 / 360), ease:"expo"});
         gsap.to(LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").rotation, {duration: 2, y: 2 * Math.PI * (-10 / 360), ease:"expo"});
         gsap.to(ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").rotation, {duration: 2, y: 2 * Math.PI * (-15 / 360), ease:"expo"});
+        gsap.to(shortGladiatorFH.getObjectByName("short-hatch-gladiator").rotation, {duration: 2, y: 2 * Math.PI * (-15 / 360), ease:"expo"});
+        gsap.to(longGladiatorFH.getObjectByName("gladiator-long-hatch").rotation, {duration: 2, y: 2 * Math.PI * (-10 / 360), ease:"expo"});
+        gsap.to(longGladiatorDH.getObjectByName("gladiator-long-dome-hatch").rotation, {duration: 2, y: 2 * Math.PI * (-10 / 360), ease:"expo"});
+        gsap.to(shortGladiatorDH.getObjectByName("gladiator-short-domed-hatch").rotation, {duration: 2, y: 2 * Math.PI * (-15 / 360), ease:"expo"});
         document.getElementById("open-hatch").innerText = "Close Hatch";
         isHatchOpen = true;
     }
@@ -914,6 +929,10 @@ function openHatch(){
         gsap.to(LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 0});
         gsap.to(LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 0});
         gsap.to(ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 0});
+        gsap.to(shortGladiatorFH.getObjectByName("short-hatch-gladiator").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 0});
+        gsap.to(longGladiatorFH.getObjectByName("gladiator-long-hatch").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 0});
+        gsap.to(longGladiatorDH.getObjectByName("gladiator-long-dome-hatch").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 0});
+        gsap.to(shortGladiatorDH.getObjectByName("gladiator-short-domed-hatch").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 0});
         document.getElementById("open-hatch").innerText = "Open Hatch";
         isHatchOpen = false;
     }
@@ -952,13 +971,15 @@ function openTruckslide(){
         isTruckslideOpen = false;
     }
 }
-
+var isGullwingOpen = false;
 function openGullwing(){
-    if(GullwingModel.getObjectByName("gw-decimated-left-lid").rotation.x < 2 ){
-        gsap.to(GullwingModel.getObjectByName("gw-decimated-left-lid").rotation, {duration: 2, x: 135 * (Math.PI / 180), ease:"expo"});
+    if(!isGullwingOpen){
+        gsap.to(GullwingModel.getObjectByName("GW-left-hinge").rotation, {duration: 2, x: 135 * (Math.PI / 180), ease:"expo"});
+        isGullwingOpen = true;
     }
     else{
-        gsap.to(GullwingModel.getObjectByName("gw-decimated-left-lid").rotation, {duration: 2, x: 90 * (Math.PI / 180), ease:"expo"});
+        gsap.to(GullwingModel.getObjectByName("GW-left-hinge").rotation, {duration: 2, x: 90 * (Math.PI / 180), ease:"expo"});
+        isGullwingOpen = false;
     }
 }
 

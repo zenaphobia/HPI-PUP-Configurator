@@ -3207,58 +3207,58 @@
         },
         {
             "buffer" : 0,
-            "byteLength" : 670784,
+            "byteLength" : 670789,
             "byteOffset" : 222712
         },
         {
             "buffer" : 0,
             "byteLength" : 2271,
-            "byteOffset" : 893496
+            "byteOffset" : 893504
         },
         {
             "buffer" : 0,
             "byteLength" : 2250,
-            "byteOffset" : 895768
+            "byteOffset" : 895776
         },
         {
             "buffer" : 0,
             "byteLength" : 16148,
-            "byteOffset" : 898020
+            "byteOffset" : 898028
         },
         {
             "buffer" : 0,
             "byteLength" : 13161,
-            "byteOffset" : 914168
+            "byteOffset" : 914176
         },
         {
             "buffer" : 0,
             "byteLength" : 16546,
-            "byteOffset" : 927332
+            "byteOffset" : 927340
         },
         {
             "buffer" : 0,
             "byteLength" : 13028,
-            "byteOffset" : 943880
+            "byteOffset" : 943888
         },
         {
             "buffer" : 0,
             "byteLength" : 11229,
-            "byteOffset" : 956908
+            "byteOffset" : 956916
         },
         {
             "buffer" : 0,
             "byteLength" : 4919,
-            "byteOffset" : 968140
+            "byteOffset" : 968148
         },
         {
             "buffer" : 0,
             "byteLength" : 4940,
-            "byteOffset" : 973060
+            "byteOffset" : 973068
         }
     ],
     "buffers" : [
         {
-            "byteLength" : 978000,
+            "byteLength" : 978008,
             "uri" : "longGladiatorFlatHatch.bin"
         }
     ]
