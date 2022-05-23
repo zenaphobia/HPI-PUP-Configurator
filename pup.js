@@ -620,9 +620,10 @@ function showOrHideLadderRack(){
 function renderPro(){
 
     clientPUP.Gullwing = true;
-
-    ShortLowSides.getObjectByName("GL-left-lid").visible  = true;
-    ShortLowSides.getObjectByName("GL-right-lid").visible = true;
+    ShortLowSides.visible = true;
+    LongLowSides.visible = false;
+    ShortLowSides.getObjectByName("GL-left-lid").visible  = false;
+    ShortLowSides.getObjectByName("GL-right-lid").visible = false;
     LongLowSides.getObjectByName("GL-ls-left-lid").visible = false;
     LongLowSides.getObjectByName("GL-ls-right-lid").visible = false;
     GullwingModel.getObjectByName("gw-decimated-right-lid").visible = false;
@@ -638,10 +639,13 @@ function renderPro(){
         //If Gullwing is not loaded, add to scene
         if(!GullwingModel.visible){
             GullwingModel.visible = true;
+            ShortLowSides.getObjectByName("GL-left-lid").visible  = true;
+            ShortLowSides.getObjectByName("GL-right-lid").visible = true;
             GullwingModel.getObjectByName("GL-gw-left-lid").visible = true;
             GullwingModel.getObjectByName("GL-gw-right-lid").visible = true;
             GullwingModel.getObjectByName("gw-decimated-left-lid").visible = false;
             GullwingModel.getObjectByName("gw-decimated-right-lid").visible = false;
+            console.log("1. Gladiator Case");
             if(LongFlatHatch.visible){
                 LongFlatHatch.visible = false;
                 ShortFlatHatch.visible = true;
@@ -664,6 +668,9 @@ function renderPro(){
         }
         //If already added, replace gullwing meshes
         else{
+            console.log("2. Gladiator Else case - Gullwing");
+            ShortLowSides.getObjectByName("GL-left-lid").visible  = true;
+            ShortLowSides.getObjectByName("GL-right-lid").visible = true;
             GullwingModel.getObjectByName("GL-gw-left-lid").visible = true;
             GullwingModel.getObjectByName("GL-gw-right-lid").visible = true;
             GullwingModel.getObjectByName("gw-decimated-left-lid").visible = false;
@@ -684,23 +691,24 @@ function renderPro(){
                 longGladiatorFH.visible = false;
                 shortGladiatorFH.visible = true;
             }
-            else{
-                throw new Error("Unknown status of hatch?...");
-            }
         }
     }
 
     else{
+        console.log("3. Else case")
         ShortLowSides.getObjectByName("GL-left-lid").visible  = false;
         ShortLowSides.getObjectByName("GL-right-lid").visible = false;
         LongLowSides.getObjectByName("GL-ls-left-lid").visible = false;
         LongLowSides.getObjectByName("GL-ls-right-lid").visible = false;
+        GullwingModel.getObjectByName("GL-gw-left-lid").visible = false;
+        GullwingModel.getObjectByName("GL-gw-right-lid").visible = false;
         GullwingModel.getObjectByName("gw-decimated-left-lid").visible = true;
         GullwingModel.getObjectByName("gw-decimated-right-lid").visible = true;
-        ShortLowSides.visible = true;
-        LongLowSides.visible = false;
+        ShortLowSides.getObjectByName("standard-right-lid").visible = true;
+        ShortLowSides.getObjectByName("standard-left-lid").visible = true;
         if(!GullwingModel.visible){
             GullwingModel.visible = true;
+            ShortLowSides.visible = true;
             if(LongFlatHatch.visible){
                 LongFlatHatch.visible = false;
                 ShortFlatHatch.visible = true;
@@ -730,32 +738,45 @@ function renderPro(){
 function renderStandard(){
 
     clientPUP.Gullwing = false;
-
     ShortLowSides.visible = false;
     LongLowSides.visible = true;
-    if(GullwingModel.visible){
-        GullwingModel.visible = false;
-        if(ShortFlatHatch.visible){
-            LongFlatHatch.visible = true;
-            ShortFlatHatch.visible = false;
-            shortGladiatorFH.visible = false;
-        }
-        else if(ShortDomedHatch.visible){
-            LongDomedHatch.visible = true;
-            ShortDomedHatch.visible = false;
-            shortGladiatorDH.visible = false;
-        }
-        else if(shortGladiatorFH.visible){
-            shortGladiatorFH.visible = false;
-            longGladiatorFH.visible = true;
-        }
-        else if(shortGladiatorDH.visible){
-            shortGladiatorDH.visible = false;
-            longGladiatorDH.visible = true;
-        }
-        else{
-            throw new Error("Unexpected event");
-        }
+    GullwingModel.visible = false;
+
+    if(ShortFlatHatch.visible){
+        LongFlatHatch.visible = true;
+        ShortFlatHatch.visible = false;
+        shortGladiatorFH.visible = false;
+    }
+    else if(ShortDomedHatch.visible){
+        LongDomedHatch.visible = true;
+        ShortDomedHatch.visible = false;
+        shortGladiatorDH.visible = false;
+    }
+    else if(shortGladiatorFH.visible){
+        shortGladiatorFH.visible = false;
+        longGladiatorFH.visible = true;
+    }
+    else if(shortGladiatorDH.visible){
+        shortGladiatorDH.visible = false;
+        longGladiatorDH.visible = true;
+    }
+    else{
+
+    }
+
+    if(clientPUP.LidFinishes === "Gladiator"){
+        LongLowSides.getObjectByName("standard-long-left-lid").visible = false;
+        LongLowSides.getObjectByName("standard-long-right-lid").visible = false;
+        LongLowSides.getObjectByName("GL-ls-left-lid").visible = true;
+        LongLowSides.getObjectByName("GL-ls-right-lid").visible = true;
+        console.log("Gladiator is true");
+    }
+    else{
+        LongLowSides.getObjectByName("standard-long-left-lid").visible = true;
+        LongLowSides.getObjectByName("standard-long-right-lid").visible = true;
+        LongLowSides.getObjectByName("GL-ls-left-lid").visible = false;
+        LongLowSides.getObjectByName("GL-ls-right-lid").visible = false;
+        console.log("Gladiator is false");
     }
 }
 
@@ -985,6 +1006,25 @@ function switchToDiamondPlate(){
         }
     });
     clientPUP.LidFinishes = "DiamondPlate";
+
+    switch(clientPUP.Hatch){
+        case "Flat":
+            renderFlatHatch();
+            break;
+        case "Domed":
+            renderDomedHatch();
+            break;
+        default:
+            throw new Error("Unknown Hatch type");
+    }
+    switch(clientPUP.Gullwing){
+        case true:
+            renderPro();
+            break;
+        case false:
+            renderStandard();
+            break;
+    }
 }
 
 function switchToBlackDiamondPlate(){
@@ -1031,6 +1071,25 @@ function switchToBlackDiamondPlate(){
         }
     });
     clientPUP.LidFinishes = "BlackDiamondPlate";
+
+    switch(clientPUP.Hatch){
+        case "Flat":
+            renderFlatHatch();
+            break;
+        case "Domed":
+            renderDomedHatch();
+            break;
+        default:
+            throw new Error("Unknown Hatch type");
+    }
+    switch(clientPUP.Gullwing){
+        case true:
+            renderPro();
+            break;
+        case false:
+            renderStandard();
+            break;
+    }
 }
 
 function switchToLeopard(){
@@ -1078,6 +1137,25 @@ function switchToLeopard(){
     });
 
     clientPUP.LidFinishes = "Leopard";
+
+    switch(clientPUP.Hatch){
+        case "Flat":
+            renderFlatHatch();
+            break;
+        case "Domed":
+            renderDomedHatch();
+            break;
+        default:
+            throw new Error("Unknown Hatch type");
+    }
+    switch(clientPUP.Gullwing){
+        case true:
+            renderPro();
+            break;
+        case false:
+            renderStandard();
+            break;
+    }
 }
 
 function switchToPatriot(){
@@ -1126,6 +1204,25 @@ function switchToPatriot(){
     });
 
     clientPUP.LidFinishes = "Patriot"
+
+    switch(clientPUP.Hatch){
+        case "Flat":
+            renderFlatHatch();
+            break;
+        case "Domed":
+            renderDomedHatch();
+            break;
+        default:
+            throw new Error("Unknown Hatch type");
+    }
+    switch(clientPUP.Gullwing){
+        case true:
+            renderPro();
+            break;
+        case false:
+            renderStandard();
+            break;
+    }
 }
 
 function switchToGladiator(){
