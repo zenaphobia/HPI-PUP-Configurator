@@ -3,6 +3,7 @@ import { GLTFLoader } from '/js/GLTFLoader.js';
 import { OrbitControls } from '/js/OrbitControls.js';
 import { DRACOLoader } from '/js/DRACOLoader.js';
 import { EXRLoader } from '/js/EXRLoader.js';
+import { FlakesTexture } from '/js/FlakesTexture.js'
 import HeadacheRack from '/js/headacheRack.js';
 import { UnrealBloomPass } from '/js/UnrealBloomPass.js';
 import { EffectComposer } from '/js/EffectComposer.js';
@@ -39,7 +40,7 @@ let basemesh, testmesh, windowMesh, truckBaseMesh, testMat, hingePoint, lidTest;
 //All Models
 var allModels, TruckModel, GullwingModel, HeadacheRackPost, HeadacheRackHex, LongLowSides, ShortLowSides,LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, shortGladiatorFH, longGladiatorFH, shortGladiatorDH, longGladiatorDH, LadderRack, XTBase, XT1200Truckslide, XT2000Truckslide;
 //Textures
-var bdpBumpTexture, dpBumpTexture, patriotTexture, BK62BumpTexture;
+var bdpBumpTexture, dpBumpTexture, patriotTexture, BK62BumpTexture, carPaintTexture;
 
 let composer, renderPass, SaoPass;
 
@@ -61,7 +62,7 @@ var vertexData = vert;
 var fragData = frag;
 var isFullLengthPUPLoaded = false;
 //materials
-let metalMat, windowMat, redGlassMat,truckPaintMat, clearGlassMat, bdpMaterial, dpMaterial, blackMetalMat, leopardMaterial, patriotMat, emissiveLight, BK62Mat;
+let metalMat, windowMat, redGlassMat,truckPaintMat, clearGlassMat, bdpMaterial, dpMaterial, blackMetalMat, leopardMaterial, patriotMat, emissiveLight, BK62Mat, clearGlassMatLights;
 
 init();
 animate();
@@ -141,6 +142,7 @@ function init(){
     dpBumpTexture = new THREE.TextureLoader().load('textures/dp-pattern-final.jpg', texture => {texture.flipY = false});
     patriotTexture = new THREE.TextureLoader().load('textures/star-bump.jpg', texture => {texture.flipY = false});
     BK62BumpTexture = new THREE.TextureLoader().load('textures/BK62-bump.jpg', texture => {texture.flipY = false});
+    carPaintTexture = new  THREE.CanvasTexture(new FlakesTexture());
 
     bdpBumpTexture.wrapS = THREE.repeatWrapping;
     bdpBumpTexture.wrapT = THREE.repeatWrapping;
@@ -150,6 +152,8 @@ function init(){
     patriotTexture.wrapT = THREE.repeatWrapping;
     BK62BumpTexture.wrapS = THREE.repeatWrapping;
     BK62BumpTexture.wrapT = THREE.repeatWrapping;
+    carPaintTexture.repeat.x = 10;
+    carPaintTexture.repeat.y = 10;
 
         //Materials
     metalMat = new THREE.MeshPhysicalMaterial({
@@ -207,6 +211,13 @@ function init(){
         //transmission: .015, //doubles the draw calls! don't include for now.
         opacity: .85,
     });
+    clearGlassMatLights = new THREE.MeshPhysicalMaterial({
+        color: 0xffffff,
+        transparent: true,
+        roughness: 0,
+        //transmission: .015, //doubles the draw calls! don't include for now.
+        opacity: .85,
+    });
     clearGlassMat = new THREE.MeshPhysicalMaterial({
         color: 0xffffff,
         transparent: true,
@@ -216,8 +227,12 @@ function init(){
     });
 
     truckPaintMat = new THREE.MeshPhysicalMaterial({
-        color: 0x606060,
+        color: 0x282828,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.1,
         roughness: .05,
+        normalMap: carPaintTexture,
+        normalScale: new THREE.Vector2(1,1),
     });
     emissiveLight = new THREE.MeshStandardMaterial({
         color: 0xffffff,
@@ -335,6 +350,7 @@ function init(){
     document.getElementById('open-gullwing').addEventListener("click", function(){openGullwing()});
     document.getElementById('xt1200').addEventListener("click", function(){chooseXT1200()});
     document.getElementById('xt2000').addEventListener("click", function(){chooseXT2000()});
+    document.getElementById('xt4000').addEventListener("click", function(){chooseXT4000()});
     document.getElementById('open-hatch').addEventListener("click", function(){openHatch()});
     document.getElementById('open-truckslide').addEventListener("click", function(){openTruckslide()});
     document.getElementById('hide-truckslide').addEventListener("click", function(){hideTruckslide()});
@@ -551,6 +567,12 @@ async function addModelsToScene(){
         if(child.material && child.material.name === 'redglass.001'){
             child.material = redGlassMat;
         }
+        if(child.material && child.material.name === 'clearglass.001'){
+            child.material = clearGlassMatLights;
+        }
+        if(child.material && child.material.name === 'Carpaint'){
+            child.material = truckPaintMat;
+        }
     });
     scene.traverse(function(child){
         if(child.material && child.material.name === 'accent color'){
@@ -600,6 +622,10 @@ async function addModelsToScene(){
     longGladiatorDH.visible = false;
     LadderRack.visible = false;
     XT2000Truckslide.visible = false;
+    XT2000Truckslide.getObjectByName("truckslide-left-xt4000").visible = false;
+    XT2000Truckslide.getObjectByName("truckslide-right-xt4000").visible = false;
+    XT2000Truckslide.getObjectByName("4000-middle-taper").visible = false;
+
 }
 
 function openLowSideLid(){
@@ -903,10 +929,40 @@ function chooseXT1200(){
 }
 
 function chooseXT2000(){
+    if(XT2000Truckslide.getObjectByName("truckslide-left-xt4000").visible === true){
+        XT2000Truckslide.getObjectByName("truckslide-left-xt4000").visible = false;
+        XT2000Truckslide.getObjectByName("truckslide-right-xt4000").visible = false;
+        XT2000Truckslide.getObjectByName("4000-middle-taper").visible = false;
+    }
     if(XT2000Truckslide.visible !== true){
         XTBase.visible = true;
         XT2000Truckslide.visible = true;
         XT1200Truckslide.visible = false;
+    }
+    XT2000Truckslide.getObjectByName("truckslide-left-xt2000").visible = true;
+    XT2000Truckslide.getObjectByName("truckslide-right-xt2000").visible = true;
+    XT2000Truckslide.getObjectByName("2000-middle-taper").visible = true;
+}
+
+function chooseXT4000(){
+    if(XT2000Truckslide.visible !== true){
+        XTBase.visible = true;
+        XT2000Truckslide.visible = true;
+        XT1200Truckslide.visible = false;
+        XT2000Truckslide.getObjectByName("truckslide-left-xt2000").visible = false;
+        XT2000Truckslide.getObjectByName("truckslide-right-xt2000").visible = false;
+        XT2000Truckslide.getObjectByName("2000-middle-taper").visible = false;
+        XT2000Truckslide.getObjectByName("truckslide-left-xt4000").visible = true;
+        XT2000Truckslide.getObjectByName("truckslide-right-xt4000").visible = true;
+        XT2000Truckslide.getObjectByName("4000-middle-taper").visible = true;
+    }
+    else{
+        XT2000Truckslide.getObjectByName("truckslide-left-xt2000").visible = false;
+        XT2000Truckslide.getObjectByName("truckslide-right-xt2000").visible = false;
+        XT2000Truckslide.getObjectByName("2000-middle-taper").visible = false;
+        XT2000Truckslide.getObjectByName("truckslide-left-xt4000").visible = true;
+        XT2000Truckslide.getObjectByName("truckslide-right-xt4000").visible = true;
+        XT2000Truckslide.getObjectByName("4000-middle-taper").visible = true;
     }
 }
 
