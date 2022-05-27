@@ -216,6 +216,9 @@ function init(){
         roughness: .05,
         normalMap: carPaintTexture,
         normalScale: new THREE.Vector2(.03,.03),
+        sheen: 1,
+        sheenRoughness: .155,
+        sheenColor: 0xffffff,
     });
     emissiveLight = new THREE.MeshStandardMaterial({
         color: 0xffffff,
@@ -306,10 +309,10 @@ function init(){
     document.getElementById('open-hatch').addEventListener("click", function(){openHatch()});
     document.getElementById('open-truckslide').addEventListener("click", function(){openTruckslide()});
     document.getElementById('hide-truckslide').addEventListener("click", function(){hideTruckslide()});
-    document.getElementById('change-to-red').addEventListener("click", function(){truckPaintMat.color.set(0x570000)});
-    document.getElementById('change-to-blue').addEventListener("click", function(){truckPaintMat.color.set(0x001340)});
-    document.getElementById('change-to-grey').addEventListener("click", function(){truckPaintMat.color.set(0x1f1f1f)});
-    document.getElementById('change-to-black').addEventListener("click", function(){truckPaintMat.color.set(0x050505)});
+    document.getElementById('change-to-red').addEventListener("click", function(){truckPaintMat.color.set(0x570000);truckPaintMat.sheenColor.set(0x2b0000); });
+    document.getElementById('change-to-blue').addEventListener("click", function(){truckPaintMat.color.set(0x001340); truckPaintMat.sheenColor.set(0x000000); });
+    document.getElementById('change-to-grey').addEventListener("click", function(){truckPaintMat.color.set(0x1f1f1f); truckPaintMat.sheenColor.set(0xffffff);});
+    document.getElementById('change-to-black').addEventListener("click", function(){truckPaintMat.color.set(0x050505); truckPaintMat.sheenColor.set(0xffffff);});
     document.getElementById('change-to-white').addEventListener("click", function(){truckPaintMat.color.set(0xf0f0f0)});
 
     //document.getElementById('hatches').addEventListener("click", function(){swapHatches()});
