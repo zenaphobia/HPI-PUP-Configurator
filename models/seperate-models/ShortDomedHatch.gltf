@@ -4059,7 +4059,7 @@
         },
         {
             "componentType" : 5126,
-            "count" : 2860,
+            "count" : 2862,
             "max" : [
                 70.26713562011719,
                 18.500001907348633,
@@ -4074,12 +4074,12 @@
         },
         {
             "componentType" : 5126,
-            "count" : 2860,
+            "count" : 2862,
             "type" : "VEC3"
         },
         {
             "componentType" : 5126,
-            "count" : 2860,
+            "count" : 2862,
             "type" : "VEC2"
         },
         {
@@ -4501,7 +4501,7 @@
         },
         {
             "buffer" : 0,
-            "byteLength" : 17426,
+            "byteLength" : 17428,
             "byteOffset" : 858176
         },
         {
@@ -4548,7 +4548,7 @@
     "buffers" : [
         {
             "byteLength" : 960932,
-            "uri" : "ShortDomedHatch.bin"
+            "uri" : "shortDomedHatch.bin"
         }
     ]
 }
