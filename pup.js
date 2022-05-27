@@ -51,9 +51,6 @@ var isTruckslideOpen = false;
 
 var sun = new THREE.Vector3();
 
-var clock;
-
-clock = new THREE.Clock();
 //#endregion
 
 //Lazy Load files
@@ -92,6 +89,16 @@ function init(){
     renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.physicallyCorrectdirectionalLights = true;
     renderer.shadowMap.enabled = true;
+    
+    // const renderScene = new RenderPass(scene, camera);
+    // const bloomPass = new UnrealBloomPass(new THREE.Vector2(container.offsetWidth / container.offsetHeight), 1.5, 0.4, 0.85);
+    // bloomPass.threshold = .85;
+    // bloomPass.strength = .15;
+    // bloomPass.radius = 0;
+
+    // composer = new EffectComposer(renderer);
+    // composer.addPass(renderScene);
+    // composer.addPass(bloomPass);
 
     // //SaoPass = new SAOPass(scene, camera, false, true);
     // SaoPass = new SAOPass(scene, camera, false, true);
@@ -111,32 +118,7 @@ function init(){
 
     // console.log(SaoPass);
 
-
-    //initialize objects
-
-    // const directionalLight = new THREE.DirectionalLight( 0xFFFFFF, 1 );
-    // //const directionaldirectionalLight = new THREE.DirectionaldirectionalLight(0xffffff, 1);
-    // directionalLight.position.set(5,12,7.5);
-    // directionalLight.castShadow = true;
-    // directionalLight.shadow.camera.top = 10000;
-    // directionalLight.shadow.camera.bottom = - 10000;
-    // directionalLight.shadow.camera.left = - 10000;
-    // directionalLight.shadow.camera.right = 10000;
-    // directionalLight.shadow.camera.near = 0.0001;
-    // directionalLight.shadow.camera.far = 1000000;
-    // directionalLight.shadow.bias = - 0.002;
-    // directionalLight.shadow.mapSize.width = 1024 *4;
-    // directionalLight.shadow.mapSize.height = 1024 *4;
-
-    // scene.add(directionalLight);
-
-
     //load textures
-        //old Textures
-    // bdpBumpTexture = new THREE.TextureLoader().load('textures/bdp-best-bump.jpg', texture => {texture.flipY = false});
-    // dpBumpTexture = new THREE.TextureLoader().load('textures/dp-pattern.jpg', texture => {texture.flipY = false});
-    // patriotTexture = new THREE.TextureLoader().load('textures/star-bump.jpg', texture => {texture.flipY = false});
-    // BK62BumpTexture = new THREE.TextureLoader().load('textures/BK62-bump.jpg', texture => {texture.flipY = false});
 
     bdpBumpTexture = new THREE.TextureLoader().load('textures/bdp-final.jpg', texture => {texture.flipY = false});
     dpBumpTexture = new THREE.TextureLoader().load('textures/dp-pattern-final.jpg', texture => {texture.flipY = false});
@@ -152,8 +134,10 @@ function init(){
     patriotTexture.wrapT = THREE.repeatWrapping;
     BK62BumpTexture.wrapS = THREE.repeatWrapping;
     BK62BumpTexture.wrapT = THREE.repeatWrapping;
-    carPaintTexture.repeat.x = 10;
-    carPaintTexture.repeat.y = 10;
+    carPaintTexture.wrapT = THREE.repeatWrapping;
+    carPaintTexture.wrapS = THREE.repeatWrapping;
+    carPaintTexture.repeat.x = 40;
+    carPaintTexture.repeat.y = 40;
 
         //Materials
     metalMat = new THREE.MeshPhysicalMaterial({
@@ -225,14 +209,13 @@ function init(){
         //transmission: .015, //doubles the draw calls! don't include for now.
         opacity: .55,
     });
-
     truckPaintMat = new THREE.MeshPhysicalMaterial({
-        color: 0x282828,
+        color: 0x1f1f1f,
         clearcoat: 1.0,
         clearcoatRoughness: 0.1,
         roughness: .05,
         normalMap: carPaintTexture,
-        normalScale: new THREE.Vector2(1,1),
+        normalScale: new THREE.Vector2(.03,.03),
     });
     emissiveLight = new THREE.MeshStandardMaterial({
         color: 0xffffff,
@@ -276,42 +259,11 @@ function init(){
     controls.rotateSpeed = (container.offsetWidth / 2560);
 
     //Draco Loader
-    dracoLoader = new DRACOLoader()
-    dracoLoader.setDecoderPath('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/js/libs/draco/')
-    loader.setDRACOLoader(dracoLoader)
+    dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/js/libs/draco/');
+    loader.setDRACOLoader(dracoLoader);
 
     //  Model Loader
-    // loader.load(
-    //     // resource URL
-    //     'models/gullwing-flat-hatch.glb',
-    //     // called when the resource is loaded
-    //     function ( gltf ) {
-
-    //         basemesh = gltf.scene;
-    //         testmesh = gltf.scene.getObjectByName('hatch');
-    //         hingePoint = gltf.scene.getObjectByName('lowside-hinge');
-    //         lidTest = gltf.scene.getObjectByName('standard-left-lid');
-
-    //         //Traverse method to change materials
-    //         gltf.scene.traverse(function(child){
-    //             if(child.material && child.material.name === 'windowglass.001'){
-    //                 child.material = windowMat;
-    //             }
-    //             if(child.material && child.material.name === 'redglass.001'){
-    //                 child.material = redGlassMat;
-    //             }
-    //         });
-    //         scene.add(basemesh);
-    //     },
-    //     // called while loading is progressing
-    //     function ( xhr ) {
-    //         console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-    //     },
-    //     // called when loading has errors
-    //     function ( error ) {
-    //         console.log( 'An error happened' + error );
-    //     }
-    // );
 
     addModelsToScene();
 
@@ -354,7 +306,11 @@ function init(){
     document.getElementById('open-hatch').addEventListener("click", function(){openHatch()});
     document.getElementById('open-truckslide').addEventListener("click", function(){openTruckslide()});
     document.getElementById('hide-truckslide').addEventListener("click", function(){hideTruckslide()});
-    document.getElementById('test').addEventListener("click", function(){swapMeshes()});
+    document.getElementById('change-to-red').addEventListener("click", function(){truckPaintMat.color.set(0x570000)});
+    document.getElementById('change-to-blue').addEventListener("click", function(){truckPaintMat.color.set(0x000c40)});
+    document.getElementById('change-to-grey').addEventListener("click", function(){truckPaintMat.color.set(0x1f1f1f)});
+    document.getElementById('change-to-black').addEventListener("click", function(){truckPaintMat.color.set(0x050505)});
+    document.getElementById('change-to-white').addEventListener("click", function(){truckPaintMat.color.set(0xf0f0f0)});
 
     //document.getElementById('hatches').addEventListener("click", function(){swapHatches()});
 
@@ -600,8 +556,6 @@ async function addModelsToScene(){
     ShortLowSides.getObjectByName("Shape_IndexedFaceSet118").material = clearGlassMat;
     ShortLowSides.getObjectByName("Icosphere").material = emissiveLight;
 
-
-    //console.log(XT1200Truckslide.getObjectByName("Shape_IndexedFaceSet1773"));
     //hide models
     HeadacheRackPost.visible = false;
     GullwingModel.visible = false;
