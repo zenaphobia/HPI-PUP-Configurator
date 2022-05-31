@@ -102,308 +102,307 @@ const HDLightsOn = {
 }
 
 class HeadacheRack{
-    constructor(size, mesh, uprights, finish, feet, lights){
-        switch(size){
+    constructor(_size, _mesh, _uprights, _finish, _feet, _lights){
+        switch(_size){
             case "Size1":
-                this._size = Size1;
+                this.size = Size1;
                 break;
             case "Size2":
-                this._size = Size2
+                this.size = Size2
                 break;
             case "Size4":
-                this._size = Size4;
+                this.size = Size4;
                 break;
             case "Size5":
-                this._size = Size5;
+                this.size = Size5;
                 break;
             case "Size6":
-                this._size = Size6;
+                this.size = Size6;
                 break;
             case "Size 7":
-                this._size = Size7;
+                this.size = Size7;
                 break;
             default:
                 throw new TypeError("TypeError: Invalid initial size selection");
         }
-        switch(mesh){
+        switch(_mesh){
             case "OpenPost":
-                this._mesh = OpenPost;
+                this.mesh = OpenPost;
                 break;
             case "OpenMesh":
-                this._mesh = OpenMesh;
+                this.mesh = OpenMesh;
                 break;
             case "FullMesh":
-                this._mesh = FullMesh;
+                this.mesh = FullMesh;
                 break;
             case "OpenWave":
-                this._mesh = OpenWave;
+                this.mesh = OpenWave;
                 break;
             case "FullWave":
-                this._mesh = FullWave;
+                this.mesh = FullWave;
                 break;
             default:
                 throw new TypeError("TypeError: Invalid initial mesh selection");
         }
-        switch(uprights){
+        switch(_uprights){
             case "HoneycombUprights":
-                this._uprights = HoneycombUprights;
+                this.uprights = HoneycombUprights;
                 break;
             case "GuardianUprights":
-                this._uprights = GuardianUprights;
+                this.uprights = GuardianUprights;
                 break;
             case "BeastUprights":
-                this._uprights = BeastUprights;
+                this.uprights = BeastUprights;
                 break;
             case "SavageUprights":
-                this._uprights = SavageUprights;
+                this.uprights = SavageUprights;
                 break;
             default:
                 throw new TypeError("TypeError: Invalid initial upright selection");
         }
-        switch(finish){
+        switch(_finish){
             case "PolishedAluminum":
-                this._finish = PolishedAluminum;
+                this.finish = PolishedAluminum;
                 break;
             case "SmoothBlack":
-                this._finish = SmoothBlack;
+                this.finish = SmoothBlack;
                 break;
             case "Leopard":
-                this._finish = Leopard;
+                this.finish = Leopard;
                 break;
             default:
                 throw new TypeError("TypeError: Invalid initial finish selection");
         }
-        switch(feet){
+        switch(_feet){
             case "StandardBedRails":
-                this._feet = StandardBedRails;
+                this.feet = StandardBedRails;
                 break;
             case "SavageBedRails":
-                this._feet = SavageBedRails;
+                this.feet = SavageBedRails;
                 break;
             case "BeastBedRails":
-                this._feet = BeastBedRails;
+                this.feet = BeastBedRails;
                 break;
             case "HoneycombFeet":
-                this._feet = HoneycombFeet;
+                this.feet = HoneycombFeet;
                 break;
             case "GuardianFeet":
-                this._feet = GuardianFeet;
+                this.feet = GuardianFeet;
                 break;
             case "SavageFeet":
-                this._feet = SavageFeet;
+                this.feet = SavageFeet;
                 break;
             case "BeastFeet":
-                this._feet = BeastFeet;
+                this.feet = BeastFeet;
                 break;
             default:
                 throw new TypeError("TypeError: Invalid initial feet selection");
         }
-        switch(lights){
+        switch(_lights){
             case true:
-                this._lights = HDLightsOn;
+                this.lights = HDLightsOn;
                 break;
             case false:
-                this._lights = HDLightsOff;
+                this.lights = HDLightsOff;
         }
     }
 
     getPrice(){
-        return this._mesh.price + this._uprights.price + this._finish.price;
+        return this.mesh.price + this.uprights.price + this.finish.price;
     }
 
-    set mesh(x){
+    set SetMesh(x){
         switch(x){
             case "OpenPost":
-                this._mesh = OpenPost;
+                this.mesh = OpenPost;
                 break;
             case "OpenMesh":
-                this._mesh = OpenMesh;
+                this.mesh = OpenMesh;
                 break;
             case "FullMesh":
-                this._mesh = FullMesh;
+                this.mesh = FullMesh;
                 break;
             case "OpenWave":
-                this._mesh = OpenWave;
+                this.mesh = OpenWave;
                 //validator checks to see if HR is a Honeycomb
-                if(this._uprights !== HoneycombUprights){
-                    this._mesh = OpenMesh;
+                if(this.uprights !== HoneycombUprights){
+                    this.mesh = OpenMesh;
                 };
                 break;
             case "FullWave":
-                this._mesh = FullWave;
+                this.mesh = FullWave;
                 //validator checks to see if HR is a Honeycomb
                 if(this.uprights !== HoneycombUprights){
-                    this._mesh = FullMesh;
+                    this.mesh = FullMesh;
                 }
                 break;
             default:
-                //this._mesh = FullMesh;
                 throw new TypeError("TypeError: Invalid mesh selection");
         }
     }
-    set uprights(x){
-        switch(uprights){
+    set SetUprights(x){
+        switch(x){
             case "HoneycombUprights":
-                this._uprights = HoneycombUprights;
+                this.uprights = HoneycombUprights;
                 break;
             case "GuardianUprights":
-                this._uprights = GuardianUprights;
+                this.uprights = GuardianUprights;
                 break;
             case "BeastUprights":
-                this._uprights = BeastUprights;
+                this.uprights = BeastUprights;
                 break;
             case "SavageUprights":
-                this._uprights = SavageUprights;
+                this.uprights = SavageUprights;
                 break;
             default:
                 throw new TypeError("TypeError: Invalid upright selection");
         }
     }
-    set size(x){
+    set SetSize(x){
         switch(x){
             case "Size1":
-                this._size = Size1;
+                this.size = Size1;
                 break;
             case "Size2":
-                this._size = Size2
+                this.size = Size2
                 break;
             case "Size4":
-                this._size = Size4;
+                this.size = Size4;
                 break;
             case "Size5":
-                this._size = Size5;
+                this.size = Size5;
                 break;
             case "Size6":
-                this._size = Size6;
+                this.size = Size6;
                 break;
             case "Size 7":
-                this._size = Size7;
+                this.size = Size7;
                 break;
             default:
                 throw new TypeError("TypeError: Invalid size selection");
         }
     }
-    set finish(x){
+    set SetFinish(x){
         switch(x){
             case "PolishedAluminum":
-                this._finish = PolishedAluminum;
-                if(this._uprights !== HoneycombUprights){
-                    this._finish = SmoothBlack;
+                this.finish = PolishedAluminum;
+                if(this.uprights !== HoneycombUprights){
+                    this.finish = SmoothBlack;
                 }
                 break;
             case "SmoothBlack":
-                this._finish = SmoothBlack;
+                this.finish = SmoothBlack;
                 break;
             case "Leopard":
-                this._finish = Leopard;
-                if(this._uprights !== HoneycombUprights){
-                    this._finish = SmoothBlack;
+                this.finish = Leopard;
+                if(this.uprights !== HoneycombUprights){
+                    this.finish = SmoothBlack;
                 }
                 break;
             default:
                 throw new TypeError("TypeError: Invalid finish selection");
         }
     }
-    set feet(x){
+    set SetFeet(x){
         switch(x){
             case "StandardBedRails":
-                this._feet = StandardBedRails;
-                if(this._uprights === BeastUprights){
-                    this._feet = BeastBedRails;
+                this.feet = StandardBedRails;
+                if(this.uprights === BeastUprights){
+                    this.feet = BeastBedRails;
                 }
                 if(this.uprights === SavageUprights){
-                    this._feet = SavageBedRails;
+                    this.feet = SavageBedRails;
                 }
                 break;
             case "SavageBedRails":
-                this._feet = SavageBedRails;
-                if(this._uprights !== SavageUprights){
-                    switch(this._uprights){
+                this.feet = SavageBedRails;
+                if(this.uprights !== SavageUprights){
+                    switch(this.uprights){
                         case GuardianUprights || HoneycombUprights:
-                            this._feet = StandardBedRails;
+                            this.feet = StandardBedRails;
                             console.log("Savage Bed Rails are only compatible with Savage uprights, applying standard bed rails");
                             break;
                         case BeastUprights:
-                            this._feet = BeastBedRails;
+                            this.feet = BeastBedRails;
                             console.log("Savage Bed Rails are only compatible with Savage uprights, applying Beast bed rails");
                             break;
                     }
                 }
                 break;
             case "BeastBedRails":
-                this._feet = BeastBedRails;
-                if(this._uprights !== BeastUprights){
-                    switch(this._uprights){
+                this.feet = BeastBedRails;
+                if(this.uprights !== BeastUprights){
+                    switch(this.uprights){
                         case GuardianUprights || HoneycombUprights:
-                            this._feet = StandardBedRails;
+                            this.feet = StandardBedRails;
                             console.log("Savage Bed Rails are only compatible with Savage uprights, applying standard bed rails");
                             break;
                         case SavageUprights:
-                            this._feet = SavageBedRails;
+                            this.feet = SavageBedRails;
                             console.log("Savage Bed Rails are only compatible with Savage uprights, applying Beast bed rails");
                             break;
                     }
                 }
                 break;
             case "HoneycombFeet":
-                this._feet = HoneycombFeet;
-                if(this._uprights !== HoneycombUprights){
-                    switch(this._uprights){
+                this.feet = HoneycombFeet;
+                if(this.uprights !== HoneycombUprights){
+                    switch(this.uprights){
                         case SavageUprights:
-                            this._feet = SavageFeet;
+                            this.feet = SavageFeet;
                             break;
                         case BeastFeet:
-                            this._feet = BeastFeet;
+                            this.feet = BeastFeet;
                             break;
                         case GuardianFeet:
-                            this._feet = GuardianFeet;
+                            this.feet = GuardianFeet;
                     }
                 }
                 break;
             case "GuardianFeet":
-                this._feet = GuardianFeet;
-                if(this._uprights !== GuardianUprights){
-                    switch(this._uprights){
+                this.feet = GuardianFeet;
+                if(this.uprights !== GuardianUprights){
+                    switch(this.uprights){
                         case SavageUprights:
-                            this._feet = SavageFeet;
+                            this.feet = SavageFeet;
                             break;
                         case BeastFeet:
-                            this._feet = BeastFeet;
+                            this.feet = BeastFeet;
                             break;
                         case HoneycombFeet:
-                            this._feet = HoneycombFeet;
+                            this.feet = HoneycombFeet;
                             break;
                     }
                 }
                 break;
             case "SavageFeet":
-                this._feet = SavageFeet;
-                if(this._uprights !== SavageUprights){
-                    switch(this._uprights){
+                this.feet = SavageFeet;
+                if(this.uprights !== SavageUprights){
+                    switch(this.uprights){
                         case HoneycombUprights:
-                            this._feet = HoneycombFeet;
+                            this.feet = HoneycombFeet;
                             break;
                         case GuardianUprights:
-                            this._feet = GuardianFeet;
+                            this.feet = GuardianFeet;
                             break;
                         case BeastUprights:
-                            this._feet = BeastFeet;
+                            this.feet = BeastFeet;
                             break;
                     }
                 }
                 break;
             case "BeastFeet":
-                this._feet = BeastFeet;
-                if(this._uprights !== BeastUprights){
-                    switch(this._uprights){
+                this.feet = BeastFeet;
+                if(this.uprights !== BeastUprights){
+                    switch(this.uprights){
                         case HoneycombUprights:
-                            this._feet = HoneycombFeet;
+                            this.feet = HoneycombFeet;
                             break;
                         case GuardianUprights:
-                            this._feet = GuardianFeet;
+                            this.feet = GuardianFeet;
                             break;
                         case SavageUprights:
-                            this._feet = SavageFeet;
+                            this.feet = SavageFeet;
                             break;
                     }
                 }
@@ -412,25 +411,25 @@ class HeadacheRack{
                 throw new TypeError("TypeError: Invalid feet selection");
         }
     }
-    set lights(x){
+    set SetLights(x){
         switch(x){
             case true:
-                this._lights = HDLightsOn;
-                if(this._uprights === HoneycombUprights){
-                    this._lights = HDLightsOff;
+                this.lights = HDLightsOn;
+                if(this.uprights === HoneycombUprights){
+                    this.lights = HDLightsOff;
                 };
                 break;
             case false:
-                this._lights = HDLightsOff;
+                this.lights = HDLightsOff;
             default:
-                this._lights = HDLightsOff;
+                this.lights = HDLightsOff;
         }
     }
 
     getPartNumber(){
-        switch(this._uprights){
+        switch(this.uprights){
             case GuardianUprights:
-                if(this._size === Size1 && this._mesh === OpenPost && this._lights === HDLightsOn)
+                if(this.size === Size1 && this.mesh === OpenPost && this.lights === HDLightsOn)
                     return "4012-028-BK62";
             break;
         }
