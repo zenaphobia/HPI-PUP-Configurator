@@ -42,14 +42,12 @@ var allModels, TruckModel, GullwingModel, HeadacheRackPost, HeadacheRackHex, Lon
 //Textures
 var bdpBumpTexture, dpBumpTexture, patriotTexture, BK62BumpTexture, carPaintTexture;
 
-let composer, renderPass, SaoPass;
+//let composer, renderPass, SaoPass;
 
 var isHatchOpen = false;
 var isTailgateOpen = false;
 var isTruckslideOpen = false;
 
-
-var sun = new THREE.Vector3();
 
 //#endregion
 
@@ -279,7 +277,7 @@ function init(){
         LEDdirectionalLighting: "None", //'battery', 'wired'
         AdditionalGullwingTray: false,
         AdditionalLowSideTray: "None", //1, 2
-        LidFinishes: "BlackDiamondPlate", //BlackDiamondPlate, Leopard, Gladiator, Patriot
+        LidFinishes: "BlackDiamondPlate", //BlackDiamondPlate, Leopard, Gladiator
         Truckslide: "None",
     };
     //#endregion
