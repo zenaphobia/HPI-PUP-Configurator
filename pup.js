@@ -38,10 +38,11 @@ let loader, fileLoader, scene, container, camera, renderer, controls, dracoLoade
 //#region INIT FILES
 let basemesh, testmesh, windowMesh, truckBaseMesh, testMat, hingePoint, lidTest;
 //All Models
-var allModels, TruckModel, GullwingModel, HeadacheRackPost, HeadacheRackHex, LongLowSides, ShortLowSides,LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, shortGladiatorFH, longGladiatorFH, shortGladiatorDH, longGladiatorDH, LadderRack, XTBase, XT1200Truckslide, XT2000Truckslide;
+var allModels, TruckModel, GullwingModel, HeadacheRackPost, HeadacheRackHex, LongLowSides, ShortLowSides,LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, shortGladiatorFH, longGladiatorFH, shortGladiatorDH, longGladiatorDH, PupAccessories, XTBase, XT1200Truckslide, XT2000Truckslide;
 //Textures
 var bdpBumpTexture, dpBumpTexture, patriotTexture, BK62BumpTexture, carPaintTexture;
 
+var longLowsideTrayCount = 1;
 //let composer, renderPass, SaoPass;
 
 var isHatchOpen = false;
@@ -273,7 +274,7 @@ function init(){
         Hatch: "Flat",
         Gullwing: false,
         HeadacheRack: "Hex",
-        LadderRack: false,
+        PupAccessories: false,
         LEDdirectionalLighting: "None", //'battery', 'wired'
         AdditionalGullwingTray: false,
         AdditionalLowSideTray: "None", //1, 2
@@ -292,6 +293,8 @@ function init(){
     document.getElementById('post-headache-rack').addEventListener("click", function(){switchToPostHeadacheRack()});
     document.getElementById('hex-headache-rack').addEventListener("click", function(){switchToHexHeadacheRack()});
     document.getElementById('ladder-rack').addEventListener("click", function(){showOrHideLadderRack()});
+    document.getElementById('add-ls-tray').addEventListener("click", function(){addLowSideTrays()});
+    document.getElementById('remove-ls-tray').addEventListener("click", function(){removeLowSideTrays()});
     //document.getElementById('hr-viewer').addEventListener("mouseover", function(){changeCam()});
     //document.getElementById('open-hatch').addEventListener("click", function(){OpenHatch()});
     document.getElementById('open-tailgate').addEventListener("click", function(){openTailgate()});
@@ -390,7 +393,7 @@ function renderPup(){
             console.log("Removing headache rack");
             break;
     }
-    switch(clientPUP.LadderRack){
+    switch(clientPUP.PupAccessories){
         case true:
             console.log("Loading Ladder Rack");
             break;
@@ -459,7 +462,7 @@ var lidOpen;
 
 async function loadModels(){
     //add all models here
-    var [truckData, gullwingData, hrHexData, hrPostData, LongLSData, shortLSData, longFHData, shortFHdata, longDomedData, shortDomedData, shortGladFHData, longGladFHData, shortGladDHData, longGladDHData, lRData, TSBaseData, TSData1200, TSData2000] = await Promise.all([
+    var [truckData, gullwingData, hrHexData, hrPostData, LongLSData, shortLSData, longFHData, shortFHdata, longDomedData, shortDomedData, shortGladFHData, longGladFHData, shortGladDHData, longGladDHData, PupExtrasData, TSBaseData, TSData1200, TSData2000] = await Promise.all([
         loader.loadAsync('models/seperate-models/truck.gltf'),
         loader.loadAsync('models/seperate-models/gullwing.gltf'),
         loader.loadAsync('models/seperate-models/headacheRackHex.gltf'),
@@ -474,7 +477,7 @@ async function loadModels(){
         loader.loadAsync('models/seperate-models/longGladiatorFlatHatch.gltf'),
         loader.loadAsync('models/seperate-models/shortGladiatorDomedHatch.gltf'),
         loader.loadAsync('models/seperate-models/longGladiatorDomedHatch.gltf'),
-        loader.loadAsync('models/seperate-models/ladderRack.gltf'),
+        loader.loadAsync('models/seperate-models/pup-extras.gltf'),
         loader.loadAsync('models/seperate-models/truckslide-base.gltf'),
         loader.loadAsync('models/seperate-models/truckslide-xt1200.gltf'),
         loader.loadAsync('models/seperate-models/truckslide-xt2000.gltf'),
@@ -494,12 +497,12 @@ async function loadModels(){
     longGladiatorFH = setupModel(longGladFHData);
     shortGladiatorDH = setupModel(shortGladDHData);
     longGladiatorDH = setupModel(longGladDHData);
-    LadderRack = setupModel(lRData);
+    PupAccessories = setupModel(PupExtrasData);
     XTBase = setupModel(TSBaseData);
     XT1200Truckslide = setupModel(TSData1200);
     XT2000Truckslide = setupModel(TSData2000);
     console.log("model data set up");
-    return {TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, shortGladiatorFH, longGladiatorFH, shortGladiatorDH, longGladiatorDH, LadderRack, XTBase, XT1200Truckslide, XT2000Truckslide };
+    return {TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, shortGladiatorFH, longGladiatorFH, shortGladiatorDH, longGladiatorDH, PupAccessories, XTBase, XT1200Truckslide, XT2000Truckslide };
 }
 
 function setupModel(data){
@@ -509,9 +512,9 @@ function setupModel(data){
 
 async function addModelsToScene(){
     //load models, add to scene, assign hinges to variables here
-    var {TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, shortGladiatorFH, longGladiatorFH, shortGladiatorDH, longGladiatorDH, LadderRack, XTBase, XT1200Truckslide, XT2000Truckslide} = await loadModels();
+    var {TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, shortGladiatorFH, longGladiatorFH, shortGladiatorDH, longGladiatorDH, PupAccessories, XTBase, XT1200Truckslide, XT2000Truckslide} = await loadModels();
 
-    scene.add(TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, shortGladiatorFH, longGladiatorFH, shortGladiatorDH, longGladiatorDH, LadderRack, XTBase, XT1200Truckslide, XT2000Truckslide);
+    scene.add(TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, shortGladiatorFH, longGladiatorFH, shortGladiatorDH, longGladiatorDH, PupAccessories, XTBase, XT1200Truckslide, XT2000Truckslide);
 
     //adding hinge points
     hingePoint = ShortLowSides.getObjectByName('lowside-hinge');
@@ -566,6 +569,8 @@ async function addModelsToScene(){
     ShortLowSides.getObjectByName("GL-right-lid").visible = false;
     LongLowSides.getObjectByName("GL-ls-left-lid").visible = false;
     LongLowSides.getObjectByName("GL-ls-right-lid").visible = false;
+    PupAccessories.getObjectByName("lowside-tray-2").visible = false;
+    PupAccessories.getObjectByName("lowside-tray-3").visible = false;
     ShortLowSides.visible = false
     ShortFlatHatch.visible = false;
     LongDomedHatch.visible = false;
@@ -575,7 +580,7 @@ async function addModelsToScene(){
     longGladiatorFH.visible = false;
     shortGladiatorDH.visible = false;
     longGladiatorDH.visible = false;
-    LadderRack.visible = false;
+    PupAccessories.getObjectByName("ladder-rack").visible = false;
     XT2000Truckslide.visible = false;
     XT2000Truckslide.getObjectByName("truckslide-left-xt4000").visible = false;
     XT2000Truckslide.getObjectByName("truckslide-right-xt4000").visible = false;
@@ -598,14 +603,70 @@ function openLowSideLid(){
     }
 }
 
-function showOrHideLadderRack(){
-    if(LadderRack.visible){
-        document.getElementById('ladder-rack').textContent = 'Add Ladder Rack';
-        LadderRack.visible = false;
+function GetLowSideCounter(){
+    if(PupAccessories.getObjectByName("lowside-tray-2").visible === true && PupAccessories.getObjectByName("lowside-tray-3").visible === false){
+        console.log("returned 2");
+        return 2;
     }
-    else if(!LadderRack.visible){
+    else if(PupAccessories.getObjectByName("lowside-tray-3").visible === true){
+        console.log("returned 3");
+        return 3;
+    }
+    else{
+        return 1;
+    }
+}
+
+function addLowSideTrays(){
+    switch(GetLowSideCounter()){
+        case 1:
+            PupAccessories.getObjectByName("lowside-tray-2").visible = true;
+            console.log("case 1");
+            switch(clientPUP.Gullwing){
+                case true:
+                    PupAccessories.getObjectByName("lowside-tray-2").position.x = -2.76635;
+                    break;
+                case false:
+                    PupAccessories.getObjectByName("lowside-tray-2").position.x = -1.71959;
+                    break;
+            }
+        break;
+        case 2:
+            PupAccessories.getObjectByName("lowside-tray-3").visible = true;
+            console.log("case 2");
+                switch(clientPUP.Gullwing){
+                    case true:
+                        PupAccessories.getObjectByName("lowside-tray-3").position.x = -4.38547;
+                        break;
+                    case false:
+                        PupAccessories.getObjectByName("lowside-tray-3").position.x = -3.41479;
+                        break;
+                }
+        break;
+    }
+
+}
+
+function removeLowSideTrays(){
+    switch(GetLowSideCounter()){
+        case 2:
+            PupAccessories.getObjectByName("lowside-tray-2").visible = false;
+        break;
+        case 3:
+            PupAccessories.getObjectByName("lowside-tray-3").visible = false;
+        break;
+    }
+    
+}
+
+function showOrHideLadderRack(){
+    if(PupAccessories.getObjectByName("ladder-rack").visible === true){
+        document.getElementById('ladder-rack').textContent = 'Add Ladder Rack';
+        PupAccessories.visible = false;
+    }
+    else{
         document.getElementById('ladder-rack').textContent = 'Remove Ladder Rack';
-        LadderRack.visible = true;
+        PupAccessories.getObjectByName("ladder-rack").visible = true;
     }
 };
 
@@ -711,20 +772,15 @@ function renderPro(){
             }
         }
     }
-
-    // ShortLowSides.visible = true;
-    // LongLowSides.visible = false;
-    // if(!GullwingModel.visible){
-    //     GullwingModel.visible = true;
-    //     if(LongFlatHatch.visible){
-    //         LongFlatHatch.visible = false;
-    //         ShortFlatHatch.visible = true;
-    //     }
-    //     else if(LongDomedHatch.visible){
-    //         LongDomedHatch.visible = false;
-    //         ShortDomedHatch.visible = true;
-    //     }
-    // }
+    switch(GetLowSideCounter()){
+        case 2:
+            PupAccessories.getObjectByName("lowside-tray-2").position.x = -2.76635;
+            break;
+        case 3:
+            PupAccessories.getObjectByName("lowside-tray-2").position.x = -2.76635;
+            PupAccessories.getObjectByName("lowside-tray-3").position.x = -4.38547;
+            break;
+    }
 }
 
 function renderStandard(){
@@ -769,6 +825,15 @@ function renderStandard(){
         LongLowSides.getObjectByName("GL-ls-left-lid").visible = false;
         LongLowSides.getObjectByName("GL-ls-right-lid").visible = false;
         console.log("Gladiator is false");
+    }
+    switch(GetLowSideCounter()){
+        case 2:
+            PupAccessories.getObjectByName("lowside-tray-2").position.x = -1.71959;
+            break;
+        case 3:
+            PupAccessories.getObjectByName("lowside-tray-2").position.x = -1.71959;
+            PupAccessories.getObjectByName("lowside-tray-3").position.x = -3.41479;
+            break;
     }
 }
 
