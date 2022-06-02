@@ -85,7 +85,7 @@
     max-width: 60vw;
     min-width: 60vw;
     max-height: calc(90vw / 2);
-    min-height: calc(90vw / 2) ;
+    min-height: calc(90vw / 2);
     object-fit: cover;
     outline: none;
     border: none;
