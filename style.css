@@ -71,7 +71,6 @@
 
 .Buttons2 {
     margin-top: 25px;
-    display: none;
 }
 
 .btn-reg {
@@ -113,10 +112,9 @@
 }
 
 #myCanvas {
-    /* display: flex;
+    display: flex;
     flex-direction: row;
-    flex-wrap: wrap; */
-    position: absolute;
+    flex-wrap: wrap;
     min-width: 100vw;
     max-height: 80vh;
     margin: auto;
