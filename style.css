@@ -17,8 +17,6 @@
     margin-right: 5em;
     margin-left: 5em;
 }
-
-<<<<<<< HEAD
 .nav-bar{
     display: flex;
     flex-direction: row;
@@ -54,10 +52,6 @@
     background-color: #ededed;
 }
 
-
-
-=======
->>>>>>> parent of e0ac601 (added top nav buttons)
 #textTop {
     display: flex;
     margin-bottom: -.35em;
