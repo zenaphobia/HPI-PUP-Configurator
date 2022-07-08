@@ -73,9 +73,9 @@ function init(){
     container = document.getElementById('myCanvas');
     camera = new THREE.PerspectiveCamera( 35, container.offsetWidth / container.offsetHeight, 0.1, 1000 );
     camera.aspect = container.offsetWidth / container.offsetHeight;
-    camera.position.z = -15;
+    camera.position.z = 15;
     camera.position.y = 5;
-    camera.position.x = -15;
+    camera.position.x = 2;
 
     renderer = new THREE.WebGLRenderer({canvas: container, antialias: true, alpha: true});
     renderer.setClearColor( 0x000000, 0 );
@@ -284,40 +284,33 @@ function init(){
     //#endregion
 
     //functions
-    //document.getElementById('change-texture').addEventListener("click", function(){applyHatch('domed')});
-    document.getElementById('hinge').addEventListener("click", function(){openLowSideLid()});
-    document.getElementById('pup-pro').addEventListener("click", function(){renderPro()});
-    document.getElementById('pup-standard').addEventListener("click", function(){renderStandard()});
-    document.getElementById('domed-hatch').addEventListener("click", function(){renderDomedHatch()});
-    document.getElementById('flat-hatch').addEventListener("click", function(){renderFlatHatch()});
-    document.getElementById('post-headache-rack').addEventListener("click", function(){switchToPostHeadacheRack()});
-    document.getElementById('hex-headache-rack').addEventListener("click", function(){switchToHexHeadacheRack()});
-    document.getElementById('ladder-rack').addEventListener("click", function(){showOrHideLadderRack()});
-    document.getElementById('add-ls-tray').addEventListener("click", function(){addLowSideTrays()});
-    document.getElementById('remove-ls-tray').addEventListener("click", function(){removeLowSideTrays()});
-    //document.getElementById('hr-viewer').addEventListener("mouseover", function(){changeCam()});
-    //document.getElementById('open-hatch').addEventListener("click", function(){OpenHatch()});
-    document.getElementById('open-tailgate').addEventListener("click", function(){openTailgate()});
-    document.getElementById('dp').addEventListener("click", function(){switchToDiamondPlate()});
-    document.getElementById('black-dp').addEventListener("click", function(){switchToBlackDiamondPlate()});
-    document.getElementById('leopard').addEventListener("click", function(){switchToLeopard()});
-    document.getElementById('gladiator').addEventListener("click", function(){switchToGladiator()});
-    // document.getElementById('hide').addEventListener("click", function(){findActiveObject(GullwingModel)});
-    document.getElementById('open-gullwing').addEventListener("click", function(){openGullwing()});
-    document.getElementById('xt1200').addEventListener("click", function(){chooseXT1200()});
-    document.getElementById('xt2000').addEventListener("click", function(){chooseXT2000()});
-    document.getElementById('xt4000').addEventListener("click", function(){chooseXT4000()});
-    document.getElementById('open-hatch').addEventListener("click", function(){openHatch()});
-    document.getElementById('open-truckslide').addEventListener("click", function(){openTruckslide()});
-    document.getElementById('hide-truckslide').addEventListener("click", function(){hideTruckslide()});
-    document.getElementById('change-to-red').addEventListener("click", function(){truckPaintMat.color.set(0x570000);truckPaintMat.sheenColor.set(0x2b0000); });
-    document.getElementById('change-to-blue').addEventListener("click", function(){truckPaintMat.color.set(0x001340); truckPaintMat.sheenColor.set(0x000000); });
-    document.getElementById('change-to-grey').addEventListener("click", function(){truckPaintMat.color.set(0x1f1f1f); truckPaintMat.sheenColor.set(0xffffff);});
-    document.getElementById('change-to-black').addEventListener("click", function(){truckPaintMat.color.set(0x050505); truckPaintMat.sheenColor.set(0xffffff);});
-    document.getElementById('change-to-white').addEventListener("click", function(){truckPaintMat.color.set(0xf0f0f0)});
-
-    //document.getElementById('hatches').addEventListener("click", function(){swapHatches()});
-
+    // document.getElementById('hinge').addEventListener("click", function(){openLowSideLid()});
+    // document.getElementById('pup-pro').addEventListener("click", function(){renderPro()});
+    // document.getElementById('pup-standard').addEventListener("click", function(){renderStandard()});
+    // document.getElementById('domed-hatch').addEventListener("click", function(){renderDomedHatch()});
+    // document.getElementById('flat-hatch').addEventListener("click", function(){renderFlatHatch()});
+    // document.getElementById('post-headache-rack').addEventListener("click", function(){switchToPostHeadacheRack()});
+    // document.getElementById('hex-headache-rack').addEventListener("click", function(){switchToHexHeadacheRack()});
+    // document.getElementById('ladder-rack').addEventListener("click", function(){showOrHideLadderRack()});
+    // document.getElementById('add-ls-tray').addEventListener("click", function(){addLowSideTrays()});
+    // document.getElementById('remove-ls-tray').addEventListener("click", function(){removeLowSideTrays()});
+    // document.getElementById('open-tailgate').addEventListener("click", function(){openTailgate()});
+    // document.getElementById('dp').addEventListener("click", function(){switchToDiamondPlate()});
+    // document.getElementById('black-dp').addEventListener("click", function(){switchToBlackDiamondPlate()});
+    // document.getElementById('leopard').addEventListener("click", function(){switchToLeopard()});
+    // document.getElementById('gladiator').addEventListener("click", function(){switchToGladiator()});
+    // document.getElementById('open-gullwing').addEventListener("click", function(){openGullwing()});
+    // document.getElementById('xt1200').addEventListener("click", function(){chooseXT1200()});
+    // document.getElementById('xt2000').addEventListener("click", function(){chooseXT2000()});
+    // document.getElementById('xt4000').addEventListener("click", function(){chooseXT4000()});
+    // document.getElementById('open-hatch').addEventListener("click", function(){openHatch()});
+    // document.getElementById('open-truckslide').addEventListener("click", function(){openTruckslide()});
+    // document.getElementById('hide-truckslide').addEventListener("click", function(){hideTruckslide()});
+    // document.getElementById('change-to-red').addEventListener("click", function(){truckPaintMat.color.set(0x570000);truckPaintMat.sheenColor.set(0x2b0000); });
+    // document.getElementById('change-to-blue').addEventListener("click", function(){truckPaintMat.color.set(0x001340); truckPaintMat.sheenColor.set(0x000000); });
+    // document.getElementById('change-to-grey').addEventListener("click", function(){truckPaintMat.color.set(0x1f1f1f); truckPaintMat.sheenColor.set(0xffffff);});
+    // document.getElementById('change-to-black').addEventListener("click", function(){truckPaintMat.color.set(0x050505); truckPaintMat.sheenColor.set(0xffffff);});
+    // document.getElementById('change-to-white').addEventListener("click", function(){truckPaintMat.color.set(0xf0f0f0)});
 
     //Window resizing
     window.addEventListener( 'resize', onWindowResize );
@@ -337,7 +330,7 @@ function animate() {
     requestAnimationFrame( animate );
     renderer.render( scene, camera );
     //composer.render();
-    controls.update();
+    // controls.update();
         //Observe a scene or a renderer
         if (typeof __THREE_DEVTOOLS__ !== 'undefined') {
             __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: scene }));
@@ -585,6 +578,10 @@ async function addModelsToScene(){
     XT2000Truckslide.getObjectByName("truckslide-left-xt4000").visible = false;
     XT2000Truckslide.getObjectByName("truckslide-right-xt4000").visible = false;
     XT2000Truckslide.getObjectByName("4000-middle-taper").visible = false;
+
+    console.log(camera);
+    console.log(LongFlatHatch.position);
+    camera.lookAt(LongFlatHatch.position);
 
 }
 

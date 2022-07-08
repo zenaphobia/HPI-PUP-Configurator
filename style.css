@@ -116,7 +116,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     min-width: 100vw;
-    max-height: 80vh;
+    max-height: 90vh;
     margin: auto;
     object-fit: cover;
     outline: none;
