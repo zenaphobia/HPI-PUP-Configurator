@@ -248,17 +248,17 @@ function init(){
         pmremGenerator.dispose();
     });
 
-    //Orbit Controls
-    controls = new OrbitControls(camera, renderer.domElement);
+    //Orbit Controls - Tailored Experience
+    // controls = new OrbitControls(camera, renderer.domElement);
 
-    controls.minDistance = 10;
-    controls.enablePan = false;
-    controls.enableDamping = true;
-    controls.maxPolarAngle = 1.6;
-    controls.maxDistance = 25;
-    controls.maxAzimuthAngle = .5;
-    controls.minAzimuthAngle = -3.5;
-    controls.rotateSpeed = (container.offsetWidth / 2560);
+    // controls.minDistance = 10;
+    // controls.enablePan = false;
+    // controls.enableDamping = true;
+    // controls.maxPolarAngle = 1.6;
+    // controls.maxDistance = 25;
+    // controls.maxAzimuthAngle = .5;
+    // controls.minAzimuthAngle = -3.5;
+    // controls.rotateSpeed = (container.offsetWidth / 2560);
 
     //Draco Loader
     dracoLoader = new DRACOLoader();
