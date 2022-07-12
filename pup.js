@@ -17,17 +17,19 @@ import { RenderPass } from '/js/RenderPass.js';
 
 //#region custom shaders
 const vert = `
-varying vec3 vNormal;
+uniform float u_time;
 void main(){
     gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);
-    vNormal = normal;
 }
 `;
 const frag =`
 varying vec3 vNormal;
+uniform float u_time;
+uniform vec3 colorMine;
 void main()
 {
-    gl_FragColor=vec4(vNormal,1.0);
+    vec3 colorMine = vec3(55,0,0);
+    gl_FragColor = vec4( colorMine, clamp(sin(u_time / 2.0), 0.5, .75) );
 }
 `;
 //#endregion
@@ -40,7 +42,14 @@ let basemesh, testmesh, windowMesh, truckBaseMesh, testMat, hingePoint, lidTest;
 //All Models
 var allModels, TruckModel, GullwingModel, HeadacheRackPost, HeadacheRackHex, LongLowSides, ShortLowSides,LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, shortGladiatorFH, longGladiatorFH, shortGladiatorDH, longGladiatorDH, PupAccessories, XTBase, XT1200Truckslide, XT2000Truckslide;
 //Textures
-var bdpBumpTexture, dpBumpTexture, patriotTexture, BK62BumpTexture, carPaintTexture;
+var bdpBumpTexture, dpBumpTexture, patriotTexture, BK62BumpTexture, carPaintTexture, blankTexture, customMaterial;
+
+let cameraTracker;
+const standardCameraAngle = new THREE.Vector3(-25.0, 7.0, -10.0);
+var uniforms;
+var headacheRackHexDupe;
+
+const clock = new THREE.Clock();
 
 var longLowsideTrayCount = 1;
 //let composer, renderPass, SaoPass;
@@ -71,11 +80,13 @@ function init(){
     scene = new THREE.Scene();
     //scene.fog = new THREE.FogExp2(0xffffff, .01);
     container = document.getElementById('myCanvas');
-    camera = new THREE.PerspectiveCamera( 35, container.offsetWidth / container.offsetHeight, 0.1, 1000 );
+    camera = new THREE.PerspectiveCamera( 25, container.offsetWidth / container.offsetHeight, 0.1, 1000 );
     camera.aspect = container.offsetWidth / container.offsetHeight;
-    camera.position.z = 15;
-    camera.position.y = 5;
-    camera.position.x = 2;
+    camera.position.set(standardCameraAngle.x, standardCameraAngle.y, standardCameraAngle.z);
+    // camera.position.x = -25;
+    // camera.position.y = 7;
+    // camera.position.z = -10;
+    console.log(camera.position);
 
     renderer = new THREE.WebGLRenderer({canvas: container, antialias: true, alpha: true});
     renderer.setClearColor( 0x000000, 0 );
@@ -138,34 +149,37 @@ function init(){
     carPaintTexture.repeat.x = 40;
     carPaintTexture.repeat.y = 40;
 
+    uniforms = {
+        u_time: {value: 0.0},
+    }
         //Materials
-    metalMat = new THREE.MeshPhysicalMaterial({
+    metalMat = new THREE.MeshStandardMaterial({
         color: 0xffffff,
         metalness: 1,
         roughness: .1,
     });
-    blackMetalMat = new THREE.MeshPhysicalMaterial({
+    blackMetalMat = new THREE.MeshStandardMaterial({
         color: 0x000000,
         metalness: 1,
         roughness: .1,
         bumpScale: .005,
         bumpMap: BK62BumpTexture,
     });
-    bdpMaterial = new THREE.MeshPhysicalMaterial({
+    bdpMaterial = new THREE.MeshStandardMaterial({
         color: 0x000000,
         metalness: 1,
         roughness: 0.15,
         bumpScale: .005,
         bumpMap: bdpBumpTexture,
     });
-    patriotMat = new THREE.MeshPhysicalMaterial({
+    patriotMat = new THREE.MeshStandardMaterial({
         color: 0x000000,
         metalness: 1,
         roughness: 0.15,
         bumpScale: .005,
         bumpMap: patriotTexture,
     });
-    leopardMaterial = new THREE.MeshPhysicalMaterial({
+    leopardMaterial = new THREE.MeshStandardMaterial({
         color: 0xffffff,
         map: dpBumpTexture,
         metalness: 1,
@@ -173,7 +187,7 @@ function init(){
         bumpScale: .005,
         bumpMap: bdpBumpTexture,
     });
-    dpMaterial = new THREE.MeshPhysicalMaterial({
+    dpMaterial = new THREE.MeshStandardMaterial({
         color: 0xffffff,
         metalness: 1,
         roughness: 0.15,
@@ -223,14 +237,30 @@ function init(){
         color: 0xffffff,
         emissive: 0xffffff,
         emissiveIntensity: 100,
-    })
+    });
     BK62Mat = new THREE.MeshStandardMaterial({
         color: 0x000000,
         metalness: 1,
         roughness: .15,
         bumpScale: .005,
         bumpMap: BK62BumpTexture,
-    })
+    });
+    blankTexture = new THREE.MeshBasicMaterial({
+        color: 0x00ff00
+    });
+    customMaterial = new THREE.ShaderMaterial({
+        vertexShader: vert,
+        fragmentShader: frag,
+        uniforms: uniforms,
+        transparent: true,
+    });
+
+    //CameraHelper
+    const geometry = new THREE.BoxGeometry( 1, 1, 1 );
+    cameraTracker = new THREE.Mesh(geometry, blankTexture);
+    scene.add(cameraTracker);
+    cameraTracker.position.y = -1;
+    cameraTracker.visible = false;
 
     //directionalLights
 
@@ -284,6 +314,9 @@ function init(){
     //#endregion
 
     //functions
+    document.getElementById('headacherack').addEventListener("mouseenter", function(){headacheRackHoverOn()});
+    document.getElementById('headacherack').addEventListener("mouseleave", function(){headacheRackHoverOff()});
+    document.getElementById('headacherack').addEventListener("click", function(){headacheRackSelect()});
     // document.getElementById('hinge').addEventListener("click", function(){openLowSideLid()});
     // document.getElementById('pup-pro').addEventListener("click", function(){renderPro()});
     // document.getElementById('pup-standard').addEventListener("click", function(){renderStandard()});
@@ -325,9 +358,32 @@ function init(){
     //radian = 2 * Math.PI * (p_angle / 360);
 }
 
+function headacheRackHoverOn(){
+    HeadacheRackHex.traverse(function(child){
+        if(child.isMesh){
+            child.material.emissive.setHex(0xff0000);
+            child.material.emissiveIntensity = .5;
+            child.material.transparent = true;
+        }
+    });
+}
+function headacheRackHoverOff(){
+    HeadacheRackHex.traverse(function(child){
+        if(child.isMesh){
+            child.material.emissive.setHex(0x000000);
+            child.material.transparent = false;
+        }
+    });
+}
+
+function headacheRackSelect(){
+    gsap.to(cameraTracker.position, {duration: 2, x: 5, y: 2, ease:"expo"});
+    gsap.to(camera.position, {duration: 2, x: -4, y: 4, z: 0, ease:"expo"});
+}
 
 function animate() {
     requestAnimationFrame( animate );
+    camera.lookAt(cameraTracker.position);
     renderer.render( scene, camera );
     //composer.render();
     // controls.update();
@@ -578,10 +634,6 @@ async function addModelsToScene(){
     XT2000Truckslide.getObjectByName("truckslide-left-xt4000").visible = false;
     XT2000Truckslide.getObjectByName("truckslide-right-xt4000").visible = false;
     XT2000Truckslide.getObjectByName("4000-middle-taper").visible = false;
-
-    console.log(camera);
-    console.log(LongFlatHatch.position);
-    camera.lookAt(LongFlatHatch.position);
 
 }
 
@@ -1443,6 +1495,9 @@ function findAllActiveObjects(x){
         }
         return group;
     }
+    else{
+        console.log("Object is undefined");
+    }
 }
 //Returns the first child that is visible in a given group
 function findActiveObject(x){
@@ -1454,5 +1509,8 @@ function findActiveObject(x){
                 //x.children[i].visible = false;
             }
         }
+    }
+    else{
+        console.log("Object is undefined");
     }
 }
