@@ -34,6 +34,16 @@ void main()
 `;
 //#endregion
 
+const HexHeadacheRackPost = {
+    name: "Hex Headache Rack",
+    price: 100,
+    description: "Whether you want added protection for your rear window or to gain overhead storage a headache rack is the perfect add on."
+}
+const PostHeadacheRackPost = {
+    name: "Open Headache Rack",
+    price: 75,
+    description: "3rd brakelight camera compatible. "
+}
 
 let loader, fileLoader, scene, container, camera, renderer, controls, dracoLoader, pmremGenerator, clientPUP;
 
@@ -83,9 +93,6 @@ function init(){
     camera = new THREE.PerspectiveCamera( 25, container.offsetWidth / container.offsetHeight, 0.1, 1000 );
     camera.aspect = container.offsetWidth / container.offsetHeight;
     camera.position.set(standardCameraAngle.x, standardCameraAngle.y, standardCameraAngle.z);
-    // camera.position.x = -25;
-    // camera.position.y = 7;
-    // camera.position.z = -10;
     console.log(camera.position);
 
     renderer = new THREE.WebGLRenderer({canvas: container, antialias: true, alpha: true});
@@ -99,7 +106,9 @@ function init(){
     renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.physicallyCorrectdirectionalLights = true;
     renderer.shadowMap.enabled = true;
+
     
+
     // const renderScene = new RenderPass(scene, camera);
     // const bloomPass = new UnrealBloomPass(new THREE.Vector2(container.offsetWidth / container.offsetHeight), 1.5, 0.4, 0.85);
     // bloomPass.threshold = .85;
@@ -164,6 +173,7 @@ function init(){
         roughness: .1,
         bumpScale: .005,
         bumpMap: BK62BumpTexture,
+        name: "BlackMetalMat"
     });
     bdpMaterial = new THREE.MeshStandardMaterial({
         color: 0x000000,
@@ -244,6 +254,7 @@ function init(){
         roughness: .15,
         bumpScale: .005,
         bumpMap: BK62BumpTexture,
+        name: "Bk62Mat"
     });
     blankTexture = new THREE.MeshBasicMaterial({
         color: 0x00ff00
@@ -304,7 +315,7 @@ function init(){
         Hatch: "Flat",
         Gullwing: false,
         HeadacheRack: "Hex",
-        PupAccessories: false,
+        LadderRack: false,
         LEDdirectionalLighting: "None", //'battery', 'wired'
         AdditionalGullwingTray: false,
         AdditionalLowSideTray: "None", //1, 2
@@ -317,6 +328,9 @@ function init(){
     document.getElementById('headacherack').addEventListener("mouseenter", function(){headacheRackHoverOn()});
     document.getElementById('headacherack').addEventListener("mouseleave", function(){headacheRackHoverOff()});
     document.getElementById('headacherack').addEventListener("click", function(){headacheRackSelect()});
+    document.getElementById('ladderrack').addEventListener("mouseenter", function(){ladderRackHoverOn()});
+    document.getElementById('ladderrack').addEventListener("mouseleave", function(){ladderRackHoverOff()});
+    document.getElementById('ladderrack').addEventListener("click", function(){ladderRackSelect()});
     // document.getElementById('hinge').addEventListener("click", function(){openLowSideLid()});
     // document.getElementById('pup-pro').addEventListener("click", function(){renderPro()});
     // document.getElementById('pup-standard').addEventListener("click", function(){renderStandard()});
@@ -358,29 +372,6 @@ function init(){
     //radian = 2 * Math.PI * (p_angle / 360);
 }
 
-function headacheRackHoverOn(){
-    HeadacheRackHex.traverse(function(child){
-        if(child.isMesh){
-            child.material.emissive.setHex(0xff0000);
-            child.material.emissiveIntensity = .5;
-            child.material.transparent = true;
-        }
-    });
-}
-function headacheRackHoverOff(){
-    HeadacheRackHex.traverse(function(child){
-        if(child.isMesh){
-            child.material.emissive.setHex(0x000000);
-            child.material.transparent = false;
-        }
-    });
-}
-
-function headacheRackSelect(){
-    gsap.to(cameraTracker.position, {duration: 2, x: 5, y: 2, ease:"expo"});
-    gsap.to(camera.position, {duration: 2, x: -4, y: 4, z: 0, ease:"expo"});
-}
-
 function animate() {
     requestAnimationFrame( animate );
     camera.lookAt(cameraTracker.position);
@@ -388,10 +379,119 @@ function animate() {
     //composer.render();
     // controls.update();
         //Observe a scene or a renderer
-        if (typeof __THREE_DEVTOOLS__ !== 'undefined') {
-            __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: scene }));
-            __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: renderer }));
-          }
+        // if (typeof __THREE_DEVTOOLS__ !== 'undefined') {
+        //     __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: scene }));
+        //     __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: renderer }));
+        //   }
+}
+
+function showPage(){
+    var loader = document.getElementById("loader");
+    gsap.to(loader, {duration: 2, opacity: 0, ease:"expo", onComplete: hideLoader});
+}
+
+function hideLoader(){
+    var loader = document.getElementById("loader");
+    loader.style.display = "none";
+}
+
+function ToHoloMaterial(mesh){
+    mesh.traverse(function(child){
+        if(child.isMesh && child.geometry.name !== ""){
+            child.material = customMaterial;
+        }
+    });
+}
+
+function toNormalMaterial(mesh){
+    mesh.traverse(function(child){
+        if(child.isMesh && child.geometry.name === "accentColor"){
+            switch(clientPUP.LidFinishes){
+                case "BlackDiamondPlate":
+                    child.material = blackMetalMat;
+                    console.log("accent color is bdp");
+                    break;
+                case "DiamondPlate":
+                    child.material = metalMat
+                    console.log("accent color is dp");
+                    break;
+                case "Leopard":
+                    child.material = blackMetalMat;
+                    console.log("accent color is bdp");
+                    break;
+                case "Patriot":
+                    child.material = blackMetalMat;
+                    console.log("accent color is bdp");
+                    break;
+                case "Gladiator":
+                    child.material = blackMetalMat;
+                    break;
+                default:
+                    console.log("unknown accent color");
+                    break;
+            }
+        }
+        if(child.isMesh && child.geometry.name === "lidMaterial"){
+            switch(clientPUP.LidFinishes){
+                case "BlackDiamondPlate":
+                    child.material = bdpMaterial;
+                    console.log("accent color is bdp");
+                    break;
+                case "DiamondPlate":
+                    child.material = dpMaterial;
+                    console.log("accent color is dp");
+                    break;
+                case "Leopard":
+                    child.material = leopardMaterial;
+                    console.log("accent color is bdp");
+                    break;
+                case "Patriot":
+                    child.material = patriotMat;
+                    console.log("accent color is bdp");
+                    break;
+                case "Gladiator":
+                    child.material = blackMetalMat;
+                    break;
+                default:
+                    console.log("unknown accent color");
+                    break;
+            }
+        }
+    });
+}
+
+function headacheRackHoverOn(){
+    ToHoloMaterial(HeadacheRackHex);
+}
+function headacheRackHoverOff(){
+    toNormalMaterial(HeadacheRackHex);
+}
+
+function headacheRackSelect(){
+    gsap.to(cameraTracker.position, {duration: 2, x: 5, y: 2, ease:"expo"});
+    gsap.to(camera.position, {duration: 2, x: -4, y: 4, z: 0, ease:"expo"});
+    console.log(HeadacheRackHex);
+}
+
+function ladderRackHoverOn(){
+    PupAccessories.getObjectByName("ladder-rack").visible = true;
+    ToHoloMaterial(PupAccessories.getObjectByName("ladder-rack"));
+}
+function ladderRackHoverOff(){
+    if(clientPUP.LadderRack === true){
+        PupAccessories.getObjectByName("ladder-rack").visible = true;
+        console.log("ladder rack is on");
+    }
+    else{
+        PupAccessories.getObjectByName("ladder-rack").visible = false;
+        console.log("ladder is off");
+    }
+    toNormalMaterial(PupAccessories.getObjectByName("ladder-rack"));
+}
+function ladderRackSelect(){
+    PupAccessories.getObjectByName("ladder-rack").visible = true;
+    clientPUP.LadderRack = true;
+    toNormalMaterial(PupAccessories.getObjectByName("ladder-rack"));
 }
 
 function renderPup(){
@@ -504,7 +604,6 @@ function renderPup(){
             break;
     }
     console.log("PUP rendered successfully")
-
 }
 
 var lidOpen;
@@ -586,6 +685,7 @@ async function addModelsToScene(){
     scene.traverse(function(child){
         if(child.material && child.material.name === 'accent color'){
             child.material = blackMetalMat;
+            child.geometry.name = "accentColor";
         }
         if(child.isMesh){
             child.castShadow = true;
@@ -594,6 +694,7 @@ async function addModelsToScene(){
         }
         if(child.material && child.material.name === 'Black Diamond Plate Test 3'){
             child.material = BK62Mat;
+            child.geometry.name = "lidMaterial";
         }
     });
     ShortFlatHatch.getObjectByName("Decimated_Hatch").material = bdpMaterial;
@@ -634,6 +735,9 @@ async function addModelsToScene(){
     XT2000Truckslide.getObjectByName("truckslide-left-xt4000").visible = false;
     XT2000Truckslide.getObjectByName("truckslide-right-xt4000").visible = false;
     XT2000Truckslide.getObjectByName("4000-middle-taper").visible = false;
+
+    //shows page after model is loaded.
+    XT2000Truckslide.onAfterRender(showPage());
 
 }
 
@@ -705,7 +809,6 @@ function removeLowSideTrays(){
             PupAccessories.getObjectByName("lowside-tray-3").visible = false;
         break;
     }
-    
 }
 
 function showOrHideLadderRack(){
