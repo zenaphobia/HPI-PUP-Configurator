@@ -45,6 +45,8 @@ const PostHeadacheRackPost = {
     description: "3rd brakelight camera compatible. "
 }
 
+const HeadacheRackPostObjects = [HexHeadacheRackPost, PostHeadacheRackPost];
+
 let loader, fileLoader, scene, container, camera, renderer, controls, dracoLoader, pmremGenerator, clientPUP;
 
 //#region INIT FILES
@@ -460,6 +462,35 @@ function toNormalMaterial(mesh){
     });
 }
 
+function showOptionsUI(idElement){
+    var element = document.querySelector(idElement);
+    element.style.display = "flex";
+    gsap.to(element, {duration: 2.5, opacity: 100, ease:"expo.inOut"});
+}
+
+function hideOptionsUI(idElement){
+    var element = document.querySelector(idElement);
+    console.log(idElement);
+    element.style.display = "flex";
+    gsap.to(element, {duration: 2.5, opacity: 0, ease:"expo.inOut"});
+}
+
+function createElement(postObject){
+
+    for(let i = 0; i < postObject.length; i++){
+        console.log(postObject[i]);
+        var UIHeader = postObject[i].name;
+        var UIDescription = postObject[i].description;
+    }
+    const optionsElement = document.getElementById("options-bar1");
+    const node = document.getElementById("option-1");
+
+    var clonedElement = node.cloneNode(true);
+    clonedElement.querySelector(".header").innerText = UIHeader;
+    clonedElement.querySelector(".description").innerText = UIDescription;
+    optionsElement.appendChild(clonedElement);
+}
+
 function headacheRackHoverOn(){
     ToHoloMaterial(HeadacheRackHex);
 }
@@ -470,7 +501,8 @@ function headacheRackHoverOff(){
 function headacheRackSelect(){
     gsap.to(cameraTracker.position, {duration: 2, x: 5, y: 2, ease:"expo"});
     gsap.to(camera.position, {duration: 2, x: -4, y: 4, z: 0, ease:"expo"});
-    console.log(HeadacheRackHex);
+    showOptionsUI(".options-bar");
+    createElement(HeadacheRackPostObjects);
 }
 
 function ladderRackHoverOn(){
@@ -1588,7 +1620,7 @@ function swapMeshes(){
 function findAllActiveObjects(x){
     var group;
 
-    if(x !== undefined ){
+    if(x !== undefined && x.children > 1){
         for(let i = 0; i <= x.children.length - 1; i++){
             if(x.children[i].visible){
                 console.log(x.children[i]);
@@ -1599,7 +1631,7 @@ function findAllActiveObjects(x){
         return group;
     }
     else{
-        console.log("Object is undefined");
+        console.log("Object is undefined or has no children");
     }
 }
 //Returns the first child that is visible in a given group
