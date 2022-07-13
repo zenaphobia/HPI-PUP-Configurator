@@ -387,7 +387,7 @@ function animate() {
 
 function showPage(){
     var loader = document.getElementById("loader");
-    gsap.to(loader, {duration: 2, opacity: 0, ease:"expo", onComplete: hideLoader});
+    gsap.to(loader, {duration: 2.5, opacity: 0, ease:"expo", onComplete: hideLoader});
 }
 
 function hideLoader(){
@@ -736,7 +736,7 @@ async function addModelsToScene(){
     XT2000Truckslide.getObjectByName("truckslide-right-xt4000").visible = false;
     XT2000Truckslide.getObjectByName("4000-middle-taper").visible = false;
 
-    //shows page after model is loaded.
+    //shows page after entire model is loaded and rendered.
     XT2000Truckslide.onAfterRender(showPage());
 
 }
