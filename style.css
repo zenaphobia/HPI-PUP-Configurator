@@ -151,21 +151,36 @@
 
 .options-bar{
     opacity: 0;
-    flex-direction: row;
+    display: flex;
     position: absolute;
-    top: 10%;
-    left: 2%;
+    flex-direction: row;
+    justify-content: center;
+    top: 15%;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    -webkit-transform: translate(-50%, 0%);
+    -moz-transform: translate(-50%, 0%);
+    -ms-transform: translate(-50%, 0%);
+    -o-transform: translate(-50%, 0%);
 }
 .option{
+    display: flex;
     flex-direction: column;
     width: 25em;
     max-width: 35em;
     background-color: #ededed;
     border-radius: 25px;
     padding: 5px;
-    margin-left: 5px;
-    margin-right: 5px;
-  }
+    margin-left: 25px;
+    margin-right: 25px;
+    box-shadow:
+    0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+    0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+    0 12.5px 10px rgba(0, 0, 0, 0.06),
+    0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+    0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+    0 100px 80px rgba(0, 0, 0, 0.12)
+}
 
   .header{
     display: flex;
@@ -205,6 +220,16 @@
     margin: auto;
   }
   .checkbox-text:hover{
+    transition-duration: .25s;
+    transition-timing-function: ease-out;
+    border: 2px solid #ffffff;
+    background-color: #e92027;
+    color: #ffffff;
+    border-radius: 25px;
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+  .checkbox-text:focus{
     transition-duration: .25s;
     transition-timing-function: ease-out;
     border: 2px solid #ffffff;

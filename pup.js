@@ -389,7 +389,7 @@ function animate() {
 
 function showPage(){
     var loader = document.getElementById("loader");
-    gsap.to(loader, {duration: 2.5, opacity: 0, ease:"expo", onComplete: hideLoader});
+    gsap.to(loader, {duration: 2, opacity: 0, ease:"expo.inOut", onComplete: hideLoader});
 }
 
 function hideLoader(){
@@ -481,14 +481,57 @@ function createElement(postObject){
         console.log(postObject[i]);
         var UIHeader = postObject[i].name;
         var UIDescription = postObject[i].description;
+        const optionsElement = document.getElementById("options-bar1");
+        const node = document.getElementById("option-1");
+        document.getElementById("option-1").remove();
+        var clonedElement = node.cloneNode(true);
+        clonedElement.querySelector(".header").innerText = UIHeader;
+        clonedElement.querySelector(".description").innerText = UIDescription;
+        optionsElement.appendChild(clonedElement);
     }
-    const optionsElement = document.getElementById("options-bar1");
-    const node = document.getElementById("option-1");
+}
 
-    var clonedElement = node.cloneNode(true);
-    clonedElement.querySelector(".header").innerText = UIHeader;
-    clonedElement.querySelector(".description").innerText = UIDescription;
-    optionsElement.appendChild(clonedElement);
+function createNewElements(postObject){
+    try{
+        for(let i = 0; i < postObject.length; i++){
+            const page = document.getElementById("options-bar1");
+
+            var UIHeader = postObject[i].name;
+            var UIDescription = postObject[i].description;
+
+            //creating new elements for each object
+            const topLevelWrapper = document.getElementById("options-bar1");
+            const newWrapper = document.createElement("div");
+            const newHeader = document.createElement("div");
+            const newDescription = document.createElement("div");
+            const newCheckBox = document.createElement("div");
+            const newCheckBoxText = document.createElement("button");
+
+            //replacing text
+            newHeader.innerText = UIHeader;
+            newDescription.innerText = UIDescription;
+            newCheckBoxText.innerText = "+ add this item";
+
+            //attaching classes
+            newWrapper.classList.add("option");
+            newHeader.classList.add("header");
+            newDescription.classList.add("description");
+            newCheckBox.classList.add("checkbox");
+            newCheckBoxText.classList.add("checkbox-text");
+            newCheckBoxText.setAttribute("id", UIHeader);
+
+            //appending objects to DOM
+            topLevelWrapper.appendChild(newWrapper);
+            newWrapper.appendChild(newHeader);
+            newWrapper.appendChild(newDescription);
+            newWrapper.appendChild(newCheckBox);
+            newCheckBox.appendChild(newCheckBoxText);
+        }
+    }
+    catch{
+        console.log("an error has occured...");
+        console.log(error);
+    }
 }
 
 function headacheRackHoverOn(){
@@ -502,7 +545,14 @@ function headacheRackSelect(){
     gsap.to(cameraTracker.position, {duration: 2, x: 5, y: 2, ease:"expo"});
     gsap.to(camera.position, {duration: 2, x: -4, y: 4, z: 0, ease:"expo"});
     showOptionsUI(".options-bar");
-    createElement(HeadacheRackPostObjects);
+    createNewElements(HeadacheRackPostObjects);
+    if(clientPUP.HeadacheRack === "Hex"){
+        document.getElementById("Hex Headache Rack").focus;
+    }
+    else{
+        document.getElementById("Open Headache Rack").focus;
+        console.log("post case");
+    }
 }
 
 function ladderRackHoverOn(){
