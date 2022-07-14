@@ -249,7 +249,7 @@ function init(){
     });
 
     //Orbit Controls - Tailored Experience
-    // controls = new OrbitControls(camera, renderer.domElement);
+    controls = new OrbitControls(camera, renderer.domElement);
 
     // controls.minDistance = 10;
     // controls.enablePan = false;
