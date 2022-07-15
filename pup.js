@@ -292,16 +292,17 @@ function init(){
     });
 
     //Orbit Controls - Tailored Experience
-    // controls = new OrbitControls(camera, renderer.domElement);
+    controls = new OrbitControls(camera, renderer.domElement);
 
-    // controls.minDistance = 10;
-    // controls.enablePan = false;
-    // controls.enableDamping = true;
-    // controls.maxPolarAngle = 1.6;
-    // controls.maxDistance = 25;
-    // controls.maxAzimuthAngle = .5;
-    // controls.minAzimuthAngle = -3.5;
-    // controls.rotateSpeed = (container.offsetWidth / 2560);
+    controls.minDistance = 10;
+    controls.enablePan = false;
+    controls.enableDamping = true;
+    controls.maxPolarAngle = 1.6;
+    controls.maxDistance = 25;
+    controls.maxAzimuthAngle = .5;
+    controls.minAzimuthAngle = -3.5;
+    controls.rotateSpeed = (container.offsetWidth / 2560);
+    controls.enabled = false;
 
     //Draco Loader
     dracoLoader = new DRACOLoader();
@@ -379,7 +380,7 @@ function animate() {
     camera.lookAt(cameraTracker.position);
     renderer.render( scene, camera );
     //composer.render();
-    // controls.update();
+    controls.update();
         //Observe a scene or a renderer
         // if (typeof __THREE_DEVTOOLS__ !== 'undefined') {
         //     __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: scene }));
@@ -475,6 +476,10 @@ function hideOptionsUI(idElement){
     gsap.to(element, {duration: 2.5, opacity: 0, ease:"expo.inOut"});
 }
 
+function enableOrbitControls(){
+    controls.enabled = true;
+}
+
 function createElement(postObject){
 
     for(let i = 0; i < postObject.length; i++){
@@ -543,16 +548,13 @@ function headacheRackHoverOff(){
 
 function headacheRackSelect(){
     gsap.to(cameraTracker.position, {duration: 2, x: 5, y: 2, ease:"expo"});
-    gsap.to(camera.position, {duration: 2, x: -4, y: 4, z: 0, ease:"expo"});
+    gsap.to(camera.position, {duration: 2, x: -4, y: 4, z: 0, ease:"expo", onComplete: enableOrbitControls});
     showOptionsUI(".options-bar");
     createNewElements(HeadacheRackPostObjects);
-    if(clientPUP.HeadacheRack === "Hex"){
-        document.getElementById("Hex Headache Rack").focus;
-    }
-    else{
-        document.getElementById("Open Headache Rack").focus;
-        console.log("post case");
-    }
+    controls.target = cameraTracker.position;
+    controls.minDistance = 7;
+    controls.maxDistance = 25;
+
 }
 
 function ladderRackHoverOn(){
