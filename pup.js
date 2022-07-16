@@ -301,8 +301,8 @@ function init(){
     controls.maxDistance = 25;
     controls.maxAzimuthAngle = .5;
     controls.minAzimuthAngle = -3.5;
-    controls.rotateSpeed = (container.offsetWidth / 2560);
-    controls.enabled = false;
+    controls.rotateSpeed = (container.offsetWidth / 8000);
+    //controls.enabled = false;
 
     //Draco Loader
     dracoLoader = new DRACOLoader();
@@ -547,6 +547,7 @@ function headacheRackHoverOff(){
 }
 
 function headacheRackSelect(){
+    controls.enabled = false;
     gsap.to(cameraTracker.position, {duration: 2, x: 5, y: 2, ease:"expo"});
     gsap.to(camera.position, {duration: 2, x: -4, y: 4, z: 0, ease:"expo", onComplete: enableOrbitControls});
     showOptionsUI(".options-bar");
