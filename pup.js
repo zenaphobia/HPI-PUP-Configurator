@@ -73,9 +73,9 @@ function init(){
     container = document.getElementById('myCanvas');
     camera = new THREE.PerspectiveCamera( 35, container.offsetWidth / container.offsetHeight, 0.1, 1000 );
     camera.aspect = container.offsetWidth / container.offsetHeight;
-    camera.position.z = -15;
-    camera.position.y = 5;
-    camera.position.x = -15;
+    camera.position.z = -27;
+    camera.position.y = 7;
+    camera.position.x = -10;
 
     renderer = new THREE.WebGLRenderer({canvas: container, antialias: true, alpha: true});
     renderer.setClearColor( 0x000000, 0 );
