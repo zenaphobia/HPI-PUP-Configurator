@@ -41,29 +41,33 @@
 			</div>
 		</nav>
 		<div class="options-bar" id="headache-racks">
-			<div class="option" id="hex-hedache-rack">
-			  <div class="header">
-				Hex Headache Rack
-			  </div>
-			  <div class="description">
-				Whether you want added protection for your rear window or to gain overhead storage a headache rack is the perfect add on.
-			  </div>
-			  <div class="checkbox">
-				<button class="checkbox-text" type="button"> + add this item</button>
-			  </div>
-			</div>
-			<div class="option" id="post-hedache-rack">
-				<div class="header">
-				  Hex Headache Rack
-				</div>
-				<div class="description">
-				  Whether you want added protection for your rear window or to gain overhead storage a headache rack is the perfect add on.
-				</div>
-				<div class="checkbox">
-				  <button class="checkbox-text" type="button"> + add this item</button>
-				</div>
-			  </div>
-		  </div>
+			<form class="options">
+					<div class="option" id="hex-headache-rack">
+						<div class="header">
+							Hex Headache Rack
+						</div>
+						<div class="description">
+							Whether you want added protection for your rear window or to gain overhead storage a headache rack is the perfect add on.
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="hex-headache-rack-radio" name="Headache Rack" value="hex-headache-rack">
+							<label for="Hex Headache Rack" class="radio-text" id="hex-radio-text">Choose this option</label><br>
+						</div>
+					</div>
+					<div class="option" id="post-headache-rack">
+						<div class="header">
+							Open Headache Rack
+						</div>
+						<div class="description">
+							3rd brakelight camera compatible.
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="post-headache-rack-radio" name="Headache Rack" value="post-headache-rack">
+							<label for="Post Headache Rack" class="radio-text" id="post-radio-text">Choose this option</label><br>
+						</div>
+					</div>
+			</form>
+		</div>
 		<div class="UIWrapper" id="body">
 			<div class="model3d">
 				<canvas id="myCanvas"></canvas>

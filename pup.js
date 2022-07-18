@@ -42,7 +42,7 @@ const HexHeadacheRackPost = {
 const PostHeadacheRackPost = {
     name: "Open Headache Rack",
     price: 75,
-    description: "3rd brakelight camera compatible. "
+    description: "3rd brakelight camera compatible."
 }
 
 const HeadacheRackPostObjects = [HexHeadacheRackPost, PostHeadacheRackPost];
@@ -339,8 +339,8 @@ function init(){
     // document.getElementById('pup-standard').addEventListener("click", function(){renderStandard()});
     // document.getElementById('domed-hatch').addEventListener("click", function(){renderDomedHatch()});
     // document.getElementById('flat-hatch').addEventListener("click", function(){renderFlatHatch()});
-    // document.getElementById('post-headache-rack').addEventListener("click", function(){switchToPostHeadacheRack()});
-    // document.getElementById('hex-headache-rack').addEventListener("click", function(){switchToHexHeadacheRack()});
+    document.getElementById('post-headache-rack-radio').addEventListener("click", function(){switchToPostHeadacheRack()});
+    document.getElementById('hex-headache-rack-radio').addEventListener("click", function(){switchToHexHeadacheRack()});
     // document.getElementById('ladder-rack').addEventListener("click", function(){showOrHideLadderRack()});
     // document.getElementById('add-ls-tray').addEventListener("click", function(){addLowSideTrays()});
     // document.getElementById('remove-ls-tray').addEventListener("click", function(){removeLowSideTrays()});
@@ -464,7 +464,7 @@ function toNormalMaterial(mesh){
 }
 
 function showOptionsUI(idElement){
-    var element = document.querySelector(idElement);
+    var element = document.getElementById(idElement);
     element.style.display = "flex";
     gsap.to(element, {duration: 2.5, opacity: 100, ease:"expo.inOut"});
 }
@@ -535,26 +535,66 @@ function createNewElements(postObject){
     }
     catch{
         console.log("an error has occured...");
-        console.log(error);
     }
 }
 
 function headacheRackHoverOn(){
-    ToHoloMaterial(HeadacheRackHex);
+    switch(clientPUP.HeadacheRack){
+        case "Hex":
+            ToHoloMaterial(HeadacheRackHex);
+            break;
+        case "Post":
+            ToHoloMaterial(PostHeadacheRackPost);
+            break;
+    }
 }
 function headacheRackHoverOff(){
-    toNormalMaterial(HeadacheRackHex);
+    switch(clientPUP.HeadacheRack){
+        case "Hex":
+            toNormalMaterial(HeadacheRackHex);
+            break;
+        case "Post":
+            toNormalMaterial(PostHeadacheRackPost);
+            break;
+    }
 }
 
 function headacheRackSelect(){
+
+    //Grabbing elements.
+    const hexRadio = document.getElementById("hex-headache-rack-radio");
+    const hexText = document.getElementById("hex-radio-text");
+    const postRadio = document.getElementById("post-headache-rack-radio");
+    const postText = document.getElementById("post-radio-text");
+
+    //Check which option is selected already.
+
+    switch(clientPUP.HeadacheRack){
+        case "Hex":
+            hexRadio.checked = true;
+            postRadio.checked = false;
+            hexText.innerText = "Option is selected";
+            postText.innerText = "Select this option";
+            break;
+        case "Post":
+            hexRadio.checked = false;
+            postRadio.checked = true;
+            postText.innerText = "Option is selected";
+            hexText.innerText = "Select this option";
+            break
+    }
+
+    //
+    //TODO: implement function that dynamically grabs objects and inserts info.
+    //createNewElements(HeadacheRackPostObjects); <-- Current solution
+
     controls.enabled = false;
     gsap.to(cameraTracker.position, {duration: 2, x: 5, y: 2, ease:"expo"});
     gsap.to(camera.position, {duration: 2, x: -4, y: 4, z: 0, ease:"expo", onComplete: enableOrbitControls});
-    showOptionsUI(".options-bar");
-    createNewElements(HeadacheRackPostObjects);
+    showOptionsUI("headache-racks");
     controls.target = cameraTracker.position;
-    controls.minDistance = 7;
-    controls.maxDistance = 25;
+    controls.minDistance = 6;
+    controls.maxDistance = 20;
 
 }
 
@@ -1142,13 +1182,32 @@ function renderFlatHatch(){
 }
 
 function switchToPostHeadacheRack(){
+    const hexText = document.getElementById("hex-radio-text");
+    const postText = document.getElementById("post-radio-text");
+
+    postText.innerText = "Option is selected";
+    hexText.innerText = "Select this option";
+
     HeadacheRackPost.visible = true;
     HeadacheRackHex.visible = false;
+
+
+    //Switching options for consistency
+    clientPUP.HeadacheRack = "Post";
 }
 
 function switchToHexHeadacheRack(){
+    const hexText = document.getElementById("hex-radio-text");
+    const postText = document.getElementById("post-radio-text");
+
+    postText.innerText = "Select this option";
+    hexText.innerText = "Option is selected";
+
     HeadacheRackHex.visible = true;
     HeadacheRackPost.visible = false;
+
+    //Switching options for consistency
+    clientPUP.HeadacheRack = "Hex";
 }
 
 function changeCam(){
