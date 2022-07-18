@@ -167,6 +167,7 @@
     display: flex;
     opacity: 85%;
     flex-direction: column;
+    justify-content: center;
     width: 25em;
     max-width: 35em;
     background-color: #ededed;
@@ -269,4 +270,11 @@
 
   .radio-text{
     font-family: "poppins";
+  }
+
+  #shopping-cart{
+    display: flex;
+    width: 85px;
+    height: auto;
+    justify-content: center;
   }

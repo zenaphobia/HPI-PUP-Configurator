@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>My first three.js app</title>
-		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="/style.css">
 		<style>
 			@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Poppins:wght@200;400;800&display=swap');
 		</style>
@@ -14,9 +14,12 @@
 		<div class="loader" id="loader">
 			<div class="loadingbar"></div>
 		</div>
-		<script type="module" src="pup.js"></script>
+		<script type="module" src="/pup.js"></script>
 		<nav>
 			<div class="nav-bar">
+				<button class="nav-buttons" id="hatch">
+					Hatch
+				</button>
 				<button class="nav-buttons" id="gullwing">
 					Gullwing
 				</button>
@@ -37,6 +40,9 @@
 				</button>
 				<button class="nav-buttons">
 					Truckslides
+				</button>
+				<button class="nav-buttons" id="shopping-cart">
+					<img src="graphic-assets/shopping-cart.svg">
 				</button>
 			</div>
 		</nav>

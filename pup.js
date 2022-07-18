@@ -544,7 +544,7 @@ function headacheRackHoverOn(){
             ToHoloMaterial(HeadacheRackHex);
             break;
         case "Post":
-            ToHoloMaterial(PostHeadacheRackPost);
+            ToHoloMaterial(HeadacheRackPost);
             break;
     }
 }
@@ -554,7 +554,7 @@ function headacheRackHoverOff(){
             toNormalMaterial(HeadacheRackHex);
             break;
         case "Post":
-            toNormalMaterial(PostHeadacheRackPost);
+            toNormalMaterial(HeadacheRackPost);
             break;
     }
 }
