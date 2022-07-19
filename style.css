@@ -1,10 +1,16 @@
+.body{
+max-width: 100vw;
+max-height: 100vh;
+}
+
 .UIWrapper {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
     margin: auto;
-    width: 99vw;
-    height: 99vh;
+    max-width: 100vw;
+    max-height: 100vh;
+    z-index: -1;
 }
 
 
@@ -141,15 +147,14 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    min-width: 100vw;
-    max-height: 90vh;
+    height: 90vh;
     margin: auto;
-    object-fit: cover;
     outline: none;
     border: none;
 }
 
-.options-bar{
+/* this is the old options-bar
+/* .options-bar{
     opacity: 0;
     display: flex;
     position: absolute;
@@ -162,8 +167,22 @@
     -moz-transform: translate(-50%, 0%);
     -ms-transform: translate(-50%, 0%);
     -o-transform: translate(-50%, 0%);
+} */
+
+.options-bar{
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  height: 90vh;
+  left: auto;
+  background-color: rgba(237, 237, 237, .85);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 1;
 }
-.option{
+
+/*Old option
+/* .option{
     display: flex;
     opacity: 85%;
     flex-direction: column;
@@ -182,7 +201,64 @@
     0 22.3px 17.9px rgba(0, 0, 0, 0.072),
     0 41.8px 33.4px rgba(0, 0, 0, 0.086),
     0 100px 80px rgba(0, 0, 0, 0.12);
+} */
+
+.option{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 25em;
+  max-width: 35em;
+  border-radius: 25px;
+  padding: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  z-index: 3;
 }
+
+.options{
+  z-index: 2;
+}
+
+.back-btn-container{
+  display: flex;
+  flex-direction: column;
+  max-height: 75px;
+  width: inherit;
+  margin: auto;
+  transition-duration: .4s;
+  background-color: #e9e9e9e9;
+}
+
+.back-btn-container:hover{
+  filter: invert(.25) brightness(50%) hue-rotate(25deg);
+  -webkit-filter: invert(.25) brightness(50%) hue-rotate(25deg);
+}
+
+#back-btn{
+  height: 35px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+#back-btn:hover{
+  height: 35px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  filter: invert(.25) brightness(8%) hue-rotate(25deg);
+  -webkit-filter: invert(.25) brightness(8%) hue-rotate(25deg);
+}
+
+/* .options-background{
+  position: absolute;
+  left: auto;
+  width: 25vw;
+  height: 100vh;
+  left: auto;
+  z-index: -1;
+  filter: blur(5px);
+  -webkit-filter: blur(5px);
+} */
 
   .header{
     display: flex;
@@ -240,10 +316,6 @@
     border-radius: 25px;
     padding-left: 25px;
     padding-right: 25px;
-  }
-  .options{
-    display: flex;
-    flex-direction: row;
   }
 
   .radio-section{
