@@ -561,6 +561,9 @@ function headacheRackHoverOff(){
 
 function headacheRackSelect(){
 
+    //grabbing main element
+    const sidebar = document.getElementById("headache-racks");
+
     //Grabbing elements.
     const hexRadio = document.getElementById("hex-headache-rack-radio");
     const hexText = document.getElementById("hex-radio-text");
@@ -583,6 +586,9 @@ function headacheRackSelect(){
             hexText.innerText = "Select this option";
             break
     }
+
+    //show sidebar
+    gsap.to(sidebar, {duration: 1.5, left:0, ease:"expo.inOut"});
 
     //
     //TODO: implement function that dynamically grabs objects and inserts info.
