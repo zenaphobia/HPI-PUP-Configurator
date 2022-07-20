@@ -362,6 +362,8 @@ function init(){
     // document.getElementById('change-to-black').addEventListener("click", function(){truckPaintMat.color.set(0x050505); truckPaintMat.sheenColor.set(0xffffff);});
     // document.getElementById('change-to-white').addEventListener("click", function(){truckPaintMat.color.set(0xf0f0f0)});
     document.getElementById("back-btn-container").addEventListener("click", function(){hideSidebar()});
+    document.getElementById("congif-back-btn-container").addEventListener("click", function(){hideConfigBar()});
+    document.getElementById("shopping-cart").addEventListener("click", function(){showConfigBar()});
 
     //Window resizing
     window.addEventListener( 'resize', onWindowResize );
@@ -397,6 +399,16 @@ function showPage(){
 function hideSidebar(){
     const sidebar = document.getElementById("headache-racks");
     gsap.to(sidebar, {duration: 1, left: -425, ease: "expo.inOut"});
+}
+
+function showConfigBar(){
+    const configBar = document.getElementById("config-options-bar");
+    gsap.to(configBar, {duration: 1, right: 0, ease:"expo.inOut"});
+}
+
+function hideConfigBar(){
+    const configBar = document.getElementById("config-options-bar");
+    gsap.to(configBar, {duration: 1, right: -425, ease: "expo.inOut"});
 }
 
 function hideLoader(){
@@ -474,6 +486,7 @@ function showOptionsUI(idElement){
     element.style.display = "flex";
     gsap.to(element, {duration: 2.5, opacity: 100, ease:"expo.inOut"});
 }
+
 
 function hideOptionsUI(idElement){
     var element = document.querySelector(idElement);
