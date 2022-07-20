@@ -361,6 +361,7 @@ function init(){
     // document.getElementById('change-to-grey').addEventListener("click", function(){truckPaintMat.color.set(0x1f1f1f); truckPaintMat.sheenColor.set(0xffffff);});
     // document.getElementById('change-to-black').addEventListener("click", function(){truckPaintMat.color.set(0x050505); truckPaintMat.sheenColor.set(0xffffff);});
     // document.getElementById('change-to-white').addEventListener("click", function(){truckPaintMat.color.set(0xf0f0f0)});
+    document.getElementById("back-btn-container").addEventListener("click", function(){hideSidebar()});
 
     //Window resizing
     window.addEventListener( 'resize', onWindowResize );
@@ -391,6 +392,11 @@ function animate() {
 function showPage(){
     var loader = document.getElementById("loader");
     gsap.to(loader, {duration: 2, opacity: 0, ease:"expo.inOut", onComplete: hideLoader});
+}
+
+function hideSidebar(){
+    const sidebar = document.getElementById("headache-racks");
+    gsap.to(sidebar, {duration: 1, left: -425, ease: "expo.inOut"});
 }
 
 function hideLoader(){
@@ -588,7 +594,7 @@ function headacheRackSelect(){
     }
 
     //show sidebar
-    gsap.to(sidebar, {duration: 1.5, left:0, ease:"expo.inOut"});
+    gsap.to(sidebar, {duration: 1, left:0, ease:"expo.inOut"});
 
     //
     //TODO: implement function that dynamically grabs objects and inserts info.

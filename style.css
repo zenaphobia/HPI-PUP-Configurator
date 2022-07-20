@@ -209,11 +209,15 @@ max-height: 100vh;
   justify-content: center;
   width: 25em;
   max-width: 35em;
-  border-radius: 25px;
   padding: 5px;
   margin-top: 5px;
   margin-bottom: 5px;
   z-index: 3;
+  transition-duration: .4s;
+}
+
+.option:hover{
+  background-color: #e3e3e3;
 }
 
 .options{
