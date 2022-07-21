@@ -337,8 +337,9 @@ function init(){
     // document.getElementById('hinge').addEventListener("click", function(){openLowSideLid()});
     // document.getElementById('pup-pro').addEventListener("click", function(){renderPro()});
     // document.getElementById('pup-standard').addEventListener("click", function(){renderStandard()});
-    // document.getElementById('domed-hatch').addEventListener("click", function(){renderDomedHatch()});
-    // document.getElementById('flat-hatch').addEventListener("click", function(){renderFlatHatch()});
+    document.getElementById('hatch-nav').addEventListener("click", function(){hatchSelect()});
+    document.getElementById('domed-hatch-radio').addEventListener("click", function(){renderDomedHatch()});
+    document.getElementById('flat-hatch-radio').addEventListener("click", function(){renderFlatHatch()});
     document.getElementById('post-headache-rack-radio').addEventListener("click", function(){switchToPostHeadacheRack()});
     document.getElementById('hex-headache-rack-radio').addEventListener("click", function(){switchToHexHeadacheRack()});
     // document.getElementById('ladder-rack').addEventListener("click", function(){showOrHideLadderRack()});
@@ -391,13 +392,31 @@ function animate() {
         //   }
 }
 
+function hideAllOpenElements(){
+    const element = document.getElementsByClassName("options-group");
+    var elementGroup;
+    for(let i = 0; i < element.length; i++){
+        // if(element[i].style["display"] !== "none"){
+        //     return element[i];
+        // }
+        element[i].style["display"] = "none";
+    }
+}
+
+//use this function to hide all elements and show relevant one.
+function refreshUI(id){
+    const element = document.getElementById(id);
+    hideAllOpenElements();
+    element.style.display = "flex";
+}
+
 function showPage(){
     var loader = document.getElementById("loader");
     gsap.to(loader, {duration: 2, opacity: 0, ease:"expo.inOut", onComplete: hideLoader});
 }
 
 function hideSidebar(){
-    const sidebar = document.getElementById("headache-racks");
+    const sidebar = document.getElementById("options-bar-container");
     gsap.to(sidebar, {duration: 1, left: -425, ease: "expo.inOut"});
 }
 
@@ -580,8 +599,10 @@ function headacheRackHoverOff(){
 
 function headacheRackSelect(){
 
+    refreshUI("headache-rack-section");
+
     //grabbing main element
-    const sidebar = document.getElementById("headache-racks");
+    const sidebar = document.getElementById("options-bar-container");
 
     //Grabbing elements.
     const hexRadio = document.getElementById("hex-headache-rack-radio");
@@ -616,11 +637,58 @@ function headacheRackSelect(){
     controls.enabled = false;
     gsap.to(cameraTracker.position, {duration: 2, x: 5, y: 2, ease:"expo"});
     gsap.to(camera.position, {duration: 2, x: -4, y: 4, z: 0, ease:"expo", onComplete: enableOrbitControls});
-    showOptionsUI("headache-racks");
+    //showOptionsUI("headache-racks");
     controls.target = cameraTracker.position;
     controls.minDistance = 6;
     controls.maxDistance = 20;
 
+}
+
+
+function hatchSelect(){
+
+    refreshUI("hatch-section");
+
+    //grabbing main element
+    const sidebar = document.getElementById("options-bar-container");
+
+    //Grabbing elements.
+    const flatHatchRadio = document.getElementById("flat-hatch-radio");
+    const flatHatchText = document.getElementById("flat-hatch-radio-text");
+    const domedHatchRadio = document.getElementById("domed-hatch-radio");
+    const domedHatchText = document.getElementById("domed-hatch-radio-text");
+
+    //Check which option is selected already.
+
+    switch(clientPUP.Hatch){
+        case "Flat":
+            flatHatchRadio.checked = true;
+            domedHatchRadio.checked = false;
+            flatHatchText.innerText = "Option is selected";
+            domedHatchText.innerText = "Select this option";
+            break;
+        case "Domed":
+            flatHatchRadio.checked = false;
+            domedHatchRadio.checked = true;
+            flatHatchText.innerText = "Option is selected";
+            domedHatchText.innerText = "Select this option";
+            break;
+    }
+
+    //show sidebar
+    gsap.to(sidebar, {duration: 1, left:0, ease:"expo.inOut"});
+
+    //
+    //TODO: implement function that dynamically grabs objects and inserts info.
+    //createNewElements(HeadacheRackPostObjects); <-- Current solution
+
+    controls.enabled = false;
+    gsap.to(cameraTracker.position, {duration: 2, x: 5, y: 2, ease:"expo"});
+    gsap.to(camera.position, {duration: 2, x: -4, y: 4, z: 0, ease:"expo", onComplete: enableOrbitControls});
+    //showOptionsUI("headache-racks");
+    controls.target = cameraTracker.position;
+    controls.minDistance = 6;
+    controls.maxDistance = 20;
 }
 
 function ladderRackHoverOn(){

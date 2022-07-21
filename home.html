@@ -17,7 +17,7 @@
 		<script type="module" src="/pup.js"></script>
 		<nav>
 			<div class="nav-bar">
-				<button class="nav-buttons" id="hatch">
+				<button class="nav-buttons" id="hatch-nav">
 					Hatch
 				</button>
 				<button class="nav-buttons" id="gullwing">
@@ -46,11 +46,64 @@
 				</button>
 			</div>
 		</nav>
-		<div class="options-bar" id="headache-racks">
-			<form class="options">
-					<div class="back-btn-container" id="back-btn-container">
-						<img src="/graphic-assets/back-btn.svg" alt="back-button" id="back-btn">
+		<div class="options-bar-container" id="options-bar-container">
+			<form>
+				<div class="back-btn-container" id="back-btn-container">
+					<img src="/graphic-assets/back-btn.svg" alt="back-button" id="back-btn">
+				</div>
+				<div class="options-group" id="hatch-section">
+					<div class="option" id="flat-hatch-option">
+						<div class="header">
+							Flat Center Hatch
+						</div>
+						<div class="description">
+							Keep the contents of your bed dry and secure with a locking center hatch.
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="flat-hatch-radio" name="hatch-option" value="flat-hatch">
+							<label for="flat hatch" class="radio-text" id="flat-hatch-radio-text">Choose this option</label><br>
+						</div>
 					</div>
+					<div class="option" id="domed-hatch-option">
+						<div class="header">
+							Domed Center Hatch
+						</div>
+						<div class="description">
+							Increase interior clearance by 4” with a domed hatch.
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="domed-hatch-radio" name="hatch-option" value="domed-hatch">
+							<label for="domed hatch" class="radio-text" id="domed-hatch-radio-text">Choose this option</label><br>
+						</div>
+					</div>
+				</div>
+				<div class="options-group" id="gullwing-section">
+					<div class="option" id="hex-headache-rack">
+						<div class="header">
+							Standard
+						</div>
+						<div class="description">
+							Lowside toolboxes spanning the total length of your truck bed.
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="gullwing-standard" name="gullwing-section" value="standard-pup">
+							<label for="gullwing-standard" class="radio-text">Choose this option</label><br>
+						</div>
+					</div>
+					<div class="option" id="post-headache-rack">
+						<div class="header">
+							Gullwing Toolbox
+						</div>
+						<div class="description">
+							Make it a pickup Pack Pro by adding easy access to cross body storage to your Pickup Pack.
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="gullwing-toolbox" name="gullwing-section" value="gullwing-pup">
+							<label for="gullwing-toolbox" class="radio-text">Choose this option</label><br>
+						</div>
+					</div>
+				</div>
+				<div class="options-group" id="headache-rack-section">
 					<div class="option" id="hex-headache-rack">
 						<div class="header">
 							Hex Headache Rack
@@ -75,6 +128,7 @@
 							<label for="Post Headache Rack" class="radio-text" id="post-radio-text">Choose this option</label><br>
 						</div>
 					</div>
+				</div>
 			</form>
 		</div>
 		<div class="config-options-bar" id="config-options-bar">
