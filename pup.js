@@ -328,7 +328,7 @@ function init(){
     //#endregion
 
     //functions
-    document.getElementById('headacherack').addEventListener("mouseenter", function(){headacheRackHoverOn()});
+    document.getElementById('headacherack').addEventListener("mouseenter", function(){headacheRackHoverOn();});
     document.getElementById('headacherack').addEventListener("mouseleave", function(){headacheRackHoverOff()});
     document.getElementById('headacherack').addEventListener("click", function(){headacheRackSelect()});
     document.getElementById('ladderrack').addEventListener("mouseenter", function(){ladderRackHoverOn()});
@@ -340,8 +340,8 @@ function init(){
     document.getElementById('hatch-nav').addEventListener("click", function(){hatchSelect()});
     document.getElementById('domed-hatch-radio').addEventListener("click", function(){renderDomedHatch();refreshConfig("config-hatch-description", "Hatch");});
     document.getElementById('flat-hatch-radio').addEventListener("click", function(){renderFlatHatch();refreshConfig("config-hatch-description", "Hatch");});
-    document.getElementById('post-headache-rack-radio').addEventListener("click", function(){switchToPostHeadacheRack()});
-    document.getElementById('hex-headache-rack-radio').addEventListener("click", function(){switchToHexHeadacheRack()});
+    document.getElementById('post-headache-rack-radio').addEventListener("click", function(){switchToPostHeadacheRack();refreshConfig("config-headache-rack-description", "HeadacheRack");});
+    document.getElementById('hex-headache-rack-radio').addEventListener("click", function(){switchToHexHeadacheRack();refreshConfig("config-headache-rack-description", "HeadacheRack");});
     // document.getElementById('ladder-rack').addEventListener("click", function(){showOrHideLadderRack()});
     // document.getElementById('add-ls-tray').addEventListener("click", function(){addLowSideTrays()});
     // document.getElementById('remove-ls-tray').addEventListener("click", function(){removeLowSideTrays()});
@@ -616,7 +616,6 @@ function headacheRackSelect(){
     const postText = document.getElementById("post-radio-text");
 
     //Check which option is selected already.
-
     switch(clientPUP.HeadacheRack){
         case "Hex":
             hexRadio.checked = true;
@@ -640,8 +639,8 @@ function headacheRackSelect(){
     //createNewElements(HeadacheRackPostObjects); <-- Current solution
 
     controls.enabled = false;
-    gsap.to(cameraTracker.position, {duration: 2, x: 5, y: 2, ease:"expo"});
     gsap.to(camera.position, {duration: 2, x: -4, y: 4, z: 0, ease:"expo", onComplete: enableOrbitControls});
+    gsap.to(cameraTracker.position, {duration: 2, x: 5, y: 2, ease:"expo"});
     //showOptionsUI("headache-racks");
     controls.target = cameraTracker.position;
     controls.minDistance = 6;
@@ -653,7 +652,7 @@ function headacheRackSelect(){
 function hatchSelect(){
 
     refreshUI("hatch-section");
-    refreshConfig("config-hatch-description", "Hatch");
+    //refreshConfig("config-hatch-description", "Hatch");
 
     //grabbing main element
     const sidebar = document.getElementById("options-bar-container");
@@ -684,13 +683,59 @@ function hatchSelect(){
     //show sidebar
     gsap.to(sidebar, {duration: 1, left:0, ease:"expo.inOut"});
 
-    //
     //TODO: implement function that dynamically grabs objects and inserts info.
     //createNewElements(HeadacheRackPostObjects); <-- Current solution
 
     controls.enabled = false;
-    gsap.to(cameraTracker.position, {duration: 0, x: 0, y: 0, ease:"expo"});
     gsap.to(camera.position, {duration: 2, x: standardCameraAngle.x, y: standardCameraAngle.y, z: standardCameraAngle.z, ease:"expo", onComplete: enableOrbitControls});
+    gsap.to(cameraTracker.position, {duration: 0, x: 0, y: 0, ease:"expo"});
+    controls.minDistance = 10;
+    controls.maxDistance = 30;
+    controls.target = cameraTracker.position;
+
+    console.log(camera.position);
+}
+
+function gullwingSelect(){
+
+    refreshUI("gullwing-section");
+    //refreshConfig("config-hatch-description", "Hatch");
+
+    //grabbing main element
+    const sidebar = document.getElementById("options-bar-container");
+
+    //Grabbing elements.
+    const flatHatchRadio = document.getElementById("flat-hatch-radio");
+    const flatHatchText = document.getElementById("flat-hatch-radio-text");
+    const domedHatchRadio = document.getElementById("domed-hatch-radio");
+    const domedHatchText = document.getElementById("domed-hatch-radio-text");
+
+    //Check which option is selected already.
+
+    switch(clientPUP.Hatch){
+        case "Flat Center Hatch":
+            flatHatchRadio.checked = true;
+            domedHatchRadio.checked = false;
+            flatHatchText.innerText = "Option is selected";
+            domedHatchText.innerText = "Select this option";
+            break;
+        case "Domed Center Hatch":
+            flatHatchRadio.checked = false;
+            domedHatchRadio.checked = true;
+            flatHatchText.innerText = "Option is selected";
+            domedHatchText.innerText = "Select this option";
+            break;
+    }
+
+    //show sidebar
+    gsap.to(sidebar, {duration: 1, left:0, ease:"expo.inOut"});
+
+    //TODO: implement function that dynamically grabs objects and inserts info.
+    //createNewElements(HeadacheRackPostObjects); <-- Current solution
+
+    controls.enabled = false;
+    gsap.to(camera.position, {duration: 2, x: standardCameraAngle.x, y: standardCameraAngle.y, z: standardCameraAngle.z, ease:"expo", onComplete: enableOrbitControls});
+    gsap.to(cameraTracker.position, {duration: 0, x: 0, y: 0, ease:"expo"});
     controls.minDistance = 10;
     controls.maxDistance = 30;
     controls.target = cameraTracker.position;
