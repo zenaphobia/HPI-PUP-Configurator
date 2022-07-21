@@ -315,7 +315,7 @@ function init(){
 
     //#region Basic PUP object implementation
     clientPUP = {
-        Hatch: "Flat",
+        Hatch: "Flat Center Hatch",
         Gullwing: false,
         HeadacheRack: "Hex",
         LadderRack: false,
@@ -338,8 +338,8 @@ function init(){
     // document.getElementById('pup-pro').addEventListener("click", function(){renderPro()});
     // document.getElementById('pup-standard').addEventListener("click", function(){renderStandard()});
     document.getElementById('hatch-nav').addEventListener("click", function(){hatchSelect()});
-    document.getElementById('domed-hatch-radio').addEventListener("click", function(){renderDomedHatch()});
-    document.getElementById('flat-hatch-radio').addEventListener("click", function(){renderFlatHatch()});
+    document.getElementById('domed-hatch-radio').addEventListener("click", function(){renderDomedHatch();refreshConfig("config-hatch-description", "Hatch");});
+    document.getElementById('flat-hatch-radio').addEventListener("click", function(){renderFlatHatch();refreshConfig("config-hatch-description", "Hatch");});
     document.getElementById('post-headache-rack-radio').addEventListener("click", function(){switchToPostHeadacheRack()});
     document.getElementById('hex-headache-rack-radio').addEventListener("click", function(){switchToHexHeadacheRack()});
     // document.getElementById('ladder-rack').addEventListener("click", function(){showOrHideLadderRack()});
@@ -408,6 +408,11 @@ function refreshUI(id){
     const element = document.getElementById(id);
     hideAllOpenElements();
     element.style.display = "flex";
+}
+
+function refreshConfig(id, section){
+    const element = document.getElementById(id);
+    element.innerText = clientPUP[section];
 }
 
 function showPage(){
@@ -648,6 +653,7 @@ function headacheRackSelect(){
 function hatchSelect(){
 
     refreshUI("hatch-section");
+    refreshConfig("config-hatch-description", "Hatch");
 
     //grabbing main element
     const sidebar = document.getElementById("options-bar-container");
@@ -661,13 +667,13 @@ function hatchSelect(){
     //Check which option is selected already.
 
     switch(clientPUP.Hatch){
-        case "Flat":
+        case "Flat Center Hatch":
             flatHatchRadio.checked = true;
             domedHatchRadio.checked = false;
             flatHatchText.innerText = "Option is selected";
             domedHatchText.innerText = "Select this option";
             break;
-        case "Domed":
+        case "Domed Center Hatch":
             flatHatchRadio.checked = false;
             domedHatchRadio.checked = true;
             flatHatchText.innerText = "Option is selected";
@@ -683,12 +689,13 @@ function hatchSelect(){
     //createNewElements(HeadacheRackPostObjects); <-- Current solution
 
     controls.enabled = false;
-    gsap.to(cameraTracker.position, {duration: 2, x: 5, y: 2, ease:"expo"});
-    gsap.to(camera.position, {duration: 2, x: -4, y: 4, z: 0, ease:"expo", onComplete: enableOrbitControls});
-    //showOptionsUI("headache-racks");
+    gsap.to(cameraTracker.position, {duration: 0, x: 0, y: 0, ease:"expo"});
+    gsap.to(camera.position, {duration: 2, x: standardCameraAngle.x, y: standardCameraAngle.y, z: standardCameraAngle.z, ease:"expo", onComplete: enableOrbitControls});
+    controls.minDistance = 10;
+    controls.maxDistance = 30;
     controls.target = cameraTracker.position;
-    controls.minDistance = 6;
-    controls.maxDistance = 20;
+
+    console.log(camera.position);
 }
 
 function ladderRackHoverOn(){
@@ -1209,7 +1216,7 @@ function renderStandard(){
 
 function renderDomedHatch(){
 
-    clientPUP.Hatch = "Domed";
+    clientPUP.Hatch = "Domed Center Hatch";
     //determine if PUP w/ Gullwing or PUP w/o Gullwing
     //render correct Hatch
 
@@ -1243,7 +1250,7 @@ function renderDomedHatch(){
 }
 
 function renderFlatHatch(){
-    clientPUP.Hatch = "Flat";
+    clientPUP.Hatch = "Flat Center Hatch";
     //determine if PUP w/ Gullwing or PUP w/o Gullwing
     //render correct Hatch
     LongFlatHatch.visible = false;
@@ -1494,10 +1501,10 @@ function switchToDiamondPlate(){
     clientPUP.LidFinishes = "DiamondPlate";
 
     switch(clientPUP.Hatch){
-        case "Flat":
+        case "Flat Center Hatch":
             renderFlatHatch();
             break;
-        case "Domed":
+        case "Domed Center Hatch":
             renderDomedHatch();
             break;
         default:
@@ -1559,10 +1566,10 @@ function switchToBlackDiamondPlate(){
     clientPUP.LidFinishes = "BlackDiamondPlate";
 
     switch(clientPUP.Hatch){
-        case "Flat":
+        case "Flat Center Hatch":
             renderFlatHatch();
             break;
-        case "Domed":
+        case "Domed Center Hatch":
             renderDomedHatch();
             break;
         default:
@@ -1625,10 +1632,10 @@ function switchToLeopard(){
     clientPUP.LidFinishes = "Leopard";
 
     switch(clientPUP.Hatch){
-        case "Flat":
+        case "Flat Center Hatch":
             renderFlatHatch();
             break;
-        case "Domed":
+        case "Domed Center Hatch":
             renderDomedHatch();
             break;
         default:
@@ -1692,10 +1699,10 @@ function switchToPatriot(){
     clientPUP.LidFinishes = "Patriot"
 
     switch(clientPUP.Hatch){
-        case "Flat":
+        case "Flat Center Hatch":
             renderFlatHatch();
             break;
-        case "Domed":
+        case "Domed Center Hatch":
             renderDomedHatch();
             break;
         default:
@@ -1748,10 +1755,10 @@ function switchToGladiator(){
     clientPUP.LidFinishes = "Gladiator"
 
     switch(clientPUP.Hatch){
-        case "Flat":
+        case "Flat Center Hatch":
             renderFlatHatch();
             break;
-        case "Domed":
+        case "Domed Center Hatch":
             renderDomedHatch();
             break;
         default:
