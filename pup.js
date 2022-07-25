@@ -335,8 +335,9 @@ function init(){
     document.getElementById('ladderrack').addEventListener("mouseleave", function(){ladderRackHoverOff()});
     document.getElementById('ladderrack').addEventListener("click", function(){ladderRackSelect()});
     // document.getElementById('hinge').addEventListener("click", function(){openLowSideLid()});
-    // document.getElementById('pup-pro').addEventListener("click", function(){renderPro()});
-    // document.getElementById('pup-standard').addEventListener("click", function(){renderStandard()});
+    document.getElementById('gullwing').addEventListener("click", function(){gullwingSelect()});
+    document.getElementById('pup-gullwing-radio').addEventListener("click", function(){renderPro(); refreshConfig("pup-toolbox-description", "Gullwing")});
+    document.getElementById('pup-standard-radio').addEventListener("click", function(){renderStandard();refreshConfig("pup-toolbox-description", "Gullwing")});
     document.getElementById('hatch-nav').addEventListener("click", function(){hatchSelect()});
     document.getElementById('domed-hatch-radio').addEventListener("click", function(){renderDomedHatch();refreshConfig("config-hatch-description", "Hatch");});
     document.getElementById('flat-hatch-radio').addEventListener("click", function(){renderFlatHatch();refreshConfig("config-hatch-description", "Hatch");});
@@ -688,7 +689,7 @@ function hatchSelect(){
 
     controls.enabled = false;
     gsap.to(camera.position, {duration: 2, x: standardCameraAngle.x, y: standardCameraAngle.y, z: standardCameraAngle.z, ease:"expo", onComplete: enableOrbitControls});
-    gsap.to(cameraTracker.position, {duration: 0, x: 0, y: 0, ease:"expo"});
+    gsap.to(cameraTracker.position, {duration: 2, x: 0, y: 0, ease:"expo"});
     controls.minDistance = 10;
     controls.maxDistance = 30;
     controls.target = cameraTracker.position;
@@ -705,25 +706,25 @@ function gullwingSelect(){
     const sidebar = document.getElementById("options-bar-container");
 
     //Grabbing elements.
-    const flatHatchRadio = document.getElementById("flat-hatch-radio");
-    const flatHatchText = document.getElementById("flat-hatch-radio-text");
-    const domedHatchRadio = document.getElementById("domed-hatch-radio");
-    const domedHatchText = document.getElementById("domed-hatch-radio-text");
+    const standardRadio = document.getElementById("pup-standard-radio");
+    const standardText = document.getElementById("pup-standard-text");
+    const gullwingRadio = document.getElementById("pup-gullwing-radio");
+    const gullwingText = document.getElementById("pup-gullwing-text");
 
     //Check which option is selected already.
 
-    switch(clientPUP.Hatch){
-        case "Flat Center Hatch":
-            flatHatchRadio.checked = true;
-            domedHatchRadio.checked = false;
-            flatHatchText.innerText = "Option is selected";
-            domedHatchText.innerText = "Select this option";
+    switch(clientPUP.Gullwing){
+        case false:
+            standardRadio.checked = true;
+            gullwingRadio.checked = false;
+            standardText.innerText = "Option is selected";
+            gullwingText.innerText = "Select this option";
             break;
-        case "Domed Center Hatch":
-            flatHatchRadio.checked = false;
-            domedHatchRadio.checked = true;
-            flatHatchText.innerText = "Option is selected";
-            domedHatchText.innerText = "Select this option";
+        case true:
+            standardRadio.checked = false;
+            gullwingRadio.checked = true;
+            gullwingText.innerText = "Option is selected";
+            standardText.innerText = "Select this option";
             break;
     }
 
@@ -734,8 +735,8 @@ function gullwingSelect(){
     //createNewElements(HeadacheRackPostObjects); <-- Current solution
 
     controls.enabled = false;
-    gsap.to(camera.position, {duration: 2, x: standardCameraAngle.x, y: standardCameraAngle.y, z: standardCameraAngle.z, ease:"expo", onComplete: enableOrbitControls});
-    gsap.to(cameraTracker.position, {duration: 0, x: 0, y: 0, ease:"expo"});
+    gsap.to(camera.position, {duration: 2, x: -4, y: 3, z: -5, ease:"expo", onComplete: enableOrbitControls});
+    gsap.to(cameraTracker.position, {duration: 2, x: 5, y: 0, ease:"expo"});
     controls.minDistance = 10;
     controls.maxDistance = 30;
     controls.target = cameraTracker.position;
