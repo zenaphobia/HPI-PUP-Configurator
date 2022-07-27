@@ -347,10 +347,11 @@ function init(){
     // document.getElementById('add-ls-tray').addEventListener("click", function(){addLowSideTrays()});
     // document.getElementById('remove-ls-tray').addEventListener("click", function(){removeLowSideTrays()});
     // document.getElementById('open-tailgate').addEventListener("click", function(){openTailgate()});
-    // document.getElementById('dp').addEventListener("click", function(){switchToDiamondPlate()});
-    // document.getElementById('black-dp').addEventListener("click", function(){switchToBlackDiamondPlate()});
-    // document.getElementById('leopard').addEventListener("click", function(){switchToLeopard()});
-    // document.getElementById('gladiator').addEventListener("click", function(){switchToGladiator()});
+    document.getElementById('lid-finishes').addEventListener("click", function(){finishSelect()});
+    document.getElementById('diamond-plate-radio').addEventListener("click", function(){switchToDiamondPlate();refreshConfig("config-finish-description", "LidFinishes")});
+    document.getElementById('black-diamond-plate-radio').addEventListener("click", function(){switchToBlackDiamondPlate();refreshConfig("config-finish-description", "LidFinishes")});
+    document.getElementById('leopard-radio').addEventListener("click", function(){switchToLeopard();refreshConfig("config-finish-description", "LidFinishes")});
+    document.getElementById('gladiator-radio').addEventListener("click", function(){switchToGladiator();refreshConfig("config-finish-description", "LidFinishes")});
     // document.getElementById('open-gullwing').addEventListener("click", function(){openGullwing()});
     // document.getElementById('xt1200').addEventListener("click", function(){chooseXT1200()});
     // document.getElementById('xt2000').addEventListener("click", function(){chooseXT2000()});
@@ -737,6 +738,83 @@ function gullwingSelect(){
     controls.enabled = false;
     gsap.to(camera.position, {duration: 2, x: -4, y: 3, z: -5, ease:"expo", onComplete: enableOrbitControls});
     gsap.to(cameraTracker.position, {duration: 2, x: 5, y: 0, ease:"expo"});
+    controls.minDistance = 10;
+    controls.maxDistance = 30;
+    controls.target = cameraTracker.position;
+
+    console.log(camera.position);
+}
+
+function finishSelect(){
+
+    refreshUI("finish-section");
+    refreshConfig("config-hatch-description", "LidFinishes");
+
+    //grabbing main element
+    const sidebar = document.getElementById("options-bar-container");
+
+    //Grabbing elements.
+    const diamondPlateRadio = document.getElementById("diamond-plate-radio");
+    const diamondPlateText = document.getElementById("diamond-plate-radio-text");
+    const blackDiamondPlateRadio = document.getElementById("black-diamond-plate-radio");
+    const blackDiamondPlateText = document.getElementById("black-diamond-plate-radio-text");
+    const leopardRadio = document.getElementById("leopard-radio");
+    const leopardText = document.getElementById("leopard-radio-text");
+    const gladiatorRadio = document.getElementById("gladiator-radio");
+    const gladiatorText = document.getElementById("gladiator-radio-text");
+
+    //Check which option is selected already.
+
+    switch(clientPUP.LidFinishes){
+        case "DiamondPlate":
+            diamondPlateRadio.checked = true;
+            blackDiamondPlateRadio.checked = false;
+            leopardRadio.checked = false;
+            gladiatorRadio.checked = false;
+            diamondPlateText.innerText = "Option is selected";
+            blackDiamondPlateText.innerText = "Select this option";
+            leopardText.innerText = "Select this option";
+            gladiatorText.innerText = "Select this option";
+            break;
+        case "BlackDiamondPlate":
+            diamondPlateRadio.checked = false;
+            blackDiamondPlateRadio.checked = true;
+            leopardRadio.checked = false;
+            gladiatorRadio.checked = false;
+            diamondPlateText.innerText = "Select this option";
+            blackDiamondPlateText.innerText = "Option is selected";
+            leopardText.innerText = "Select this option";
+            gladiatorText.innerText = "Select this option";
+            break;
+        case "Leopard":
+            diamondPlateRadio.checked = false;
+            blackDiamondPlateRadio.checked = false;
+            leopardRadio.checked = true;
+            gladiatorRadio.checked = false;
+            diamondPlateText.innerText = "Select this option";
+            blackDiamondPlateText.innerText = "Select this option";
+            leopardText.innerText = "Option is selected";
+            gladiatorText.innerText = "Select this option";
+        case "Gladiator":
+            diamondPlateRadio.checked = false;
+            blackDiamondPlateRadio.checked = false;
+            leopardRadio.checked = false;
+            gladiatorRadio.checked = true;
+            diamondPlateText.innerText = "Select this option";
+            blackDiamondPlateText.innerText = "Select this option";
+            leopardText.innerText = "Select this option";
+            gladiatorText.innerText = "Option is selected";
+    }
+
+    //show sidebar
+    gsap.to(sidebar, {duration: 1, left:0, ease:"expo.inOut"});
+
+    //TODO: implement function that dynamically grabs objects and inserts info.
+    //createNewElements(HeadacheRackPostObjects); <-- Current solution
+
+    controls.enabled = false;
+    gsap.to(camera.position, {duration: 2, x: standardCameraAngle.x, y: standardCameraAngle.y, z: standardCameraAngle.z, ease:"expo", onComplete: enableOrbitControls});
+    gsap.to(cameraTracker.position, {duration: 2, x: 0, y: 0, ease:"expo"});
     controls.minDistance = 10;
     controls.maxDistance = 30;
     controls.target = cameraTracker.position;
