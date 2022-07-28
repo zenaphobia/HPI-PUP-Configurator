@@ -4,6 +4,7 @@ import { OrbitControls } from '/js/OrbitControls.js';
 import { DRACOLoader } from '/js/DRACOLoader.js';
 import { EXRLoader } from '/js/EXRLoader.js';
 import { FlakesTexture } from '/js/FlakesTexture.js'
+import PickupPack from '/js/PickupPack.js'
 import HeadacheRack from '/js/headacheRack.js';
 import { UnrealBloomPass } from '/js/UnrealBloomPass.js';
 import { EffectComposer } from '/js/EffectComposer.js';
@@ -34,19 +35,6 @@ void main()
 `;
 //#endregion
 
-const HexHeadacheRackPost = {
-    name: "Hex Headache Rack",
-    price: 100,
-    description: "Whether you want added protection for your rear window or to gain overhead storage a headache rack is the perfect add on."
-}
-const PostHeadacheRackPost = {
-    name: "Open Headache Rack",
-    price: 75,
-    description: "3rd brakelight camera compatible."
-}
-
-const HeadacheRackPostObjects = [HexHeadacheRackPost, PostHeadacheRackPost];
-
 let loader, fileLoader, scene, container, camera, renderer, controls, dracoLoader, pmremGenerator, clientPUP;
 
 //#region INIT FILES
@@ -56,10 +44,13 @@ var allModels, TruckModel, GullwingModel, HeadacheRackPost, HeadacheRackHex, Lon
 //Textures
 var bdpBumpTexture, dpBumpTexture, patriotTexture, BK62BumpTexture, carPaintTexture, blankTexture, customMaterial;
 
+var PUPtest = new PickupPack("Flat", false, "Hex", false, "Wired", false, 1, "BlackDiamondPlate", "1200");
+
+console.log(PUPtest);
+
 let cameraTracker;
 const standardCameraAngle = new THREE.Vector3(-25.0, 7.0, -10.0);
 var uniforms;
-var headacheRackHexDupe;
 
 const clock = new THREE.Clock();
 
