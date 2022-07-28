@@ -323,7 +323,7 @@ function init(){
         AdditionalGullwingTray: false,
         AdditionalLowSideTray: "None", //1, 2
         LidFinishes: "BlackDiamondPlate", //BlackDiamondPlate, Leopard, Gladiator
-        Truckslide: "None",
+        Truckslide: "1200",
     };
     //#endregion
 
@@ -353,6 +353,7 @@ function init(){
     document.getElementById('leopard-radio').addEventListener("click", function(){switchToLeopard();refreshConfig("config-finish-description", "LidFinishes")});
     document.getElementById('gladiator-radio').addEventListener("click", function(){switchToGladiator();refreshConfig("config-finish-description", "LidFinishes")});
     // document.getElementById('open-gullwing').addEventListener("click", function(){openGullwing()});
+    document.getElementById('truckslide').addEventListener("click", function(){truckslideSelect()});
     // document.getElementById('xt1200').addEventListener("click", function(){chooseXT1200()});
     // document.getElementById('xt2000').addEventListener("click", function(){chooseXT2000()});
     // document.getElementById('xt4000').addEventListener("click", function(){chooseXT4000()});
@@ -654,7 +655,7 @@ function headacheRackSelect(){
 function hatchSelect(){
 
     refreshUI("hatch-section");
-    //refreshConfig("config-hatch-description", "Hatch");
+    refreshConfig("config-hatch-description", "Hatch");
 
     //grabbing main element
     const sidebar = document.getElementById("options-bar-container");
@@ -701,7 +702,7 @@ function hatchSelect(){
 function gullwingSelect(){
 
     refreshUI("gullwing-section");
-    //refreshConfig("config-hatch-description", "Hatch");
+    refreshConfig("config-hatch-description", "Hatch");
 
     //grabbing main element
     const sidebar = document.getElementById("options-bar-container");
@@ -795,6 +796,7 @@ function finishSelect(){
             blackDiamondPlateText.innerText = "Select this option";
             leopardText.innerText = "Option is selected";
             gladiatorText.innerText = "Select this option";
+            break;
         case "Gladiator":
             diamondPlateRadio.checked = false;
             blackDiamondPlateRadio.checked = false;
@@ -804,6 +806,7 @@ function finishSelect(){
             blackDiamondPlateText.innerText = "Select this option";
             leopardText.innerText = "Select this option";
             gladiatorText.innerText = "Option is selected";
+            break;
     }
 
     //show sidebar
@@ -824,63 +827,69 @@ function finishSelect(){
 
 function truckslideSelect(){
 
-    refreshUI("finish-section");
-    refreshConfig("config-hatch-description", "LidFinishes");
+    refreshUI("truckslide-section");
+    refreshConfig("config-hatch-description", "Truckslide");
 
     //grabbing main element
     const sidebar = document.getElementById("options-bar-container");
 
     //Grabbing elements.
-    const diamondPlateRadio = document.getElementById("diamond-plate-radio");
-    const diamondPlateText = document.getElementById("diamond-plate-radio-text");
-    const blackDiamondPlateRadio = document.getElementById("black-diamond-plate-radio");
-    const blackDiamondPlateText = document.getElementById("black-diamond-plate-radio-text");
-    const leopardRadio = document.getElementById("leopard-radio");
-    const leopardText = document.getElementById("leopard-radio-text");
-    const gladiatorRadio = document.getElementById("gladiator-radio");
-    const gladiatorText = document.getElementById("gladiator-radio-text");
+    const noTruckslideRadio = document.getElementById("no-truckslide-radio");
+    const noTruckslideText = document.getElementById("no-truckslide-radio-text");
+    const twelveTruckslideRadio = document.getElementById("1200-truckslide-radio");
+    const twelveTruckslideText = document.getElementById("1200-truckslide-radio-text");
+    const twoTruckslideRadio = document.getElementById("2000-truckslide-radio");
+    const twoTruckslideText = document.getElementById("2000-truckslide-radio-text");
+    const fourTruckslideRadio = document.getElementById("4000-truckslide-radio");
+    const fourTruckslideText = document.getElementById("4000-truckslide-radio-text");
 
     //Check which option is selected already.
 
-    switch(clientPUP.LidFinishes){
-        case "DiamondPlate":
-            diamondPlateRadio.checked = true;
-            blackDiamondPlateRadio.checked = false;
-            leopardRadio.checked = false;
-            gladiatorRadio.checked = false;
-            diamondPlateText.innerText = "Option is selected";
-            blackDiamondPlateText.innerText = "Select this option";
-            leopardText.innerText = "Select this option";
-            gladiatorText.innerText = "Select this option";
+    switch(clientPUP.Truckslide){
+        case "None":
+            noTruckslideRadio.checked = true;
+            twelveTruckslideRadio.checked  = false;
+            twoTruckslideRadio.checked = false;
+            fourTruckslideRadio.checked = false;
+            //radio text
+            noTruckslideText.innerText = "This option is selected";
+            twelveTruckslideText.innerText = "Select this option";
+            twoTruckslideText.innerText = "Select this option";
+            fourTruckslideText.innerText = "Select this option";
             break;
-        case "BlackDiamondPlate":
-            diamondPlateRadio.checked = false;
-            blackDiamondPlateRadio.checked = true;
-            leopardRadio.checked = false;
-            gladiatorRadio.checked = false;
-            diamondPlateText.innerText = "Select this option";
-            blackDiamondPlateText.innerText = "Option is selected";
-            leopardText.innerText = "Select this option";
-            gladiatorText.innerText = "Select this option";
+        case "1200":
+            noTruckslideRadio.checked = false;
+            twelveTruckslideRadio.checked = true;
+            twoTruckslideRadio.checked = false;
+            fourTruckslideRadio.checked = false;
+            //radio text
+            noTruckslideText.innerText = "Select this option";
+            twelveTruckslideText.innerText = "This option is selected";
+            twoTruckslideText.innerText = "Select this option";
+            fourTruckslideText.innerText = "Select this option";
             break;
-        case "Leopard":
-            diamondPlateRadio.checked = false;
-            blackDiamondPlateRadio.checked = false;
-            leopardRadio.checked = true;
-            gladiatorRadio.checked = false;
-            diamondPlateText.innerText = "Select this option";
-            blackDiamondPlateText.innerText = "Select this option";
-            leopardText.innerText = "Option is selected";
-            gladiatorText.innerText = "Select this option";
-        case "Gladiator":
-            diamondPlateRadio.checked = false;
-            blackDiamondPlateRadio.checked = false;
-            leopardRadio.checked = false;
-            gladiatorRadio.checked = true;
-            diamondPlateText.innerText = "Select this option";
-            blackDiamondPlateText.innerText = "Select this option";
-            leopardText.innerText = "Select this option";
-            gladiatorText.innerText = "Option is selected";
+        case "2000":
+            noTruckslideRadio.radio = false;
+            twelveTruckslideRadio.checked = false;
+            twoTruckslideRadio.checked = true;
+            fourTruckslideRadio.checked = false;
+            //radio text
+            noTruckslideText.innerText = "Select this option";
+            twelveTruckslideText.innerText = "Select this option";
+            twoTruckslideText.innerText = "This option is selected";
+            fourTruckslideText.innerText = "Select this option";
+            break;
+        case "4000":
+            noTruckslideRadio.checked = false;
+            twelveTruckslideRadio.checked = false;
+            twoTruckslideRadio.checked = false;
+            fourTruckslideRadio.checked = true;
+            //radio text
+            noTruckslideText.innerText = "Select this option";
+            twelveTruckslideText.innerText = "Select this option";
+            twoTruckslideText.innerText = "Select this option";
+            fourTruckslideText.innerText = "This option is selected";
+            break;
     }
 
     //show sidebar
@@ -888,7 +897,7 @@ function truckslideSelect(){
 
     //TODO: implement function that dynamically grabs objects and inserts info.
     //createNewElements(HeadacheRackPostObjects); <-- Current solution
-
+    presentTruckslide();
     controls.enabled = false;
     gsap.to(camera.position, {duration: 2, x: standardCameraAngle.x, y: standardCameraAngle.y, z: standardCameraAngle.z, ease:"expo", onComplete: enableOrbitControls});
     gsap.to(cameraTracker.position, {duration: 2, x: 0, y: 0, ease:"expo"});
@@ -918,118 +927,6 @@ function ladderRackSelect(){
     PupAccessories.getObjectByName("ladder-rack").visible = true;
     clientPUP.LadderRack = true;
     toNormalMaterial(PupAccessories.getObjectByName("ladder-rack"));
-}
-
-function renderPup(){
-
-    //switch cases with dependencies go here
-    //this function should be called after every change in selection
-    switch(clientPUP.Hatch){
-        case 'flat':
-            renderFlatHatch();
-            if(clientPUP.LidFinishes === "Gladiator"){
-                LongFlatHatch.visible = false;
-                ShortFlatHatch.visible = false;
-                longGladiatorFH.visible = true;
-                shortGladiatorFH.visible = true;
-            }
-            break;
-        case 'domed':
-            renderDomedHatch();
-            if(clientPUP.LidFinishes === "Gladiator"){
-                LongDomedHatch.visible = false;
-
-            }
-            break;
-        default:
-        console.log("invalid selection");
-    }
-    switch(clientPUP.Gullwing){
-        case true:
-            //this is loaded by default
-            console.log("Loading Gullwing");
-            break;
-        case false:
-            if(!isFullLengthPUPLoaded){
-                //Load full length PUP pack here
-            }
-            //unload gullwing, load full length PUP
-            console.log("Unloading Gullwing, load long hatch and lowsides");
-            break;
-    }
-    switch(clientPUP.HeadacheRack){
-        case 'Hex':
-            console.log("Loading Hex");
-            break;
-        case 'Post':
-            console.log("Loading Post");
-            break;
-        case 'None':
-            console.log("Removing headache rack");
-            break;
-    }
-    switch(clientPUP.PupAccessories){
-        case true:
-            console.log("Loading Ladder Rack");
-            break;
-        case false:
-            console.log("Removing Ladder Rack");
-            break;
-    }
-    switch(clientPUP.LEDdirectionalLighting){
-        //Do we need Wired and Battery as options?
-        //If not, simplify LED directionalLighting to boolean options
-        case 'None':
-            console.log("Unload LED directionalLighting");
-            break;
-        case 'Wired':
-            console.log("Load directionalLighting");
-    }
-    switch(clientPUP.AdditionalGullwingTray){
-        case true:
-            console.log("Loading Gullwing tray");
-            break;
-        case false:
-            console.log("Remove Gullwing tray");
-            break;
-    }
-    switch(clientPUP.AdditionalLowSideTray){
-        case '1':
-            console.log("Adding one tray");
-            break;
-        case '2':
-            console.log("Adding another tray");
-            break;
-    }
-    switch(clientPUP.LidFinishes){
-        case 'DiamondPlate':
-            console.log("Loading diamond plate");
-            break;
-        case 'BlackDiamondPlate':
-            console.log("Loading black diamond plate");
-            break;
-        case 'Leopard':
-            console.log("Loading leopard");
-            break;
-        case 'Gladiator':
-            console.log("Loading gladiator");
-            break;
-        case 'Patriot':
-            console.log("Loading patriot");
-            break;
-    }
-    switch(clientPUP.XT1200Truckslide){
-        case '1200':
-            console.log("Loading 1200XT XT1200Truckslide");
-            break;
-        case '2000':
-            console.log("Loading 2000XT XT1200Truckslide");
-            break;
-        case '4000':
-            console.log("Loading 4000XT XT1200Truckslide");
-            break;
-    }
-    console.log("PUP rendered successfully")
 }
 
 var lidOpen;
@@ -1511,18 +1408,6 @@ function switchToHexHeadacheRack(){
     clientPUP.HeadacheRack = "Hex";
 }
 
-function changeCam(){
-
-    //declare animation
-    let animation = gsap.to(camera.position, {duration: 2, x:-10, y:2.35, z: 0, ease:"expo"});
-    //controls.minDistance = 5;
-    animation.play();
-    //will kill animation if somebody clicks any part of the page, otherwise user won't be able to regain control after
-    //animation is over.
-    document.getElementById('body').addEventListener("mousedown", function(){animation.kill()});
-}
-
-
 function presentXT1200Truckslide(){
     if(!isHatchOpen){
         gsap.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (-5 / 360), ease:"expo" });
@@ -1594,7 +1479,7 @@ function openHatch(){
         gsap.to(longGladiatorFH.getObjectByName("gladiator-long-hatch").rotation, {duration: 2, y: 2 * Math.PI * (-10 / 360), ease:"expo"});
         gsap.to(longGladiatorDH.getObjectByName("gladiator-long-dome-hatch").rotation, {duration: 2, y: 2 * Math.PI * (-10 / 360), ease:"expo"});
         gsap.to(shortGladiatorDH.getObjectByName("gladiator-short-domed-hatch").rotation, {duration: 2, y: 2 * Math.PI * (-15 / 360), ease:"expo"});
-        document.getElementById("open-hatch").innerText = "Close Hatch";
+        //document.getElementById("open-hatch").innerText = "Close Hatch";
         isHatchOpen = true;
     }
     else{
@@ -1606,7 +1491,7 @@ function openHatch(){
         gsap.to(longGladiatorFH.getObjectByName("gladiator-long-hatch").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 0});
         gsap.to(longGladiatorDH.getObjectByName("gladiator-long-dome-hatch").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 0});
         gsap.to(shortGladiatorDH.getObjectByName("gladiator-short-domed-hatch").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 0});
-        document.getElementById("open-hatch").innerText = "Open Hatch";
+        //document.getElementById("open-hatch").innerText = "Open Hatch";
         isHatchOpen = false;
     }
 }
@@ -1633,17 +1518,38 @@ function openTruckslide(){
         gsap.to(XTBase.getObjectByName("truckslide_movingBase").position, {duration: 2, x: -11, ease:"expo"});
         gsap.to(XT2000Truckslide.getObjectByName("Truckslide_XT2000").position, {duration: 2, x: -11, ease:"expo"});
         gsap.to(XT1200Truckslide.getObjectByName("Truckslide_XT1200").position, {duration: 2, x: -11, ease:"expo"});
-        document.getElementById('open-truckslide').innerText = "Close Truckslide";
+        //document.getElementById('open-truckslide').innerText = "Close Truckslide";
         isTruckslideOpen = true;
     }
     else if(isTruckslideOpen && isTailgateOpen){
         gsap.to(XTBase.getObjectByName("truckslide_movingBase").position, {duration: 2, x: -4.65, ease:"expo"});
         gsap.to(XT1200Truckslide.getObjectByName("Truckslide_XT1200").position, {duration: 2, x: -4.65, ease:"expo"});
         gsap.to(XT2000Truckslide.getObjectByName("Truckslide_XT2000").position, {duration: 2, x: -4.65, ease:"expo"});
-        document.getElementById('open-truckslide').innerText = "Open Truckslide";
+        //document.getElementById('open-truckslide').innerText = "Open Truckslide";
         isTruckslideOpen = false;
     }
 }
+
+function presentTruckslide(){
+    //open hatch
+    gsap.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (-15 / 360), ease:"expo"});
+    gsap.to(LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").rotation, {duration: 2, y: 2 * Math.PI * (-10 / 360), ease:"expo"});
+    gsap.to(LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").rotation, {duration: 2, y: 2 * Math.PI * (-10 / 360), ease:"expo"});
+    gsap.to(ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").rotation, {duration: 2, y: 2 * Math.PI * (-15 / 360), ease:"expo"});
+    gsap.to(shortGladiatorFH.getObjectByName("short-hatch-gladiator").rotation, {duration: 2, y: 2 * Math.PI * (-15 / 360), ease:"expo"});
+    gsap.to(longGladiatorFH.getObjectByName("gladiator-long-hatch").rotation, {duration: 2, y: 2 * Math.PI * (-10 / 360), ease:"expo"});
+    gsap.to(longGladiatorDH.getObjectByName("gladiator-long-dome-hatch").rotation, {duration: 2, y: 2 * Math.PI * (-10 / 360), ease:"expo"});
+    gsap.to(shortGladiatorDH.getObjectByName("gladiator-short-domed-hatch").rotation, {duration: 2, y: 2 * Math.PI * (-15 / 360), ease:"expo"});
+    //open tailgate
+    gsap.to(TruckModel.getObjectByName("tailgate").rotation, {duration: 2, x: 2 * Math.PI * (-90 / 360), ease:"expo", delay: .5});
+    isTailgateOpen = true;
+    //open truckslide
+    gsap.to(XTBase.getObjectByName("truckslide_movingBase").position, {duration: 2, x: -11, ease:"expo", delay: 1});
+    gsap.to(XT2000Truckslide.getObjectByName("Truckslide_XT2000").position, {duration: 2, x: -11, ease:"expo", delay: 1});
+    gsap.to(XT1200Truckslide.getObjectByName("Truckslide_XT1200").position, {duration: 2, x: -11, ease:"expo", delay: 1});
+}
+
+
 var isGullwingOpen = false;
 function openGullwing(){
     if(!isGullwingOpen){

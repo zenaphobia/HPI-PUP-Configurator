@@ -6,7 +6,7 @@
 //     LEDdirectionalLighting: "None", //'battery', 'wired'
 //     AdditionalGullwingTray: false,
 //     AdditionalLowSideTray: "None", //1, 2
-//     LidFinishes: "BlackDiamondPlate", //BlackDiamondPlate, Leopard, Gladiator
+//     LidFinishes: "BlackDiamondPlate", DiamondPlate, Leopard, Gladiator
 //     Truckslide: "None",
 // };
 
