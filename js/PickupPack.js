@@ -1,15 +1,3 @@
-// clientPUP = {
-//     Hatch: "Flat Center Hatch",
-//     Gullwing: false,
-//     HeadacheRack: "Hex",
-//     LadderRack: false,
-//     LEDdirectionalLighting: "None", //'battery', 'wired'
-//     AdditionalGullwingTray: false,
-//     AdditionalLowSideTray: "None", //1, 2
-//     LidFinishes: "BlackDiamondPlate", DiamondPlate, Leopard, Gladiator
-//     Truckslide: "None",
-// };
-
 const FlatCenterHatch = {
     name: "Flat Center Hatch",
     price: 0
@@ -283,7 +271,7 @@ class PickupPack{
                 this.Finish = GladiatorFinish;
                 break;
             default:
-                throw new TypeError("Invalid input: Try DiamondPlate, BlackDiamondPlate, Leopard, Gladiator");
+                throw new TypeError("Invalid input: Try Diamond Plate, Black Diamond Plate, Leopard, Gladiator");
         }
     }
     set setTruckslide(_truckslide){
@@ -300,6 +288,8 @@ class PickupPack{
             case "4000":
                 this.FourThousandTruckslide;
                 break;
+            default :
+                throw new TypeError("Invalid input: Try 1200, 2000, 4000");
         }
     }
 }

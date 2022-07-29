@@ -756,7 +756,7 @@ function gullwingSelect(){
     //createNewElements(HeadacheRackPostObjects); <-- Current solution
 
     controls.enabled = false;
-    gsap.to(camera.position, {duration: 2, x: -4, y: 3, z: -5, ease:"expo", onComplete: enableOrbitControls});
+    gsap.to(camera.position, {duration: 2, x: -7.665, y: 5.15, z: -7, ease:"expo", onComplete: enableOrbitControls});
     gsap.to(cameraTracker.position, {duration: 2, x: 5, y: 0, ease:"expo"});
     controls.minDistance = 10;
     controls.maxDistance = 30;
