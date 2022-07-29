@@ -264,7 +264,7 @@ function init(){
     cameraTracker = new THREE.Mesh(geometry, blankTexture);
     scene.add(cameraTracker);
     cameraTracker.position.y = -1;
-    cameraTracker.visible = true;
+    cameraTracker.visible = false;
 
     //directionalLights
 
