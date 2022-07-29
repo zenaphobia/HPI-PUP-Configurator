@@ -20,11 +20,13 @@ const DomedCenterHatch = {
 }
 const NoGullwing = {
     name: "Standard",
+    enabled: false,
     price: 0
 }
 const GullwingSelected = {
     name: "Gullwing Toolbox",
     additionalTray: 0,
+    enabled: true,
     price: 0
 }
 const HexHeadacheRack = {
@@ -37,10 +39,12 @@ const PostHeadacheRack = {
 }
 const NoLadderRack = {
     name: "No ladder rack selected",
+    enabled: false,
     price: 0
 }
 const LadderRackSelected = {
     name: "Ladder rack selected",
+    enabled: true,
     price: 0
 }
 const LedLightsWired = {
@@ -95,12 +99,12 @@ const FourThousandTruckslide = {
 }
 
 class PickupPack{
-    constructor(_hatch, _gullwing, _headacheRack, _ladderRack, _LED, _additionalGullwingTray, _additionalLowsideTray, _lidFinish, _truckslide){
+    constructor(_hatch, _gullwing, _headacheRack, _ladderRack, _LED, _additionalGullwingTray, _additionalLowsideTray, _Finish, _truckslide){
         switch(_hatch){
-            case "Flat":
+            case "Flat Center Hatch":
                 this.Hatch = FlatCenterHatch;
                 break;
-            case "Domed":
+            case "Domed Center Hatch":
                 this.Hatch = DomedCenterHatch;
                 break;
         }
@@ -113,10 +117,10 @@ class PickupPack{
                 break;
         }
         switch(_headacheRack){
-            case "Hex":
+            case "Hex Headache Rack":
                 this.HeadacheRack = HexHeadacheRack;
                 break;
-            case "Post":
+            case "Post Headache Rack":
                 this.HeadacheRack = PostHeadacheRack;
         }
         switch(_ladderRack){
@@ -157,11 +161,11 @@ class PickupPack{
             default:
                 throw new TypeError("Please input an integer between 0 and 3");
         }
-        switch(_lidFinish){
-            case "DiamondPlate":
+        switch(_Finish){
+            case "Diamond Plate":
                 this.Finish = DiamondPlateFinish;
                 break;
-            case "BlackDiamondPlate":
+            case "Black Diamond Plate":
                 this.Finish = BlackDiamondPlateFinish;
                 break;
             case "Leopard":
@@ -184,17 +188,17 @@ class PickupPack{
                 this.Truckslide = TwoThousandTruckslide;
                 break;
             case "4000":
-                this.FourThousandTruckslide;
+                this.Truckslide = FourThousandTruckslide;
                 break;
         }
     }
 
     set setHatch(_hatch){
         switch(_hatch){
-            case "Flat":
+            case "Flat Center Hatch":
                 this.Hatch = FlatCenterHatch;
                 break;
-            case "Domed":
+            case "Domed Center Hatch":
                 this.Hatch = DomedCenterHatch;
                 break;
         }
@@ -213,10 +217,10 @@ class PickupPack{
 
     set setHeadacheRack(_headacheRack){
         switch(_headacheRack){
-            case "Hex":
+            case "Hex Headache Rack":
                 this.HeadacheRack = HexHeadacheRack;
                 break;
-            case "Post":
+            case "Post Headache Rack":
                 this.HeadacheRack = PostHeadacheRack;
         }
     }
@@ -264,12 +268,12 @@ class PickupPack{
             this.AdditionalLowsideTray = 0;
         }
     }
-    set setLidFinish(_lidFinish){
-        switch(_lidFinish){
-            case "DiamondPlate":
+    set setFinish(_Finish){
+        switch(_Finish){
+            case "Diamond Plate":
                 this.Finish = DiamondPlateFinish;
                 break;
-            case "BlackDiamondPlate":
+            case "Black Diamond Plate":
                 this.Finish = BlackDiamondPlateFinish;
                 break;
             case "Leopard":

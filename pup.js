@@ -35,7 +35,7 @@ void main()
 `;
 //#endregion
 
-let loader, fileLoader, scene, container, camera, renderer, controls, dracoLoader, pmremGenerator, clientPUP;
+let loader, fileLoader, scene, container, camera, renderer, controls, dracoLoader, pmremGenerator;
 
 //#region INIT FILES
 let basemesh, testmesh, windowMesh, truckBaseMesh, testMat, hingePoint, lidTest;
@@ -44,9 +44,9 @@ var allModels, TruckModel, GullwingModel, HeadacheRackPost, HeadacheRackHex, Lon
 //Textures
 var bdpBumpTexture, dpBumpTexture, patriotTexture, BK62BumpTexture, carPaintTexture, blankTexture, customMaterial;
 
-var PUPtest = new PickupPack("Flat", false, "Hex", false, "Wired", false, 1, "BlackDiamondPlate", "1200");
+var clientPUP = new PickupPack("Flat Center Hatch", false, "Hex Headache Rack", false, false, false, 0, "Black Diamond Plate", false);
 
-console.log(PUPtest);
+console.log(clientPUP);
 
 let cameraTracker;
 const standardCameraAngle = new THREE.Vector3(-25.0, 7.0, -10.0);
@@ -305,17 +305,17 @@ function init(){
     addModelsToScene();
 
     //#region Basic PUP object implementation
-    clientPUP = {
-        Hatch: "Flat Center Hatch",
-        Gullwing: false,
-        HeadacheRack: "Hex",
-        LadderRack: false,
-        LEDdirectionalLighting: "None", //'battery', 'wired'
-        AdditionalGullwingTray: false,
-        AdditionalLowSideTray: "None", //1, 2
-        LidFinishes: "BlackDiamondPlate", //BlackDiamondPlate, Leopard, Gladiator
-        Truckslide: "1200",
-    };
+    // clientPUP = {
+    //     Hatch: "Flat Center Hatch",
+    //     Gullwing: false,
+    //     HeadacheRack: "Hex",
+    //     LadderRack: false,
+    //     LEDdirectionalLighting: "None", //'battery', 'wired'
+    //     AdditionalGullwingTray: false,
+    //     AdditionalLowSideTray: "None", //1, 2
+    //     LidFinishes: "BlackDiamondPlate", //BlackDiamondPlate, Leopard, Gladiator
+    //     Truckslide: "1200",
+    // };
     //#endregion
 
     //functions
@@ -339,10 +339,10 @@ function init(){
     // document.getElementById('remove-ls-tray').addEventListener("click", function(){removeLowSideTrays()});
     // document.getElementById('open-tailgate').addEventListener("click", function(){openTailgate()});
     document.getElementById('lid-finishes').addEventListener("click", function(){finishSelect(); closeTruckslide()});
-    document.getElementById('diamond-plate-radio').addEventListener("click", function(){switchToDiamondPlate();refreshConfig("config-finish-description", "LidFinishes")});
-    document.getElementById('black-diamond-plate-radio').addEventListener("click", function(){switchToBlackDiamondPlate();refreshConfig("config-finish-description", "LidFinishes")});
-    document.getElementById('leopard-radio').addEventListener("click", function(){switchToLeopard();refreshConfig("config-finish-description", "LidFinishes")});
-    document.getElementById('gladiator-radio').addEventListener("click", function(){switchToGladiator();refreshConfig("config-finish-description", "LidFinishes")});
+    document.getElementById('diamond-plate-radio').addEventListener("click", function(){switchToDiamondPlate();refreshConfig("config-finish-description", "Finish")});
+    document.getElementById('black-diamond-plate-radio').addEventListener("click", function(){switchToBlackDiamondPlate();refreshConfig("config-finish-description", "Finish")});
+    document.getElementById('leopard-radio').addEventListener("click", function(){switchToLeopard();refreshConfig("config-finish-description", "Finish")});
+    document.getElementById('gladiator-radio').addEventListener("click", function(){switchToGladiator();refreshConfig("config-finish-description", "Finish")});
     // document.getElementById('open-gullwing').addEventListener("click", function(){openGullwing()});
     document.getElementById('truckslide').addEventListener("click", function(){truckslideSelect()});
     // document.getElementById('xt1200').addEventListener("click", function(){chooseXT1200()});
@@ -358,7 +358,7 @@ function init(){
     // document.getElementById('change-to-white').addEventListener("click", function(){truckPaintMat.color.set(0xf0f0f0)});
     document.getElementById("back-btn-container").addEventListener("click", function(){hideSidebar()});
     document.getElementById("congif-back-btn-container").addEventListener("click", function(){hideConfigBar()});
-    document.getElementById("shopping-cart").addEventListener("click", function(){showConfigBar()});
+    document.getElementById("shopping-cart").addEventListener("click", function(){showConfigBar(); refreshAllConfig()});
 
     //Window resizing
     window.addEventListener( 'resize', onWindowResize );
@@ -404,9 +404,17 @@ function refreshUI(id){
     element.style.display = "flex";
 }
 
+function refreshAllConfig(){
+    refreshConfig("config-headache-rack-description", "HeadacheRack");
+    refreshConfig("config-hatch-description", "Hatch");
+    refreshConfig("config-toolbox-description", "Gullwing");
+    refreshConfig("config-finish-description", "Finish");
+    refreshConfig("config-truckslide-description", "Truckslide");
+}
+
 function refreshConfig(id, section){
     const element = document.getElementById(id);
-    element.innerText = clientPUP[section];
+    element.innerText = clientPUP[section].name;
 }
 
 function showPage(){
@@ -445,12 +453,12 @@ function ToHoloMaterial(mesh){
 function toNormalMaterial(mesh){
     mesh.traverse(function(child){
         if(child.isMesh && child.geometry.name === "accentColor"){
-            switch(clientPUP.LidFinishes){
-                case "BlackDiamondPlate":
+            switch(clientPUP.Finish.name){
+                case "Black Diamond Plate":
                     child.material = blackMetalMat;
                     console.log("accent color is bdp");
                     break;
-                case "DiamondPlate":
+                case "Diamond Plate":
                     child.material = metalMat
                     console.log("accent color is dp");
                     break;
@@ -471,12 +479,12 @@ function toNormalMaterial(mesh){
             }
         }
         if(child.isMesh && child.geometry.name === "lidMaterial"){
-            switch(clientPUP.LidFinishes){
-                case "BlackDiamondPlate":
+            switch(clientPUP.Finish.name){
+                case "Black Diamond Plate":
                     child.material = bdpMaterial;
                     console.log("accent color is bdp");
                     break;
-                case "DiamondPlate":
+                case "Diamond Plate":
                     child.material = dpMaterial;
                     console.log("accent color is dp");
                     break;
@@ -576,21 +584,21 @@ function createNewElements(postObject){
 }
 
 function headacheRackHoverOn(){
-    switch(clientPUP.HeadacheRack){
-        case "Hex":
+    switch(clientPUP.HeadacheRack.name){
+        case "Hex Headache Rack":
             ToHoloMaterial(HeadacheRackHex);
             break;
-        case "Post":
+        case "Post Headache Rack":
             ToHoloMaterial(HeadacheRackPost);
             break;
     }
 }
 function headacheRackHoverOff(){
-    switch(clientPUP.HeadacheRack){
-        case "Hex":
+    switch(clientPUP.HeadacheRack.name){
+        case "Hex Headache Rack":
             toNormalMaterial(HeadacheRackHex);
             break;
-        case "Post":
+        case "Post Headache Rack":
             toNormalMaterial(HeadacheRackPost);
             break;
     }
@@ -599,6 +607,7 @@ function headacheRackHoverOff(){
 function headacheRackSelect(){
 
     refreshUI("headache-rack-section");
+    refreshConfig("config-headache-rack-description", "HeadacheRack");
 
     //grabbing main element
     const sidebar = document.getElementById("options-bar-container");
@@ -610,14 +619,14 @@ function headacheRackSelect(){
     const postText = document.getElementById("post-radio-text");
 
     //Check which option is selected already.
-    switch(clientPUP.HeadacheRack){
-        case "Hex":
+    switch(clientPUP.HeadacheRack.name){
+        case "Hex Headache Rack":
             hexRadio.checked = true;
             postRadio.checked = false;
             hexText.innerText = "Option is selected";
             postText.innerText = "Select this option";
             break;
-        case "Post":
+        case "Post Headache Rack":
             hexRadio.checked = false;
             postRadio.checked = true;
             postText.innerText = "Option is selected";
@@ -658,7 +667,7 @@ function hatchSelect(){
 
     //Check which option is selected already.
 
-    switch(clientPUP.Hatch){
+    switch(clientPUP.Hatch.name){
         case "Flat Center Hatch":
             flatHatchRadio.checked = true;
             domedHatchRadio.checked = false;
@@ -695,7 +704,7 @@ function changeTargetDistance(){
 function gullwingSelect(){
 
     refreshUI("gullwing-section");
-    refreshConfig("config-hatch-description", "Hatch");
+    refreshConfig("config-toolbox-description", "Gullwing");
 
     //grabbing main element
     const sidebar = document.getElementById("options-bar-container");
@@ -708,14 +717,14 @@ function gullwingSelect(){
 
     //Check which option is selected already.
 
-    switch(clientPUP.Gullwing){
-        case false:
+    switch(clientPUP.Gullwing.name){
+        case "Standard":
             standardRadio.checked = true;
             gullwingRadio.checked = false;
             standardText.innerText = "Option is selected";
             gullwingText.innerText = "Select this option";
             break;
-        case true:
+        case "Gullwing Toolbox":
             standardRadio.checked = false;
             gullwingRadio.checked = true;
             gullwingText.innerText = "Option is selected";
@@ -742,7 +751,7 @@ function gullwingSelect(){
 function finishSelect(){
 
     refreshUI("finish-section");
-    refreshConfig("config-hatch-description", "LidFinishes");
+    refreshConfig("config-finish-description", "Finish");
 
     //grabbing main element
     const sidebar = document.getElementById("options-bar-container");
@@ -759,8 +768,8 @@ function finishSelect(){
 
     //Check which option is selected already.
 
-    switch(clientPUP.LidFinishes){
-        case "DiamondPlate":
+    switch(clientPUP.Finish.name){
+        case "Diamond Plate":
             diamondPlateRadio.checked = true;
             blackDiamondPlateRadio.checked = false;
             leopardRadio.checked = false;
@@ -770,7 +779,7 @@ function finishSelect(){
             leopardText.innerText = "Select this option";
             gladiatorText.innerText = "Select this option";
             break;
-        case "BlackDiamondPlate":
+        case "Black Diamond Plate":
             diamondPlateRadio.checked = false;
             blackDiamondPlateRadio.checked = true;
             leopardRadio.checked = false;
@@ -821,7 +830,7 @@ function finishSelect(){
 function truckslideSelect(){
 
     refreshUI("truckslide-section");
-    refreshConfig("config-hatch-description", "Truckslide");
+    refreshConfig("config-truckslide-description", "Truckslide");
 
     //grabbing main element
     const sidebar = document.getElementById("options-bar-container");
@@ -838,8 +847,8 @@ function truckslideSelect(){
 
     //Check which option is selected already.
 
-    switch(clientPUP.Truckslide){
-        case "None":
+    switch(clientPUP.Truckslide.name){
+        case "No truckslide":
             noTruckslideRadio.checked = true;
             twelveTruckslideRadio.checked  = false;
             twoTruckslideRadio.checked = false;
@@ -850,7 +859,7 @@ function truckslideSelect(){
             twoTruckslideText.innerText = "Select this option";
             fourTruckslideText.innerText = "Select this option";
             break;
-        case "1200":
+        case "XT1200":
             noTruckslideRadio.checked = false;
             twelveTruckslideRadio.checked = true;
             twoTruckslideRadio.checked = false;
@@ -861,7 +870,7 @@ function truckslideSelect(){
             twoTruckslideText.innerText = "Select this option";
             fourTruckslideText.innerText = "Select this option";
             break;
-        case "2000":
+        case "XT2000":
             noTruckslideRadio.radio = false;
             twelveTruckslideRadio.checked = false;
             twoTruckslideRadio.checked = true;
@@ -872,7 +881,7 @@ function truckslideSelect(){
             twoTruckslideText.innerText = "This option is selected";
             fourTruckslideText.innerText = "Select this option";
             break;
-        case "4000":
+        case "XT4000":
             noTruckslideRadio.checked = false;
             twelveTruckslideRadio.checked = false;
             twoTruckslideRadio.checked = false;
@@ -906,7 +915,7 @@ function ladderRackHoverOn(){
     ToHoloMaterial(PupAccessories.getObjectByName("ladder-rack"));
 }
 function ladderRackHoverOff(){
-    if(clientPUP.LadderRack === true){
+    if(clientPUP.LadderRack.enabled === true){
         PupAccessories.getObjectByName("ladder-rack").visible = true;
         console.log("ladder rack is on");
     }
@@ -918,7 +927,7 @@ function ladderRackHoverOff(){
 }
 function ladderRackSelect(){
     PupAccessories.getObjectByName("ladder-rack").visible = true;
-    clientPUP.LadderRack = true;
+    clientPUP.setLadderRack = true;
     toNormalMaterial(PupAccessories.getObjectByName("ladder-rack"));
 }
 
@@ -1091,7 +1100,7 @@ function addLowSideTrays(){
         case 1:
             PupAccessories.getObjectByName("lowside-tray-2").visible = true;
             console.log("case 1");
-            switch(clientPUP.Gullwing){
+            switch(clientPUP.Gullwing.enabled){
                 case true:
                     PupAccessories.getObjectByName("lowside-tray-2").position.x = -2.76635;
                     break;
@@ -1103,7 +1112,7 @@ function addLowSideTrays(){
         case 2:
             PupAccessories.getObjectByName("lowside-tray-3").visible = true;
             console.log("case 2");
-                switch(clientPUP.Gullwing){
+                switch(clientPUP.Gullwing.enabled){
                     case true:
                         PupAccessories.getObjectByName("lowside-tray-3").position.x = -4.38547;
                         break;
@@ -1140,7 +1149,7 @@ function showOrHideLadderRack(){
 
 function renderPro(){
 
-    clientPUP.Gullwing = true;
+    clientPUP.setGullwing = true;
     ShortLowSides.visible = true;
     LongLowSides.visible = false;
     ShortLowSides.getObjectByName("GL-left-lid").visible  = false;
@@ -1155,7 +1164,7 @@ function renderPro(){
     LongLowSides.getObjectByName("standard-long-right-lid").visible = false;
 
     //If it's a Gladiator, reconstruct the whole damn thing
-    if(clientPUP.LidFinishes === "Gladiator"){
+    if(clientPUP.Finish.name === "Gladiator"){
 
         //If Gullwing is not loaded, add to scene
         if(!GullwingModel.visible){
@@ -1253,7 +1262,7 @@ function renderPro(){
 
 function renderStandard(){
 
-    clientPUP.Gullwing = false;
+    clientPUP.setGullwing = false;
     ShortLowSides.visible = false;
     LongLowSides.visible = true;
     GullwingModel.visible = false;
@@ -1280,7 +1289,7 @@ function renderStandard(){
 
     }
 
-    if(clientPUP.LidFinishes === "Gladiator"){
+    if(clientPUP.Finish.name === "Gladiator"){
         LongLowSides.getObjectByName("standard-long-left-lid").visible = false;
         LongLowSides.getObjectByName("standard-long-right-lid").visible = false;
         LongLowSides.getObjectByName("GL-ls-left-lid").visible = true;
@@ -1307,7 +1316,7 @@ function renderStandard(){
 
 function renderDomedHatch(){
 
-    clientPUP.Hatch = "Domed Center Hatch";
+    clientPUP.setHatch = "Domed Center Hatch";
     //determine if PUP w/ Gullwing or PUP w/o Gullwing
     //render correct Hatch
 
@@ -1321,7 +1330,7 @@ function renderDomedHatch(){
     shortGladiatorFH.visible = false;
 
     if(GullwingModel.visible){
-        if(clientPUP.LidFinishes === "Gladiator"){
+        if(clientPUP.Finish.name === "Gladiator"){
             shortGladiatorDH.visible = true;
         }
         else{
@@ -1330,7 +1339,7 @@ function renderDomedHatch(){
     }
     //If PUP w/o Gullwing
     else{
-        if(clientPUP.LidFinishes === "Gladiator"){
+        if(clientPUP.Finish.name === "Gladiator"){
             longGladiatorDH.visible = true;
         }
         else{
@@ -1341,7 +1350,7 @@ function renderDomedHatch(){
 }
 
 function renderFlatHatch(){
-    clientPUP.Hatch = "Flat Center Hatch";
+    clientPUP.setHatch = "Flat Center Hatch";
     //determine if PUP w/ Gullwing or PUP w/o Gullwing
     //render correct Hatch
     LongFlatHatch.visible = false;
@@ -1354,7 +1363,7 @@ function renderFlatHatch(){
     shortGladiatorFH.visible = false;
     //If PUP w/Gullwing
     if(GullwingModel.visible){
-        if(clientPUP.LidFinishes === "Gladiator"){
+        if(clientPUP.Finish.name === "Gladiator"){
             shortGladiatorFH.visible = true;
         }
         else{
@@ -1363,7 +1372,7 @@ function renderFlatHatch(){
     }
     //If PUP w/o Gullwing
     else{
-        if(clientPUP.LidFinishes === "Gladiator"){
+        if(clientPUP.Finish.name === "Gladiator"){
             longGladiatorFH.visible = true;
         }
         else{
@@ -1384,7 +1393,7 @@ function switchToPostHeadacheRack(){
 
 
     //Switching options for consistency
-    clientPUP.HeadacheRack = "Post";
+    clientPUP.setHeadacheRack = "Post Headache Rack";
 }
 
 function switchToHexHeadacheRack(){
@@ -1398,7 +1407,7 @@ function switchToHexHeadacheRack(){
     HeadacheRackPost.visible = false;
 
     //Switching options for consistency
-    clientPUP.HeadacheRack = "Hex";
+    clientPUP.setHeadacheRack = "Hex Headache Rack";
 }
 
 function presentXT1200Truckslide(){
@@ -1416,6 +1425,7 @@ function presentXT1200Truckslide(){
 }
 
 function chooseXT1200(){
+    clientPUP.setTruckslide = "1200";
     if(XT1200Truckslide.visible !== true){
         XTBase.visible = true;
         XT2000Truckslide.visible = false;
@@ -1576,12 +1586,12 @@ function openGullwing(){
 function switchToDiamondPlate(){
     var _accentColor = null;
 
-    switch(clientPUP.LidFinishes){
-        case "BlackDiamondPlate":
+    switch(clientPUP.Finish.name){
+        case "Black Diamond Plate":
             _accentColor = blackMetalMat;
             console.log("accent color is bdp");
             break;
-        case "DiamondPlate":
+        case "Diamond Plate":
             _accentColor = metalMat
             console.log("accent color is dp");
             break;
@@ -1616,9 +1626,9 @@ function switchToDiamondPlate(){
             child.material = metalMat;
         }
     });
-    clientPUP.LidFinishes = "DiamondPlate";
+    clientPUP.setFinish = "Diamond Plate";
 
-    switch(clientPUP.Hatch){
+    switch(clientPUP.Hatch.name){
         case "Flat Center Hatch":
             renderFlatHatch();
             break;
@@ -1628,7 +1638,7 @@ function switchToDiamondPlate(){
         default:
             throw new Error("Unknown Hatch type");
     }
-    switch(clientPUP.Gullwing){
+    switch(clientPUP.Gullwing.enabled){
         case true:
             renderPro();
             break;
@@ -1641,12 +1651,12 @@ function switchToDiamondPlate(){
 function switchToBlackDiamondPlate(){
     var _accentColor = null;
 
-    switch(clientPUP.LidFinishes){
-        case "BlackDiamondPlate":
+    switch(clientPUP.Finish.name){
+        case "Black Diamond Plate":
             _accentColor = blackMetalMat;
             console.log("accent color is bdp");
             break;
-        case "DiamondPlate":
+        case "Diamond Plate":
             _accentColor = metalMat
             console.log("accent color is dp");
             break;
@@ -1681,9 +1691,9 @@ function switchToBlackDiamondPlate(){
             child.material = blackMetalMat;
         }
     });
-    clientPUP.LidFinishes = "BlackDiamondPlate";
+    clientPUP.setFinish = "Black Diamond Plate";
 
-    switch(clientPUP.Hatch){
+    switch(clientPUP.Hatch.name){
         case "Flat Center Hatch":
             renderFlatHatch();
             break;
@@ -1693,7 +1703,7 @@ function switchToBlackDiamondPlate(){
         default:
             throw new Error("Unknown Hatch type");
     }
-    switch(clientPUP.Gullwing){
+    switch(clientPUP.Gullwing.enabled){
         case true:
             renderPro();
             break;
@@ -1706,12 +1716,12 @@ function switchToBlackDiamondPlate(){
 function switchToLeopard(){
     var _accentColor = null;
 
-    switch(clientPUP.LidFinishes){
-        case "BlackDiamondPlate":
+    switch(clientPUP.Finish.name){
+        case "Black Diamond Plate":
             _accentColor = blackMetalMat;
             console.log("accent color is bdp");
             break;
-        case "DiamondPlate":
+        case "Diamond Plate":
             _accentColor = metalMat
             console.log("accent color is dp");
             break;
@@ -1747,9 +1757,9 @@ function switchToLeopard(){
         }
     });
 
-    clientPUP.LidFinishes = "Leopard";
+    clientPUP.setFinish = "Leopard";
 
-    switch(clientPUP.Hatch){
+    switch(clientPUP.Hatch.name){
         case "Flat Center Hatch":
             renderFlatHatch();
             break;
@@ -1759,7 +1769,7 @@ function switchToLeopard(){
         default:
             throw new Error("Unknown Hatch type");
     }
-    switch(clientPUP.Gullwing){
+    switch(clientPUP.Gullwing.enabled){
         case true:
             renderPro();
             break;
@@ -1773,12 +1783,12 @@ function switchToPatriot(){
 
     var _accentColor = null;
 
-    switch(clientPUP.LidFinishes){
-        case "BlackDiamondPlate":
+    switch(clientPUP.Finish.name){
+        case "Black Diamond Plate":
             _accentColor = blackMetalMat;
             console.log("accent color is bdp");
             break;
-        case "DiamondPlate":
+        case "Diamond Plate":
             _accentColor = metalMat
             console.log("accent color is dp");
             break;
@@ -1814,9 +1824,9 @@ function switchToPatriot(){
         }
     });
 
-    clientPUP.LidFinishes = "Patriot"
+    clientPUP.setFinish = "Patriot";
 
-    switch(clientPUP.Hatch){
+    switch(clientPUP.Finish.name){
         case "Flat Center Hatch":
             renderFlatHatch();
             break;
@@ -1826,7 +1836,7 @@ function switchToPatriot(){
         default:
             throw new Error("Unknown Hatch type");
     }
-    switch(clientPUP.Gullwing){
+    switch(clientPUP.Gullwing.enabled){
         case true:
             renderPro();
             break;
@@ -1839,12 +1849,12 @@ function switchToPatriot(){
 function switchToGladiator(){
     var _accentColor = null;
 
-    switch(clientPUP.LidFinishes){
-        case "BlackDiamondPlate":
+    switch(clientPUP.Finish.name){
+        case "Black Diamond Plate":
             _accentColor = blackMetalMat;
             console.log("accent color is bdp");
             break;
-        case "DiamondPlate":
+        case "Diamond Plate":
             _accentColor = metalMat
             console.log("accent color is dp");
             break;
@@ -1870,9 +1880,9 @@ function switchToGladiator(){
         }
     });
 
-    clientPUP.LidFinishes = "Gladiator"
+    clientPUP.setFinish = "Gladiator";
 
-    switch(clientPUP.Hatch){
+    switch(clientPUP.Hatch.name){
         case "Flat Center Hatch":
             renderFlatHatch();
             break;
@@ -1882,7 +1892,7 @@ function switchToGladiator(){
         default:
             throw new Error("Unknown Hatch type");
     }
-    switch(clientPUP.Gullwing){
+    switch(clientPUP.Gullwing.enabled){
         case true:
             renderPro();
             break;
