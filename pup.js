@@ -264,7 +264,7 @@ function init(){
     cameraTracker = new THREE.Mesh(geometry, blankTexture);
     scene.add(cameraTracker);
     cameraTracker.position.y = -1;
-    cameraTracker.visible = false;
+    cameraTracker.visible = true;
 
     //directionalLights
 
@@ -321,15 +321,15 @@ function init(){
     //functions
     document.getElementById('headacherack').addEventListener("mouseenter", function(){headacheRackHoverOn();});
     document.getElementById('headacherack').addEventListener("mouseleave", function(){headacheRackHoverOff()});
-    document.getElementById('headacherack').addEventListener("click", function(){headacheRackSelect()});
+    document.getElementById('headacherack').addEventListener("click", function(){headacheRackSelect(); closeTruckslide()});
     document.getElementById('ladderrack').addEventListener("mouseenter", function(){ladderRackHoverOn()});
     document.getElementById('ladderrack').addEventListener("mouseleave", function(){ladderRackHoverOff()});
     document.getElementById('ladderrack').addEventListener("click", function(){ladderRackSelect()});
     // document.getElementById('hinge').addEventListener("click", function(){openLowSideLid()});
-    document.getElementById('gullwing').addEventListener("click", function(){gullwingSelect()});
+    document.getElementById('gullwing').addEventListener("click", function(){gullwingSelect(); closeTruckslide()});
     document.getElementById('pup-gullwing-radio').addEventListener("click", function(){renderPro(); refreshConfig("pup-toolbox-description", "Gullwing")});
     document.getElementById('pup-standard-radio').addEventListener("click", function(){renderStandard();refreshConfig("pup-toolbox-description", "Gullwing")});
-    document.getElementById('hatch-nav').addEventListener("click", function(){hatchSelect()});
+    document.getElementById('hatch-nav').addEventListener("click", function(){hatchSelect(); closeTruckslide()});
     document.getElementById('domed-hatch-radio').addEventListener("click", function(){renderDomedHatch();refreshConfig("config-hatch-description", "Hatch");});
     document.getElementById('flat-hatch-radio').addEventListener("click", function(){renderFlatHatch();refreshConfig("config-hatch-description", "Hatch");});
     document.getElementById('post-headache-rack-radio').addEventListener("click", function(){switchToPostHeadacheRack();refreshConfig("config-headache-rack-description", "HeadacheRack");});
@@ -338,7 +338,7 @@ function init(){
     // document.getElementById('add-ls-tray').addEventListener("click", function(){addLowSideTrays()});
     // document.getElementById('remove-ls-tray').addEventListener("click", function(){removeLowSideTrays()});
     // document.getElementById('open-tailgate').addEventListener("click", function(){openTailgate()});
-    document.getElementById('lid-finishes').addEventListener("click", function(){finishSelect()});
+    document.getElementById('lid-finishes').addEventListener("click", function(){finishSelect(); closeTruckslide()});
     document.getElementById('diamond-plate-radio').addEventListener("click", function(){switchToDiamondPlate();refreshConfig("config-finish-description", "LidFinishes")});
     document.getElementById('black-diamond-plate-radio').addEventListener("click", function(){switchToBlackDiamondPlate();refreshConfig("config-finish-description", "LidFinishes")});
     document.getElementById('leopard-radio').addEventListener("click", function(){switchToLeopard();refreshConfig("config-finish-description", "LidFinishes")});
@@ -631,7 +631,6 @@ function headacheRackSelect(){
     //
     //TODO: implement function that dynamically grabs objects and inserts info.
     //createNewElements(HeadacheRackPostObjects); <-- Current solution
-
     controls.enabled = false;
     gsap.to(camera.position, {duration: 2, x: -4, y: 4, z: 0, ease:"expo", onComplete: enableOrbitControls});
     gsap.to(cameraTracker.position, {duration: 2, x: 5, y: 2, ease:"expo"});
@@ -682,12 +681,15 @@ function hatchSelect(){
 
     controls.enabled = false;
     gsap.to(camera.position, {duration: 2, x: standardCameraAngle.x, y: standardCameraAngle.y, z: standardCameraAngle.z, ease:"expo", onComplete: enableOrbitControls});
-    gsap.to(cameraTracker.position, {duration: 2, x: 0, y: 0, ease:"expo"});
-    controls.minDistance = 10;
-    controls.maxDistance = 30;
+    gsap.to(cameraTracker.position, {duration: 2, x: 0, y: -1, ease:"expo", onComplete: changeTargetDistance});
     controls.target = cameraTracker.position;
 
     console.log(camera.position);
+}
+
+function changeTargetDistance(){
+    controls.minDistance = 10;
+    controls.maxDistance = 30;
 }
 
 function gullwingSelect(){
@@ -808,7 +810,7 @@ function finishSelect(){
 
     controls.enabled = false;
     gsap.to(camera.position, {duration: 2, x: standardCameraAngle.x, y: standardCameraAngle.y, z: standardCameraAngle.z, ease:"expo", onComplete: enableOrbitControls});
-    gsap.to(cameraTracker.position, {duration: 2, x: 0, y: 0, ease:"expo"});
+    gsap.to(cameraTracker.position, {duration: 2, x: 0, y:-1, ease:"expo"});
     controls.minDistance = 10;
     controls.maxDistance = 30;
     controls.target = cameraTracker.position;
@@ -891,7 +893,7 @@ function truckslideSelect(){
     presentTruckslide();
     controls.enabled = false;
     gsap.to(camera.position, {duration: 2, x: standardCameraAngle.x, y: standardCameraAngle.y, z: standardCameraAngle.z, ease:"expo", onComplete: enableOrbitControls});
-    gsap.to(cameraTracker.position, {duration: 2, x: 0, y: 0, ease:"expo"});
+    gsap.to(cameraTracker.position, {duration: 2, x: -5, y: -1, ease:"expo"});
     controls.minDistance = 10;
     controls.maxDistance = 30;
     controls.target = cameraTracker.position;
@@ -1533,11 +1535,29 @@ function presentTruckslide(){
     gsap.to(shortGladiatorDH.getObjectByName("gladiator-short-domed-hatch").rotation, {duration: 2, y: 2 * Math.PI * (-15 / 360), ease:"expo"});
     //open tailgate
     gsap.to(TruckModel.getObjectByName("tailgate").rotation, {duration: 2, x: 2 * Math.PI * (-90 / 360), ease:"expo", delay: .5});
-    isTailgateOpen = true;
     //open truckslide
     gsap.to(XTBase.getObjectByName("truckslide_movingBase").position, {duration: 2, x: -11, ease:"expo", delay: 1});
     gsap.to(XT2000Truckslide.getObjectByName("Truckslide_XT2000").position, {duration: 2, x: -11, ease:"expo", delay: 1});
     gsap.to(XT1200Truckslide.getObjectByName("Truckslide_XT1200").position, {duration: 2, x: -11, ease:"expo", delay: 1});
+}
+function closeTruckslide(){
+    //close in reverse order
+
+    //close truckslide first
+    gsap.to(XTBase.getObjectByName("truckslide_movingBase").position, {duration: 2, x: -4.65, ease:"expo"});
+    gsap.to(XT1200Truckslide.getObjectByName("Truckslide_XT1200").position, {duration: 2, x: -4.65, ease:"expo"});
+    gsap.to(XT2000Truckslide.getObjectByName("Truckslide_XT2000").position, {duration: 2, x: -4.65, ease:"expo"});
+
+    gsap.to(TruckModel.getObjectByName("tailgate").rotation, {duration: 2, x: 2 * Math.PI * (0 / 360), ease:"expo", delay: .5});
+
+    gsap.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 1});
+    gsap.to(LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 1});
+    gsap.to(LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 1});
+    gsap.to(ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 1});
+    gsap.to(shortGladiatorFH.getObjectByName("short-hatch-gladiator").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 1});
+    gsap.to(longGladiatorFH.getObjectByName("gladiator-long-hatch").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 1});
+    gsap.to(longGladiatorDH.getObjectByName("gladiator-long-dome-hatch").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 1});
+    gsap.to(shortGladiatorDH.getObjectByName("gladiator-short-domed-hatch").rotation, {duration: 2, y: 2 * Math.PI * (0 / 360), ease:"expo", delay: 1});
 }
 
 
