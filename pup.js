@@ -6,10 +6,11 @@ import { EXRLoader } from '/js/EXRLoader.js';
 import { FlakesTexture } from '/js/FlakesTexture.js'
 import PickupPack from '/js/PickupPack.js'
 import HeadacheRack from '/js/headacheRack.js';
-import { UnrealBloomPass } from '/js/UnrealBloomPass.js';
-import { EffectComposer } from '/js/EffectComposer.js';
-import { RenderPass } from '/js/RenderPass.js';
-// import { SAOPass } from '/js/SAOPass.js';
+//import { UnrealBloomPass } from '/js/UnrealBloomPass.js';
+//import { EffectComposer } from '/js/EffectComposer.js';
+//import { RenderPass } from '/js/RenderPass.js';
+//import { SAOPass } from '/js/SAOPass.js';
+//import { GUI } from '/js/lil-gui.module.min.js'
 // import * as THREE from 'https://highwayproducts.com/wp-content/uploads/resources/TestEnvironment/js/three.module.js';
 // import { GLTFLoader } from 'https://highwayproducts.com/wp-content/uploads/resources/TestEnvironment/js/GLTFLoader.js';
 // import { OrbitControls } from 'https://highwayproducts.com/wp-content/uploads/resources/TestEnvironment/js/OrbitControls.js';
@@ -51,11 +52,10 @@ console.log(clientPUP);
 let cameraTracker;
 const standardCameraAngle = new THREE.Vector3(-25.0, 7.0, -10.0);
 var uniforms;
-
 const clock = new THREE.Clock();
 
 var longLowsideTrayCount = 1;
-//let composer, renderPass, SaoPass;
+let composer, renderPass, SaoPass;
 
 var isHatchOpen = false;
 var isTailgateOpen = false;
@@ -83,48 +83,65 @@ function init(){
     scene = new THREE.Scene();
     //scene.fog = new THREE.FogExp2(0xffffff, .01);
     container = document.getElementById('myCanvas');
-    camera = new THREE.PerspectiveCamera( 25, container.offsetWidth / container.offsetHeight, 0.1, 1000 );
+    camera = new THREE.PerspectiveCamera( 25, container.offsetWidth / container.offsetHeight, 0.1, 50 );
     camera.aspect = container.offsetWidth / container.offsetHeight;
     camera.position.set(standardCameraAngle.x, standardCameraAngle.y, standardCameraAngle.z);
     console.log(camera.position);
 
     renderer = new THREE.WebGLRenderer({canvas: container, antialias: true, alpha: true});
     renderer.setClearColor( 0x000000, 0 );
-    renderer.localClippingEnabled = true;
 
     renderer.setClearColor(0x000000,0);
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize(container.offsetWidth, container.offsetHeight);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1; //If you enable sao, turn to 2
     renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.physicallyCorrectdirectionalLights = true;
     renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
 
     
 
-    // const renderScene = new RenderPass(scene, camera);
-    // const bloomPass = new UnrealBloomPass(new THREE.Vector2(container.offsetWidth / container.offsetHeight), 1.5, 0.4, 0.85);
-    // bloomPass.threshold = .85;
-    // bloomPass.strength = .15;
-    // bloomPass.radius = 0;
+    //const renderScene = new RenderPass(scene, camera);
 
-    // composer = new EffectComposer(renderer);
-    // composer.addPass(renderScene);
-    // composer.addPass(bloomPass);
-
-    // //SaoPass = new SAOPass(scene, camera, false, true);
     // SaoPass = new SAOPass(scene, camera, false, true);
 
-    // SaoPass.OUTPUT = SaoPass.OUTPUT.Default;
-    // SaoPass.params.saoBias = -1;
-    // SaoPass.params.saoIntensity = .165;
-    // SaoPass.params.saoScale = .1;
-    // SaoPass.params.saoKernalRadius = 100;
-    // SaoPass.params.saoMinResolution = .005;
+    // SaoPass.params.saoBias = 1;
+    // SaoPass.params.saoIntensity = .041;
+    // SaoPass.params.saoScale = .9;
+    // SaoPass.params.saoKernalRadius = 10;
+    // SaoPass.params.saoMinResolution = .004;
+    // SaoPass.params.output = 0;
     // SaoPass.params.saoBlur = true;
-    // SaoPass.params.saoBlurRadius = 20;
-    // SaoPass.params.saoBlurStdDev = 35;
-    // SaoPass.params.saoBlurDepthCutoff = .027;
+    // SaoPass.params.saoBlurRadius = 15.6;
+    // SaoPass.params.saoBlurStdDev = 8.5215;
+    // SaoPass.params.saoBlurDepthCutoff = .0078;
+    // SaoPass.resolution.set(8192,8192);
+
+    // const gui = new GUI();
+    // gui.add( SaoPass.params, 'output', {
+    //     'Beauty': SAOPass.OUTPUT.Beauty,
+    //     'Beauty+SAO': SAOPass.OUTPUT.Default,
+    //     'SAO': SAOPass.OUTPUT.SAO,
+    //     'Depth': SAOPass.OUTPUT.Depth,
+    //     'Normal': SAOPass.OUTPUT.Normal
+    // } ).onChange( function ( value ) {
+
+    //     SaoPass.params.output = parseInt( value );
+
+    // } );
+    // gui.add( SaoPass.params, 'saoBias', - 1, 1 );
+    // gui.add( SaoPass.params, 'saoIntensity', 0, 1 );
+    // gui.add( SaoPass.params, 'saoScale', 0, 10 );
+    // gui.add( SaoPass.params, 'saoKernelRadius', 1, 100 );
+    // gui.add( SaoPass.params, 'saoMinResolution', 0, 1 );
+    // gui.add( SaoPass.params, 'saoBlur' );
+    // gui.add( SaoPass.params, 'saoBlurRadius', 0, 200 );
+    // gui.add( SaoPass.params, 'saoBlurStdDev', 0.5, 150 );
+    // gui.add( SaoPass.params, 'saoBlurDepthCutoff', 0.0, 0.1 );
+
 
     // composer.addPass(SaoPass);
 
