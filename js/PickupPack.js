@@ -188,6 +188,116 @@ class PickupPack{
                 break;
         }
     }
+
+    set setHatch(_hatch){
+        switch(_hatch){
+            case "Flat":
+                this.Hatch = FlatCenterHatch;
+                break;
+            case "Domed":
+                this.Hatch = DomedCenterHatch;
+                break;
+        }
+    }
+
+    set setGullwing(_gullwing){
+        switch(_gullwing){
+            case true:
+                this.Gullwing = GullwingSelected;
+                break;
+            case false:
+                this.Gullwing = NoGullwing;
+                break;
+        }
+    }
+
+    set setHeadacheRack(_headacheRack){
+        switch(_headacheRack){
+            case "Hex":
+                this.HeadacheRack = HexHeadacheRack;
+                break;
+            case "Post":
+                this.HeadacheRack = PostHeadacheRack;
+        }
+    }
+
+    set setLadderRack(_ladderRack){
+        switch(_ladderRack){
+            case true:
+                this.LadderRack = LadderRackSelected;
+                break;
+            case false:
+                this.LadderRack = NoLadderRack;
+                break;
+        }
+    }
+
+    set setLED(_LED){
+        switch(_LED){
+            case false:
+                this.LED = NoLedLightsSelected;
+                break;
+            case "Battery":
+                this.LED = LedLightsBattery;
+                break;
+            case "Wired":
+                this.LED = LedLightsWired;
+        }
+    }
+
+    set setAdditionalGullwingTray(_additionalGullwingTray){
+        this.Gullwing.additionalTray = _additionalGullwingTray;
+        if(this.Gullwing.additionalTray > 1){
+            this.Gullwing.additionalTray = 1;
+        }
+        if(this.Gullwing.additionalTray < 0){
+            this.Gullwing.additionalTray = 0;
+        }
+    }
+
+    set setAdditionalLowsideTray(_additionalLowsideTray){
+        this.AdditionalLowsideTray = _additionalLowsideTray;
+        if(this.AdditionalLowsideTray > 3){
+            this.AdditionalLowsideTray = 3;
+        }
+        if(this.AdditionalLowsideTray < 0){
+            this.AdditionalLowsideTray = 0;
+        }
+    }
+    set setLidFinish(_lidFinish){
+        switch(_lidFinish){
+            case "DiamondPlate":
+                this.Finish = DiamondPlateFinish;
+                break;
+            case "BlackDiamondPlate":
+                this.Finish = BlackDiamondPlateFinish;
+                break;
+            case "Leopard":
+                this.Finish = LeopardFinish;
+                break;
+            case "Gladiator":
+                this.Finish = GladiatorFinish;
+                break;
+            default:
+                throw new TypeError("Invalid input: Try DiamondPlate, BlackDiamondPlate, Leopard, Gladiator");
+        }
+    }
+    set setTruckslide(_truckslide){
+        switch(_truckslide){
+            case false:
+                this.Truckslide = NoTruckslide;
+                break;
+            case "1200":
+                this.Truckslide = TwelveHundredTruckslide;
+                break;
+            case "2000":
+                this.Truckslide = TwoThousandTruckslide;
+                break;
+            case "4000":
+                this.FourThousandTruckslide;
+                break;
+        }
+    }
 }
 
 export default PickupPack;
