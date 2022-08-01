@@ -231,7 +231,7 @@ max-height: 100vh;
   display: none;
 }
 
-.config-options-bar{
+.config-options-bar-div{
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -241,7 +241,10 @@ max-height: 100vh;
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   z-index: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
+
 
 .options{
   z-index: 2;
@@ -342,6 +345,19 @@ max-height: 100vh;
     font-family: 'poppins';
     font-size: 12px;
     margin-right: 100px;
+  }
+  .description-stacked{
+    display: flex;
+    flex-direction: row;
+    margin-left: 25px;
+    padding-top: 5px;
+    padding-right: 25px;
+    font-family: 'poppins';
+    font-size: 12px;
+    margin-right: 100px;
+  }
+  .description-seperator{
+    padding-right: 5px;
   }
   .checkbox{
     display: flex;

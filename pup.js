@@ -54,7 +54,6 @@ const standardCameraAngle = new THREE.Vector3(-25.0, 7.0, -10.0);
 var uniforms;
 const clock = new THREE.Clock();
 
-var longLowsideTrayCount = 1;
 let composer, renderPass, SaoPass;
 
 var isHatchOpen = false;
@@ -344,14 +343,16 @@ function init(){
     document.getElementById('ladderrack').addEventListener("click", function(){ladderRackSelect()});
     // document.getElementById('hinge').addEventListener("click", function(){openLowSideLid()});
     document.getElementById('gullwing').addEventListener("click", function(){gullwingSelect(); closeTruckslide()});
-    document.getElementById('pup-gullwing-radio').addEventListener("click", function(){renderPro(); refreshConfig("pup-toolbox-description", "Gullwing")});
-    document.getElementById('pup-standard-radio').addEventListener("click", function(){renderStandard();refreshConfig("pup-toolbox-description", "Gullwing")});
+    document.getElementById('pup-gullwing-radio').addEventListener("click", function(){renderPro(); refreshConfig("config-toolbox-description", "Gullwing")});
+    document.getElementById('pup-standard-radio').addEventListener("click", function(){renderStandard();refreshConfig("config-toolbox-description", "Gullwing")});
     document.getElementById('hatch-nav').addEventListener("click", function(){hatchSelect(); closeTruckslide()});
     document.getElementById('domed-hatch-radio').addEventListener("click", function(){renderDomedHatch();refreshConfig("config-hatch-description", "Hatch");});
     document.getElementById('flat-hatch-radio').addEventListener("click", function(){renderFlatHatch();refreshConfig("config-hatch-description", "Hatch");});
     document.getElementById('post-headache-rack-radio').addEventListener("click", function(){switchToPostHeadacheRack();refreshConfig("config-headache-rack-description", "HeadacheRack");});
     document.getElementById('hex-headache-rack-radio').addEventListener("click", function(){switchToHexHeadacheRack();refreshConfig("config-headache-rack-description", "HeadacheRack");});
-    // document.getElementById('ladder-rack').addEventListener("click", function(){showOrHideLadderRack()});
+    document.getElementById('no-ladder-rack-radio').addEventListener("click", function(){hideLadderRack();refreshConfig("config-ladder-rack-description", "LadderRack");});
+    document.getElementById('ladder-rack-radio').addEventListener("click", function(){renderLadderRack();refreshConfig("config-ladder-rack-description", "LadderRack");});
+    document.getElementById('additional-trays').addEventListener("click", function(){additionalTraysSelect();});
     // document.getElementById('add-ls-tray').addEventListener("click", function(){addLowSideTrays()});
     // document.getElementById('remove-ls-tray').addEventListener("click", function(){removeLowSideTrays()});
     // document.getElementById('open-tailgate').addEventListener("click", function(){openTailgate()});
@@ -362,9 +363,10 @@ function init(){
     document.getElementById('gladiator-radio').addEventListener("click", function(){switchToGladiator();refreshConfig("config-finish-description", "Finish")});
     // document.getElementById('open-gullwing').addEventListener("click", function(){openGullwing()});
     document.getElementById('truckslide').addEventListener("click", function(){truckslideSelect()});
-    // document.getElementById('xt1200').addEventListener("click", function(){chooseXT1200()});
-    // document.getElementById('xt2000').addEventListener("click", function(){chooseXT2000()});
-    // document.getElementById('xt4000').addEventListener("click", function(){chooseXT4000()});
+    document.getElementById('no-truckslide-radio').addEventListener("click", function(){hideTruckslide();refreshConfig("config-truckslide-description", "Truckslide")});
+    document.getElementById('1200-truckslide-radio').addEventListener("click", function(){chooseXT1200();refreshConfig("config-truckslide-description", "Truckslide")});
+    document.getElementById('2000-truckslide-radio').addEventListener("click", function(){chooseXT2000();refreshConfig("config-truckslide-description", "Truckslide")});
+    document.getElementById('4000-truckslide-radio').addEventListener("click", function(){chooseXT4000();refreshConfig("config-truckslide-description", "Truckslide")});
     // document.getElementById('open-hatch').addEventListener("click", function(){openHatch()});
     // document.getElementById('open-truckslide').addEventListener("click", function(){openTruckslide()});
     // document.getElementById('hide-truckslide').addEventListener("click", function(){hideTruckslide()});
@@ -402,6 +404,7 @@ function animate() {
         //     __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: renderer }));
         //   }
 }
+
 
 function hideAllOpenElements(){
     const element = document.getElementsByClassName("options-group");
@@ -659,11 +662,10 @@ function headacheRackSelect(){
     //createNewElements(HeadacheRackPostObjects); <-- Current solution
     controls.enabled = false;
     gsap.to(camera.position, {duration: 2, x: -4, y: 4, z: 0, ease:"expo", onComplete: enableOrbitControls});
-    gsap.to(cameraTracker.position, {duration: 2, x: 5, y: 2, ease:"expo"});
-    //showOptionsUI("headache-racks");
+    gsap.to(cameraTracker.position, {duration: 2, x: 5, y: 2, ease:"expo", onComplete: changeTargetDistance(6,20)});
     controls.target = cameraTracker.position;
-    controls.minDistance = 6;
-    controls.maxDistance = 20;
+    // controls.minDistance = 6;
+    // controls.maxDistance = 20;
 
 }
 
@@ -707,15 +709,15 @@ function hatchSelect(){
 
     controls.enabled = false;
     gsap.to(camera.position, {duration: 2, x: standardCameraAngle.x, y: standardCameraAngle.y, z: standardCameraAngle.z, ease:"expo", onComplete: enableOrbitControls});
-    gsap.to(cameraTracker.position, {duration: 2, x: 0, y: -1, ease:"expo", onComplete: changeTargetDistance});
+    gsap.to(cameraTracker.position, {duration: 2, x: 0, y: -1, ease:"expo", onComplete: changeTargetDistance(10,30)});
     controls.target = cameraTracker.position;
 
     console.log(camera.position);
 }
 
-function changeTargetDistance(){
-    controls.minDistance = 10;
-    controls.maxDistance = 30;
+function changeTargetDistance(number1, number2){
+    controls.minDistance = number1;
+    controls.maxDistance = number2;
 }
 
 function gullwingSelect(){
@@ -942,10 +944,99 @@ function ladderRackHoverOff(){
     }
     toNormalMaterial(PupAccessories.getObjectByName("ladder-rack"));
 }
+
 function ladderRackSelect(){
-    PupAccessories.getObjectByName("ladder-rack").visible = true;
-    clientPUP.setLadderRack = true;
-    toNormalMaterial(PupAccessories.getObjectByName("ladder-rack"));
+
+    refreshUI("ladder-rack-section");
+    refreshConfig("config-ladder-rack-description", "LadderRack");
+
+    //grabbing main element
+    const sidebar = document.getElementById("options-bar-container");
+
+    //Grabbing elements.
+    const noLadderRackRadio = document.getElementById("no-ladder-rack-radio");
+    const noLadderRackText = document.getElementById("no-ladder-rack-text");
+    const ladderRackRadio = document.getElementById("ladder-rack-radio");
+    const ladderRackText = document.getElementById("ladder-rack-text");
+
+    //Check which option is selected already.
+
+    switch(clientPUP.LadderRack.enabled){
+        case true:
+            noLadderRackRadio.checked = false;
+            ladderRackRadio.checked = true;
+            noLadderRackText.innerText = "Select this option";
+            ladderRackText.innerText = "Option is selected";
+            break;
+        case false:
+            noLadderRackRadio.checked = true;
+            ladderRackRadio.checked = false;
+            noLadderRackText.innerText = "Option is selected";
+            ladderRackText.innerText = "Select this option";
+            break;
+    }
+
+    //show sidebar
+    gsap.to(sidebar, {duration: 1, left:0, ease:"expo.inOut"});
+
+    //TODO: implement function that dynamically grabs objects and inserts info.
+    //createNewElements(HeadacheRackPostObjects); <-- Current solution
+
+    controls.enabled = false;
+    gsap.to(camera.position, {duration: 2, x: -25, y: 8, z: 0, ease:"expo", onComplete: enableOrbitControls});
+    gsap.to(cameraTracker.position, {duration: 2, x: -5, y: 0, ease:"expo"});
+    controls.minDistance = 10;
+    controls.maxDistance = 30;
+    controls.target = cameraTracker.position;
+
+    console.log(camera.position);
+}
+
+function additionalTraysSelect(){
+
+    refreshUI("additional-trays-section");
+    refreshConfig("config-ladder-rack-description", "LadderRack");
+
+    //grabbing main element
+    const sidebar = document.getElementById("options-bar-container");
+
+    //Grabbing elements.
+    const noLadderRackRadio = document.getElementById("no-ladder-rack-radio");
+    const noLadderRackText = document.getElementById("no-ladder-rack-text");
+    const ladderRackRadio = document.getElementById("ladder-rack-radio");
+    const ladderRackText = document.getElementById("ladder-rack-text");
+
+    //Check which option is selected already.
+
+    switch(clientPUP.LadderRack.enabled){
+        case true:
+            noLadderRackRadio.checked = false;
+            ladderRackRadio.checked = true;
+            noLadderRackText.innerText = "Select this option";
+            ladderRackText.innerText = "Option is selected";
+            break;
+        case false:
+            noLadderRackRadio.checked = true;
+            ladderRackRadio.checked = false;
+            noLadderRackText.innerText = "Option is selected";
+            ladderRackText.innerText = "Select this option";
+            break;
+    }
+
+    //show sidebar
+    gsap.to(sidebar, {duration: 1, left:0, ease:"expo.inOut"});
+
+    //TODO: implement function that dynamically grabs objects and inserts info.
+    //createNewElements(HeadacheRackPostObjects); <-- Current solution
+
+    controls.enabled = false;
+    gsap.to(camera.position, {duration: 2, x: -25, y: 8, z: 0, ease:"expo", onComplete: enableOrbitControls});
+    gsap.to(cameraTracker.position, {duration: 2, x: -5, y: 0, ease:"expo"});
+    controls.minDistance = 10;
+    controls.maxDistance = 30;
+    controls.target = cameraTracker.position;
+
+    console.log(camera.position);
 }
 
 var lidOpen;
@@ -991,7 +1082,7 @@ async function loadModels(){
     XTBase = setupModel(TSBaseData);
     XT1200Truckslide = setupModel(TSData1200);
     XT2000Truckslide = setupModel(TSData2000);
-    console.log("model data set up");
+    //console.log("model data set up");
     return {TruckModel, GullwingModel, HeadacheRackHex, HeadacheRackPost, LongLowSides, ShortLowSides, LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, shortGladiatorFH, longGladiatorFH, shortGladiatorDH, longGladiatorDH, PupAccessories, XTBase, XT1200Truckslide, XT2000Truckslide };
 }
 
@@ -1113,9 +1204,10 @@ function GetLowSideCounter(){
 }
 
 function addLowSideTrays(){
-    switch(GetLowSideCounter()){
+    switch(clientPUP.getAdditionalLowsideTray){
         case 1:
             PupAccessories.getObjectByName("lowside-tray-2").visible = true;
+            clientPUP.setAdditionalLowSideTray = clientPUP.LowSideTrayCount +=1;
             console.log("case 1");
             switch(clientPUP.Gullwing.enabled){
                 case true:
@@ -1128,6 +1220,7 @@ function addLowSideTrays(){
         break;
         case 2:
             PupAccessories.getObjectByName("lowside-tray-3").visible = true;
+            clientPUP.setAdditionalLowSideTray = clientPUP.LowSideTrayCount +=1;
             console.log("case 2");
                 switch(clientPUP.Gullwing.enabled){
                     case true:
@@ -1143,26 +1236,27 @@ function addLowSideTrays(){
 }
 
 function removeLowSideTrays(){
-    switch(GetLowSideCounter()){
+    switch(clientPUP.LowSideTrayCount){
         case 2:
+            clientPUP.setAdditionalLowSideTray = clientPUP.LowSideTrayCount -=1;
             PupAccessories.getObjectByName("lowside-tray-2").visible = false;
         break;
         case 3:
+            clientPUP.setAdditionalLowSideTray = clientPUP.LowSideTrayCount +=1;
             PupAccessories.getObjectByName("lowside-tray-3").visible = false;
         break;
     }
 }
 
-function showOrHideLadderRack(){
-    if(PupAccessories.getObjectByName("ladder-rack").visible === true){
-        document.getElementById('ladder-rack').textContent = 'Add Ladder Rack';
-        PupAccessories.visible = false;
-    }
-    else{
-        document.getElementById('ladder-rack').textContent = 'Remove Ladder Rack';
-        PupAccessories.getObjectByName("ladder-rack").visible = true;
-    }
-};
+function renderLadderRack(){
+    clientPUP.setLadderRack = true;
+    PupAccessories.getObjectByName("ladder-rack").visible = true;
+}
+
+function hideLadderRack(){
+    clientPUP.setLadderRack = false;
+    PupAccessories.getObjectByName("ladder-rack").visible = false;
+}
 
 function renderPro(){
 
@@ -1451,6 +1545,7 @@ function chooseXT1200(){
 }
 
 function chooseXT2000(){
+    clientPUP.setTruckslide = "2000";
     if(XT2000Truckslide.getObjectByName("truckslide-left-xt4000").visible === true){
         XT2000Truckslide.getObjectByName("truckslide-left-xt4000").visible = false;
         XT2000Truckslide.getObjectByName("truckslide-right-xt4000").visible = false;
@@ -1467,6 +1562,7 @@ function chooseXT2000(){
 }
 
 function chooseXT4000(){
+    clientPUP.setTruckslide = "4000";
     if(XT2000Truckslide.visible !== true){
         XTBase.visible = true;
         XT2000Truckslide.visible = true;
@@ -1528,6 +1624,7 @@ function openTailgate(){
 }
 
 function hideTruckslide(){
+    clientPUP.setTruckslide = false;
     XTBase.visible = false;
     XT1200Truckslide.visible = false;
     XT2000Truckslide.visible = false;

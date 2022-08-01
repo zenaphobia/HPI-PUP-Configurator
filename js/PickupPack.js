@@ -26,7 +26,7 @@ const PostHeadacheRack = {
     price: 0
 }
 const NoLadderRack = {
-    name: "No ladder rack selected",
+    name: "No ladder rack",
     enabled: false,
     price: 0
 }
@@ -46,12 +46,6 @@ const LedLightsBattery= {
 const NoLedLightsSelected = {
     name: "No LED Lights Selected",
     price: 0
-}
-const NoAdditionalGullwingTray = {
-    name: "No additional Gullwing Tray"
-}
-const OneAdditionalGullwingTray = {
-    name: "One additional Gullwing Tray"
 }
 const BlackDiamondPlateFinish = {
     name: "Black Diamond Plate",
@@ -256,6 +250,11 @@ class PickupPack{
             this.AdditionalLowsideTray = 0;
         }
     }
+
+    get LowsideTrayCount(){
+        return this.AdditionalLowsideTray;
+    }
+
     set setFinish(_Finish){
         switch(_Finish){
             case "Diamond Plate":
@@ -286,7 +285,7 @@ class PickupPack{
                 this.Truckslide = TwoThousandTruckslide;
                 break;
             case "4000":
-                this.FourThousandTruckslide;
+                this.Truckslide = FourThousandTruckslide;
                 break;
             default :
                 throw new TypeError("Invalid input: Try 1200, 2000, 4000");
