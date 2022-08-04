@@ -46,8 +46,9 @@ var allModels, TruckModel, GullwingModel, HeadacheRackPost, HeadacheRackHex, Lon
 var bdpBumpTexture, dpBumpTexture, patriotTexture, BK62BumpTexture, carPaintTexture, blankTexture, customMaterial;
 
 var clientPUP = new PickupPack("Flat Center Hatch", false, "Hex Headache Rack", false, false, false, 0, "Black Diamond Plate", false);
-
 console.log(clientPUP);
+//console.log(clientPUP.AdditionalLowsideTray);
+console.log(clientPUP.LowsideTrayCount);
 
 let cameraTracker;
 const standardCameraAngle = new THREE.Vector3(-25.0, 7.0, -10.0);
@@ -352,7 +353,10 @@ function init(){
     document.getElementById('hex-headache-rack-radio').addEventListener("click", function(){switchToHexHeadacheRack();refreshConfig("config-headache-rack-description", "HeadacheRack");});
     document.getElementById('no-ladder-rack-radio').addEventListener("click", function(){hideLadderRack();refreshConfig("config-ladder-rack-description", "LadderRack");});
     document.getElementById('ladder-rack-radio').addEventListener("click", function(){renderLadderRack();refreshConfig("config-ladder-rack-description", "LadderRack");});
-    document.getElementById('additional-trays').addEventListener("click", function(){additionalTraysSelect();});
+    document.getElementById('additional-trays').addEventListener("click", function(){additionalTraysSelect()});
+    document.getElementById('lowside-tray-0-radio').addEventListener("click", function(){renderLowSideTrays()});
+    document.getElementById('lowside-tray-1-radio').addEventListener("click", function(){renderLowSideTrays()});
+    document.getElementById('lowside-tray-2-radio').addEventListener("click", function(){renderLowSideTrays()});
     // document.getElementById('add-ls-tray').addEventListener("click", function(){addLowSideTrays()});
     // document.getElementById('remove-ls-tray').addEventListener("click", function(){removeLowSideTrays()});
     // document.getElementById('open-tailgate').addEventListener("click", function(){openTailgate()});
@@ -633,22 +637,16 @@ function headacheRackSelect(){
     const sidebar = document.getElementById("options-bar-container");
 
     //Grabbing elements.
-    const hexRadio = document.getElementById("hex-headache-rack-radio");
     const hexText = document.getElementById("hex-radio-text");
-    const postRadio = document.getElementById("post-headache-rack-radio");
     const postText = document.getElementById("post-radio-text");
 
     //Check which option is selected already.
     switch(clientPUP.HeadacheRack.name){
         case "Hex Headache Rack":
-            hexRadio.checked = true;
-            postRadio.checked = false;
             hexText.innerText = "Option is selected";
             postText.innerText = "Select this option";
             break;
         case "Post Headache Rack":
-            hexRadio.checked = false;
-            postRadio.checked = true;
             postText.innerText = "Option is selected";
             hexText.innerText = "Select this option";
             break
@@ -662,7 +660,7 @@ function headacheRackSelect(){
     //createNewElements(HeadacheRackPostObjects); <-- Current solution
     controls.enabled = false;
     gsap.to(camera.position, {duration: 2, x: -4, y: 4, z: 0, ease:"expo", onComplete: enableOrbitControls});
-    gsap.to(cameraTracker.position, {duration: 2, x: 5, y: 2, ease:"expo", onComplete: changeTargetDistance(6,20)});
+    gsap.to(cameraTracker.position, {duration: 2, x: 5, y: 2, z: 0, ease:"expo", onComplete: changeTargetDistance(6,20)});
     controls.target = cameraTracker.position;
     // controls.minDistance = 6;
     // controls.maxDistance = 20;
@@ -679,23 +677,17 @@ function hatchSelect(){
     const sidebar = document.getElementById("options-bar-container");
 
     //Grabbing elements.
-    const flatHatchRadio = document.getElementById("flat-hatch-radio");
     const flatHatchText = document.getElementById("flat-hatch-radio-text");
-    const domedHatchRadio = document.getElementById("domed-hatch-radio");
     const domedHatchText = document.getElementById("domed-hatch-radio-text");
 
     //Check which option is selected already.
 
     switch(clientPUP.Hatch.name){
         case "Flat Center Hatch":
-            flatHatchRadio.checked = true;
-            domedHatchRadio.checked = false;
             flatHatchText.innerText = "Option is selected";
             domedHatchText.innerText = "Select this option";
             break;
         case "Domed Center Hatch":
-            flatHatchRadio.checked = false;
-            domedHatchRadio.checked = true;
             flatHatchText.innerText = "Option is selected";
             domedHatchText.innerText = "Select this option";
             break;
@@ -709,7 +701,7 @@ function hatchSelect(){
 
     controls.enabled = false;
     gsap.to(camera.position, {duration: 2, x: standardCameraAngle.x, y: standardCameraAngle.y, z: standardCameraAngle.z, ease:"expo", onComplete: enableOrbitControls});
-    gsap.to(cameraTracker.position, {duration: 2, x: 0, y: -1, ease:"expo", onComplete: changeTargetDistance(10,30)});
+    gsap.to(cameraTracker.position, {duration: 2, x: 0, y: -1, z: 0, ease:"expo", onComplete: changeTargetDistance(10,30)});
     controls.target = cameraTracker.position;
 
     console.log(camera.position);
@@ -738,14 +730,10 @@ function gullwingSelect(){
 
     switch(clientPUP.Gullwing.name){
         case "Standard":
-            standardRadio.checked = true;
-            gullwingRadio.checked = false;
             standardText.innerText = "Option is selected";
             gullwingText.innerText = "Select this option";
             break;
         case "Gullwing Toolbox":
-            standardRadio.checked = false;
-            gullwingRadio.checked = true;
             gullwingText.innerText = "Option is selected";
             standardText.innerText = "Select this option";
             break;
@@ -759,7 +747,7 @@ function gullwingSelect(){
 
     controls.enabled = false;
     gsap.to(camera.position, {duration: 2, x: -7.665, y: 5.15, z: -7, ease:"expo", onComplete: enableOrbitControls});
-    gsap.to(cameraTracker.position, {duration: 2, x: 5, y: 0, ease:"expo"});
+    gsap.to(cameraTracker.position, {duration: 2, x: 5, y: 0, z:0, ease:"expo"});
     controls.minDistance = 10;
     controls.maxDistance = 30;
     controls.target = cameraTracker.position;
@@ -776,53 +764,33 @@ function finishSelect(){
     const sidebar = document.getElementById("options-bar-container");
 
     //Grabbing elements.
-    const diamondPlateRadio = document.getElementById("diamond-plate-radio");
     const diamondPlateText = document.getElementById("diamond-plate-radio-text");
-    const blackDiamondPlateRadio = document.getElementById("black-diamond-plate-radio");
     const blackDiamondPlateText = document.getElementById("black-diamond-plate-radio-text");
-    const leopardRadio = document.getElementById("leopard-radio");
     const leopardText = document.getElementById("leopard-radio-text");
-    const gladiatorRadio = document.getElementById("gladiator-radio");
     const gladiatorText = document.getElementById("gladiator-radio-text");
 
     //Check which option is selected already.
 
     switch(clientPUP.Finish.name){
         case "Diamond Plate":
-            diamondPlateRadio.checked = true;
-            blackDiamondPlateRadio.checked = false;
-            leopardRadio.checked = false;
-            gladiatorRadio.checked = false;
             diamondPlateText.innerText = "Option is selected";
             blackDiamondPlateText.innerText = "Select this option";
             leopardText.innerText = "Select this option";
             gladiatorText.innerText = "Select this option";
             break;
         case "Black Diamond Plate":
-            diamondPlateRadio.checked = false;
-            blackDiamondPlateRadio.checked = true;
-            leopardRadio.checked = false;
-            gladiatorRadio.checked = false;
             diamondPlateText.innerText = "Select this option";
             blackDiamondPlateText.innerText = "Option is selected";
             leopardText.innerText = "Select this option";
             gladiatorText.innerText = "Select this option";
             break;
         case "Leopard":
-            diamondPlateRadio.checked = false;
-            blackDiamondPlateRadio.checked = false;
-            leopardRadio.checked = true;
-            gladiatorRadio.checked = false;
             diamondPlateText.innerText = "Select this option";
             blackDiamondPlateText.innerText = "Select this option";
             leopardText.innerText = "Option is selected";
             gladiatorText.innerText = "Select this option";
             break;
         case "Gladiator":
-            diamondPlateRadio.checked = false;
-            blackDiamondPlateRadio.checked = false;
-            leopardRadio.checked = false;
-            gladiatorRadio.checked = true;
             diamondPlateText.innerText = "Select this option";
             blackDiamondPlateText.innerText = "Select this option";
             leopardText.innerText = "Select this option";
@@ -838,7 +806,7 @@ function finishSelect(){
 
     controls.enabled = false;
     gsap.to(camera.position, {duration: 2, x: standardCameraAngle.x, y: standardCameraAngle.y, z: standardCameraAngle.z, ease:"expo", onComplete: enableOrbitControls});
-    gsap.to(cameraTracker.position, {duration: 2, x: 0, y:-1, ease:"expo"});
+    gsap.to(cameraTracker.position, {duration: 2, x: 0, y:-1, z:0, ease:"expo"});
     controls.minDistance = 10;
     controls.maxDistance = 30;
     controls.target = cameraTracker.position;
@@ -855,23 +823,15 @@ function truckslideSelect(){
     const sidebar = document.getElementById("options-bar-container");
 
     //Grabbing elements.
-    const noTruckslideRadio = document.getElementById("no-truckslide-radio");
     const noTruckslideText = document.getElementById("no-truckslide-radio-text");
-    const twelveTruckslideRadio = document.getElementById("1200-truckslide-radio");
     const twelveTruckslideText = document.getElementById("1200-truckslide-radio-text");
-    const twoTruckslideRadio = document.getElementById("2000-truckslide-radio");
     const twoTruckslideText = document.getElementById("2000-truckslide-radio-text");
-    const fourTruckslideRadio = document.getElementById("4000-truckslide-radio");
     const fourTruckslideText = document.getElementById("4000-truckslide-radio-text");
 
     //Check which option is selected already.
 
     switch(clientPUP.Truckslide.name){
         case "No truckslide":
-            noTruckslideRadio.checked = true;
-            twelveTruckslideRadio.checked  = false;
-            twoTruckslideRadio.checked = false;
-            fourTruckslideRadio.checked = false;
             //radio text
             noTruckslideText.innerText = "This option is selected";
             twelveTruckslideText.innerText = "Select this option";
@@ -879,10 +839,6 @@ function truckslideSelect(){
             fourTruckslideText.innerText = "Select this option";
             break;
         case "XT1200":
-            noTruckslideRadio.checked = false;
-            twelveTruckslideRadio.checked = true;
-            twoTruckslideRadio.checked = false;
-            fourTruckslideRadio.checked = false;
             //radio text
             noTruckslideText.innerText = "Select this option";
             twelveTruckslideText.innerText = "This option is selected";
@@ -890,10 +846,6 @@ function truckslideSelect(){
             fourTruckslideText.innerText = "Select this option";
             break;
         case "XT2000":
-            noTruckslideRadio.radio = false;
-            twelveTruckslideRadio.checked = false;
-            twoTruckslideRadio.checked = true;
-            fourTruckslideRadio.checked = false;
             //radio text
             noTruckslideText.innerText = "Select this option";
             twelveTruckslideText.innerText = "Select this option";
@@ -901,10 +853,6 @@ function truckslideSelect(){
             fourTruckslideText.innerText = "Select this option";
             break;
         case "XT4000":
-            noTruckslideRadio.checked = false;
-            twelveTruckslideRadio.checked = false;
-            twoTruckslideRadio.checked = false;
-            fourTruckslideRadio.checked = true;
             //radio text
             noTruckslideText.innerText = "Select this option";
             twelveTruckslideText.innerText = "Select this option";
@@ -921,7 +869,7 @@ function truckslideSelect(){
     presentTruckslide();
     controls.enabled = false;
     gsap.to(camera.position, {duration: 2, x: standardCameraAngle.x, y: standardCameraAngle.y, z: standardCameraAngle.z, ease:"expo", onComplete: enableOrbitControls});
-    gsap.to(cameraTracker.position, {duration: 2, x: -5, y: -1, ease:"expo"});
+    gsap.to(cameraTracker.position, {duration: 2, x: -5, y: -1, Z:0, ease:"expo"});
     controls.minDistance = 10;
     controls.maxDistance = 30;
     controls.target = cameraTracker.position;
@@ -963,14 +911,10 @@ function ladderRackSelect(){
 
     switch(clientPUP.LadderRack.enabled){
         case true:
-            noLadderRackRadio.checked = false;
-            ladderRackRadio.checked = true;
             noLadderRackText.innerText = "Select this option";
             ladderRackText.innerText = "Option is selected";
             break;
         case false:
-            noLadderRackRadio.checked = true;
-            ladderRackRadio.checked = false;
             noLadderRackText.innerText = "Option is selected";
             ladderRackText.innerText = "Select this option";
             break;
@@ -984,7 +928,7 @@ function ladderRackSelect(){
 
     controls.enabled = false;
     gsap.to(camera.position, {duration: 2, x: -25, y: 8, z: 0, ease:"expo", onComplete: enableOrbitControls});
-    gsap.to(cameraTracker.position, {duration: 2, x: -5, y: 0, ease:"expo"});
+    gsap.to(cameraTracker.position, {duration: 2, x: -5, y: 0, Z:0, ease:"expo"});
     controls.minDistance = 10;
     controls.maxDistance = 30;
     controls.target = cameraTracker.position;
@@ -1001,23 +945,17 @@ function additionalTraysSelect(){
     const sidebar = document.getElementById("options-bar-container");
 
     //Grabbing elements.
-    const noLadderRackRadio = document.getElementById("no-ladder-rack-radio");
     const noLadderRackText = document.getElementById("no-ladder-rack-text");
-    const ladderRackRadio = document.getElementById("ladder-rack-radio");
     const ladderRackText = document.getElementById("ladder-rack-text");
 
     //Check which option is selected already.
 
     switch(clientPUP.LadderRack.enabled){
         case true:
-            noLadderRackRadio.checked = false;
-            ladderRackRadio.checked = true;
             noLadderRackText.innerText = "Select this option";
             ladderRackText.innerText = "Option is selected";
             break;
         case false:
-            noLadderRackRadio.checked = true;
-            ladderRackRadio.checked = false;
             noLadderRackText.innerText = "Option is selected";
             ladderRackText.innerText = "Select this option";
             break;
@@ -1026,15 +964,23 @@ function additionalTraysSelect(){
     //show sidebar
     gsap.to(sidebar, {duration: 1, left:0, ease:"expo.inOut"});
 
-    //TODO: implement function that dynamically grabs objects and inserts info.
-    //createNewElements(HeadacheRackPostObjects); <-- Current solution
-
     controls.enabled = false;
-    gsap.to(camera.position, {duration: 2, x: -25, y: 8, z: 0, ease:"expo", onComplete: enableOrbitControls});
-    gsap.to(cameraTracker.position, {duration: 2, x: -5, y: 0, ease:"expo"});
+
+    //dtermine if PUP Pro or Standard
+    if(clientPUP.Gullwing.enabled === true){
+        gsap.to(camera.position, {duration: 2, x: -8, y: 5, z: -10, ease:"expo", onComplete: enableOrbitControls});
+        gsap.to(cameraTracker.position, {duration: 2, x: -1.25, y: 0, z:-3, ease:"expo"});
+    }
+    else{
+        gsap.to(camera.position, {duration: 2, x: -5, y: 5, z: -10, ease:"expo", onComplete: enableOrbitControls});
+        gsap.to(cameraTracker.position, {duration: 2, x: 0, y: 0, z:-3, ease:"expo"});
+    }
+
     controls.minDistance = 10;
     controls.maxDistance = 30;
     controls.target = cameraTracker.position;
+
+    openLowSideLid();
 
     console.log(camera.position);
 }
@@ -1175,18 +1121,19 @@ async function addModelsToScene(){
 }
 
 function openLowSideLid(){
-    if(!lidOpen){
-        document.getElementById('hinge').textContent = 'Close lid';
-        gsap.to(hingePoint.rotation, {duration: 2, x: 2 * Math.PI * (160 / 360), ease:"expo" });
-        gsap.to(LongLowSides.getObjectByName('long-ls-left-hinge').rotation, {duration: 2, x: 2 * Math.PI * (160 / 360), ease:"expo" });
-        lidOpen = true;
-    }
-    else{
-        document.getElementById('hinge').textContent = 'Open Lid';
-        gsap.to(hingePoint.rotation, {duration: 2, x: 2 * Math.PI * (90 / 360), ease:"expo" });
-        gsap.to(LongLowSides.getObjectByName('long-ls-left-hinge').rotation, {duration: 2, x: 2 * Math.PI * (90 / 360), ease:"expo" });
-        lidOpen = false;
-    }
+    // if(!lidOpen){
+    //     gsap.to(hingePoint.rotation, {duration: 2, x: 2 * Math.PI * (160 / 360), ease:"expo" });
+    //     gsap.to(LongLowSides.getObjectByName('long-ls-left-hinge').rotation, {duration: 2, x: 2 * Math.PI * (160 / 360), ease:"expo" });
+    //     lidOpen = true;
+    // }
+    // else{
+    //     gsap.to(hingePoint.rotation, {duration: 2, x: 2 * Math.PI * (90 / 360), ease:"expo" });
+    //     gsap.to(LongLowSides.getObjectByName('long-ls-left-hinge').rotation, {duration: 2, x: 2 * Math.PI * (90 / 360), ease:"expo" });
+    //     lidOpen = false;
+    // }
+
+    gsap.to(hingePoint.rotation, {duration: 2, x: 2 * Math.PI * (160 / 360), ease:"expo" });
+    gsap.to(LongLowSides.getObjectByName('long-ls-left-hinge').rotation, {duration: 2, x: 2 * Math.PI * (160 / 360), ease:"expo" });
 }
 
 function GetLowSideCounter(){
@@ -1203,12 +1150,43 @@ function GetLowSideCounter(){
     }
 }
 
-function addLowSideTrays(){
-    switch(clientPUP.getAdditionalLowsideTray){
+function determineLowSideCount(){
+    if(document.getElementById("lowside-tray-0-radio").checked){
+        console.log("case 0");
+        return 0;
+    }
+    else if(document.getElementById("lowside-tray-1-radio").checked){
+        console.log("case 1");
+        return 1;
+    }
+    else if(document.getElementById("lowside-tray-2-radio").checked){
+        console.log("case 2");
+        return 2;
+    }
+    return 0;
+}
+
+function renderLowSideTrays(){
+    switch(determineLowSideCount()){
+        case 0:
+            PupAccessories.getObjectByName("lowside-tray-2").visible = false;
+            PupAccessories.getObjectByName("lowside-tray-3").visible = false;
+            clientPUP.setAdditionalLowsideTray = 0;
+            console.log(clientPUP.LowsideTrayCount)
+            switch(clientPUP.Gullwing.enabled){
+                case true:
+                    PupAccessories.getObjectByName("lowside-tray-2").position.x = -2.76635;
+                    break;
+                case false:
+                    PupAccessories.getObjectByName("lowside-tray-2").position.x = -1.71959;
+                    break;
+            }
+        break;
         case 1:
             PupAccessories.getObjectByName("lowside-tray-2").visible = true;
-            clientPUP.setAdditionalLowSideTray = clientPUP.LowSideTrayCount +=1;
-            console.log("case 1");
+            PupAccessories.getObjectByName("lowside-tray-3").visible = false;
+            clientPUP.setAdditionalLowsideTray = 1;
+            console.log(clientPUP.LowsideTrayCount)
             switch(clientPUP.Gullwing.enabled){
                 case true:
                     PupAccessories.getObjectByName("lowside-tray-2").position.x = -2.76635;
@@ -1219,9 +1197,10 @@ function addLowSideTrays(){
             }
         break;
         case 2:
+            PupAccessories.getObjectByName("lowside-tray-2").visible = true;
             PupAccessories.getObjectByName("lowside-tray-3").visible = true;
-            clientPUP.setAdditionalLowSideTray = clientPUP.LowSideTrayCount +=1;
-            console.log("case 2");
+            clientPUP.setAdditionalLowsideTray = 2;
+            console.log(clientPUP.LowsideTrayCount)
                 switch(clientPUP.Gullwing.enabled){
                     case true:
                         PupAccessories.getObjectByName("lowside-tray-3").position.x = -4.38547;

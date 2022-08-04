@@ -243,12 +243,6 @@ class PickupPack{
 
     set setAdditionalLowsideTray(_additionalLowsideTray){
         this.AdditionalLowsideTray = _additionalLowsideTray;
-        if(this.AdditionalLowsideTray > 3){
-            this.AdditionalLowsideTray = 3;
-        }
-        if(this.AdditionalLowsideTray < 0){
-            this.AdditionalLowsideTray = 0;
-        }
     }
 
     get LowsideTrayCount(){
