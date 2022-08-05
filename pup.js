@@ -84,7 +84,7 @@ function init(){
     //scene.fog = new THREE.FogExp2(0xffffff, .01);
     container = document.getElementById('myCanvas');
     camera = new THREE.PerspectiveCamera( 25, container.offsetWidth / container.offsetHeight, 0.1, 50 );
-    camera.aspect = container.offsetWidth / container.offsetHeight;
+    camera.aspect = (container.offsetWidth / container.offsetHeight);
     camera.position.set(standardCameraAngle.x, standardCameraAngle.y, standardCameraAngle.z);
     console.log(camera.position);
 
@@ -386,7 +386,7 @@ function init(){
     //Window resizing
     window.addEventListener( 'resize', onWindowResize );
     function onWindowResize(){
-    camera.aspect = container.offsetWidth / container.offsetHeight;
+    camera.aspect = (container.offsetWidth / container.offsetHeight);
     camera.updateProjectionMatrix();
     renderer.setSize( container.offsetWidth , container.offsetHeight );
 
@@ -721,9 +721,7 @@ function gullwingSelect(){
     const sidebar = document.getElementById("options-bar-container");
 
     //Grabbing elements.
-    const standardRadio = document.getElementById("pup-standard-radio");
     const standardText = document.getElementById("pup-standard-text");
-    const gullwingRadio = document.getElementById("pup-gullwing-radio");
     const gullwingText = document.getElementById("pup-gullwing-text");
 
     //Check which option is selected already.
@@ -922,9 +920,6 @@ function ladderRackSelect(){
 
     //show sidebar
     gsap.to(sidebar, {duration: 1, left:0, ease:"expo.inOut"});
-
-    //TODO: implement function that dynamically grabs objects and inserts info.
-    //createNewElements(HeadacheRackPostObjects); <-- Current solution
 
     controls.enabled = false;
     gsap.to(camera.position, {duration: 2, x: -25, y: 8, z: 0, ease:"expo", onComplete: enableOrbitControls});
@@ -1167,12 +1162,13 @@ function determineLowSideCount(){
 }
 
 function renderLowSideTrays(){
+    const lowsideCountid = document.getElementById("config-lowside-trays-count");
     switch(determineLowSideCount()){
         case 0:
             PupAccessories.getObjectByName("lowside-tray-2").visible = false;
             PupAccessories.getObjectByName("lowside-tray-3").visible = false;
             clientPUP.setAdditionalLowsideTray = 0;
-            console.log(clientPUP.LowsideTrayCount)
+            lowsideCountid.innerText = clientPUP.LowsideTrayCount;
             switch(clientPUP.Gullwing.enabled){
                 case true:
                     PupAccessories.getObjectByName("lowside-tray-2").position.x = -2.76635;
@@ -1186,7 +1182,7 @@ function renderLowSideTrays(){
             PupAccessories.getObjectByName("lowside-tray-2").visible = true;
             PupAccessories.getObjectByName("lowside-tray-3").visible = false;
             clientPUP.setAdditionalLowsideTray = 1;
-            console.log(clientPUP.LowsideTrayCount)
+            lowsideCountid.innerText = clientPUP.LowsideTrayCount;
             switch(clientPUP.Gullwing.enabled){
                 case true:
                     PupAccessories.getObjectByName("lowside-tray-2").position.x = -2.76635;
@@ -1200,7 +1196,7 @@ function renderLowSideTrays(){
             PupAccessories.getObjectByName("lowside-tray-2").visible = true;
             PupAccessories.getObjectByName("lowside-tray-3").visible = true;
             clientPUP.setAdditionalLowsideTray = 2;
-            console.log(clientPUP.LowsideTrayCount)
+            lowsideCountid.innerText = clientPUP.LowsideTrayCount;
                 switch(clientPUP.Gullwing.enabled){
                     case true:
                         PupAccessories.getObjectByName("lowside-tray-3").position.x = -4.38547;
@@ -1212,19 +1208,6 @@ function renderLowSideTrays(){
         break;
     }
 
-}
-
-function removeLowSideTrays(){
-    switch(clientPUP.LowSideTrayCount){
-        case 2:
-            clientPUP.setAdditionalLowSideTray = clientPUP.LowSideTrayCount -=1;
-            PupAccessories.getObjectByName("lowside-tray-2").visible = false;
-        break;
-        case 3:
-            clientPUP.setAdditionalLowSideTray = clientPUP.LowSideTrayCount +=1;
-            PupAccessories.getObjectByName("lowside-tray-3").visible = false;
-        break;
-    }
 }
 
 function renderLadderRack(){
