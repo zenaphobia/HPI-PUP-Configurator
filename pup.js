@@ -1074,6 +1074,8 @@ async function addModelsToScene(){
     ShortFlatHatch.getObjectByName("Decimated_Hatch").material = bdpMaterial;
     GullwingModel.getObjectByName("gw-decimated-left-lid").material = bdpMaterial;
     GullwingModel.getObjectByName("gw-decimated-right-lid").material = bdpMaterial;
+    GullwingModel.getObjectByName("GL-gw-left-lid").material = blackMetalMat;
+    GullwingModel.getObjectByName("GL-gw-right-lid").material = blackMetalMat;
     ShortLowSides.getObjectByName("standard-left-lid").material = bdpMaterial;
     ShortLowSides.getObjectByName("standard-right-lid").material = bdpMaterial;
     LongLowSides.getObjectByName("standard-long-left-lid").material = bdpMaterial;
