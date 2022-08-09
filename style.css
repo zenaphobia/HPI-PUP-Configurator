@@ -176,8 +176,8 @@ max-height: 100vh;
   height: 90vh;
   left: -425px;
   background-color: rgba(237, 237, 237, .85);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   z-index: 1;
   overflow-y: auto;
 }

@@ -357,6 +357,8 @@ function init(){
     document.getElementById('lowside-tray-0-radio').addEventListener("click", function(){renderLowSideTrays()});
     document.getElementById('lowside-tray-1-radio').addEventListener("click", function(){renderLowSideTrays()});
     document.getElementById('lowside-tray-2-radio').addEventListener("click", function(){renderLowSideTrays()});
+    document.getElementById('gullwing-1-radio').addEventListener("click", function(){renderGullwingTray()});
+    document.getElementById('gullwing-2-radio').addEventListener("click", function(){renderGullwingTray()});
     // document.getElementById('add-ls-tray').addEventListener("click", function(){addLowSideTrays()});
     // document.getElementById('remove-ls-tray').addEventListener("click", function(){removeLowSideTrays()});
     // document.getElementById('open-tailgate').addEventListener("click", function(){openTailgate()});
@@ -939,23 +941,6 @@ function additionalTraysSelect(){
     //grabbing main element
     const sidebar = document.getElementById("options-bar-container");
 
-    //Grabbing elements.
-    const noLadderRackText = document.getElementById("no-ladder-rack-text");
-    const ladderRackText = document.getElementById("ladder-rack-text");
-
-    //Check which option is selected already.
-
-    switch(clientPUP.LadderRack.enabled){
-        case true:
-            noLadderRackText.innerText = "Select this option";
-            ladderRackText.innerText = "Option is selected";
-            break;
-        case false:
-            noLadderRackText.innerText = "Option is selected";
-            ladderRackText.innerText = "Select this option";
-            break;
-    }
-
     //show sidebar
     gsap.to(sidebar, {duration: 1, left:0, ease:"expo.inOut"});
 
@@ -976,6 +961,7 @@ function additionalTraysSelect(){
     controls.target = cameraTracker.position;
 
     openLowSideLid();
+    openGullwing();
 
     console.log(camera.position);
 }
@@ -1091,6 +1077,7 @@ async function addModelsToScene(){
     GullwingModel.visible = false;
     GullwingModel.getObjectByName("GL-gw-left-lid").visible = false;
     GullwingModel.getObjectByName("GL-gw-right-lid").visible = false;
+    GullwingModel.getObjectByName("additional-gw-tray").visible = false;
     ShortLowSides.getObjectByName("GL-left-lid").visible = false;
     ShortLowSides.getObjectByName("GL-right-lid").visible = false;
     LongLowSides.getObjectByName("GL-ls-left-lid").visible = false;
@@ -1161,6 +1148,17 @@ function determineLowSideCount(){
         return 2;
     }
     return 0;
+}
+
+function renderGullwingTray(){
+    const gullwingid = document.getElementById("config-gw-trays-count");
+
+    if(document.getElementById("gullwing-1-radio").checked){
+        GullwingModel.getObjectByName("additional-gw-tray").visible = false;
+    }
+    else{
+        GullwingModel.getObjectByName("additional-gw-tray").visible = true;
+    }
 }
 
 function renderLowSideTrays(){
@@ -1649,16 +1647,17 @@ function closeTruckslide(){
 }
 
 
-var isGullwingOpen = false;
 function openGullwing(){
-    if(!isGullwingOpen){
-        gsap.to(GullwingModel.getObjectByName("GW-left-hinge").rotation, {duration: 2, x: 135 * (Math.PI / 180), ease:"expo"});
-        isGullwingOpen = true;
-    }
-    else{
-        gsap.to(GullwingModel.getObjectByName("GW-left-hinge").rotation, {duration: 2, x: 90 * (Math.PI / 180), ease:"expo"});
-        isGullwingOpen = false;
-    }
+
+    gsap.to(GullwingModel.getObjectByName("GW-left-hinge").rotation, {duration: 2, x: 135 * (Math.PI / 180), ease:"expo"});
+    // if(!isGullwingOpen){
+    //     gsap.to(GullwingModel.getObjectByName("GW-left-hinge").rotation, {duration: 2, x: 135 * (Math.PI / 180), ease:"expo"});
+    //     isGullwingOpen = true;
+    // }
+    // else{
+    //     gsap.to(GullwingModel.getObjectByName("GW-left-hinge").rotation, {duration: 2, x: 90 * (Math.PI / 180), ease:"expo"});
+    //     isGullwingOpen = false;
+    // }
 }
 
 function switchToDiamondPlate(){
