@@ -9,6 +9,7 @@ import HeadacheRack from '/js/headacheRack.js';
 //import { UnrealBloomPass } from '/js/UnrealBloomPass.js';
 //import { EffectComposer } from '/js/EffectComposer.js';
 //import { RenderPass } from '/js/RenderPass.js';
+//import { ShaderPass } from './shaders/ShaderPass.js'
 //import { SAOPass } from '/js/SAOPass.js';
 //import { GUI } from '/js/lil-gui.module.min.js'
 // import * as THREE from 'https://highwayproducts.com/wp-content/uploads/resources/TestEnvironment/js/three.module.js';
@@ -45,7 +46,7 @@ var allModels, TruckModel, GullwingModel, HeadacheRackPost, HeadacheRackHex, Lon
 //Textures
 var bdpBumpTexture, dpBumpTexture, patriotTexture, BK62BumpTexture, carPaintTexture, blankTexture, customMaterial;
 
-var clientPUP = new PickupPack("Flat Center Hatch", false, "Hex Headache Rack", false, false, false, 0, "Black Diamond Plate", false);
+var clientPUP = new PickupPack("Flat Center Hatch", false, "Hex Headache Rack", false, false, false, 0, "Black Diamond Plate", "1200");
 console.log(clientPUP);
 //console.log(clientPUP.AdditionalLowsideTray);
 console.log(clientPUP.LowsideTrayCount);
@@ -65,9 +66,6 @@ var isTruckslideOpen = false;
 //#endregion
 
 //Lazy Load files
-
-var vertexData = vert;
-var fragData = frag;
 var isFullLengthPUPLoaded = false;
 //materials
 let metalMat, windowMat, redGlassMat,truckPaintMat, clearGlassMat, bdpMaterial, dpMaterial, blackMetalMat, leopardMaterial, patriotMat, emissiveLight, BK62Mat, clearGlassMatLights;
@@ -86,12 +84,8 @@ function init(){
     camera = new THREE.PerspectiveCamera( 25, container.offsetWidth / container.offsetHeight, 0.1, 50 );
     camera.aspect = (container.offsetWidth / container.offsetHeight);
     camera.position.set(standardCameraAngle.x, standardCameraAngle.y, standardCameraAngle.z);
-    console.log(camera.position);
-
     renderer = new THREE.WebGLRenderer({canvas: container, antialias: true, alpha: true});
-    renderer.setClearColor( 0x000000, 0 );
-
-    renderer.setClearColor(0x000000,0);
+    renderer.setClearColor( 0xffffff, 1 );
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize(container.offsetWidth, container.offsetHeight);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -101,8 +95,73 @@ function init(){
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
+    // const bloomParams = {
+    //     exposure: 1,
+    //     bloomStrength: 1.5,
+    //     bloomThreshold: 0,
+    //     bloomRadius: 0
+    // }
 
-    
+
+    // const renderscene = new RenderPass(scene, camera);
+
+    // const bloomPass = new UnrealBloomPass( new THREE.Vector2( container.offsetWidth, container.offsetHeight ), 1.5, 0.4, 0.85);
+    // bloomPass.threshold = 0;
+    // bloomPass.strength = 1.5;
+    // bloomPass.radius = 0;
+
+    // bloomComposer = new EffectComposer(renderer);
+    // bloomComposer.renderToScreen = false;
+    // bloomComposer.addPass(renderscene);
+    // bloomComposer.addPass(bloomPass);
+
+    // const finalPass = new ShaderPass(
+    //         new THREE.ShaderMaterial({
+    //             uniforms: {
+    //                 baseTexture: {value: null},
+    //                 bloomTexture: {value: bloomComposer.renderTarget2.texture}
+    //             },
+    //             vertexShader: bloomVert,
+    //             fragmentShader: bloomFrag,
+    //             defines: {}
+    //         }), 'baseTexture'
+    // );
+
+    // finalPass.needsSwap = true;
+
+    // finalComposer = new EffectComposer(renderer);
+    // finalComposer.addPass(renderscene);
+    // finalComposer.addPass(finalPass);
+    // // composer = new EffectComposer(renderer);
+    // // composer.addPass(renderscene);
+    // // composer.addPass(bloomPass);
+
+    // const gui = new GUI();
+
+
+    // gui.add( bloomParams, 'exposure', 0.1, 2 ).onChange( function ( value ) {
+
+    //     renderer.toneMappingExposure = Math.pow( value, 4.0 );
+
+    // } );
+
+    // gui.add( bloomParams, 'bloomThreshold', 0.0, 1.0 ).onChange( function ( value ) {
+
+    //     bloomPass.threshold = Number( value );
+
+    // } );
+
+    // gui.add( bloomParams, 'bloomStrength', 0.0, 3.0 ).onChange( function ( value ) {
+
+    //     bloomPass.strength = Number( value );
+
+    // } );
+
+    // gui.add( bloomParams, 'bloomRadius', 0.0, 1.0 ).step( 0.01 ).onChange( function ( value ) {
+
+    //     bloomPass.radius = Number( value );
+
+    // } );
 
     //const renderScene = new RenderPass(scene, camera);
 
@@ -256,7 +315,7 @@ function init(){
     emissiveLight = new THREE.MeshStandardMaterial({
         color: 0xffffff,
         emissive: 0xffffff,
-        emissiveIntensity: 100,
+        emissiveIntensity: 100000,
     });
     BK62Mat = new THREE.MeshStandardMaterial({
         color: 0x000000,
@@ -362,6 +421,7 @@ function init(){
     // document.getElementById('add-ls-tray').addEventListener("click", function(){addLowSideTrays()});
     // document.getElementById('remove-ls-tray').addEventListener("click", function(){removeLowSideTrays()});
     // document.getElementById('open-tailgate').addEventListener("click", function(){openTailgate()});
+    document.getElementById('additional-lights').addEventListener("click", function(){renderLights()});
     document.getElementById('lid-finishes').addEventListener("click", function(){finishSelect()});
     document.getElementById('diamond-plate-radio').addEventListener("click", function(){switchToDiamondPlate();refreshConfig("config-finish-description", "Finish")});
     document.getElementById('black-diamond-plate-radio').addEventListener("click", function(){switchToBlackDiamondPlate();refreshConfig("config-finish-description", "Finish")});
@@ -1088,8 +1148,11 @@ async function addModelsToScene(){
     LongFlatHatch.getObjectByName("Shape_IndexedFaceSet622").material = bdpMaterial;
     ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").material = bdpMaterial;
     LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").material = bdpMaterial;
-    ShortLowSides.getObjectByName("Shape_IndexedFaceSet118").material = clearGlassMat;
-    ShortLowSides.getObjectByName("Icosphere").material = emissiveLight;
+    ShortLowSides.getObjectByName("Shape_IndexedFaceSet118").material = emissiveLight;
+
+    // HeadacheRackHex.getObjectByName("Curve006").attach(ShortLowSides.getObjectByName("Icosphere"));
+
+    ShortLowSides.getObjectByName("Icosphere").attach(HeadacheRackHex.getObjectByName("Curve006"));
 
     //hide models
     HeadacheRackPost.visible = false;
@@ -1180,6 +1243,12 @@ function closeAllCompartments(){
     closeTruckslide();
 }
 
+function renderLights(){
+
+    renderer.toneMappingExposure = .2;
+
+}
+
 function renderGullwingTray(){
     const gullwingid = document.getElementById("config-gw-trays-count-id");
     const loc = GullwingModel.getObjectByName("additional-gw-tray").position;
@@ -1193,7 +1262,6 @@ function renderGullwingTray(){
         gullwingid.innerText = 1;
     }
 
-    closeLowSideLid();
     gsap.to(cameraTracker.position, {duration: 2, x: loc.x, y: loc.y, z:loc.z, ease:"expo"});
     gsap.to(camera.position, {duration: 2, x: 3.25, y: 4, z: -12, ease:"expo"});
     controls.target = cameraTracker.position;
