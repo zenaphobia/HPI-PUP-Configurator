@@ -315,7 +315,7 @@ function init(){
     emissiveLight = new THREE.MeshStandardMaterial({
         color: 0xffffff,
         emissive: 0xffffff,
-        emissiveIntensity: 100000,
+        emissiveIntensity: 0,
     });
     BK62Mat = new THREE.MeshStandardMaterial({
         color: 0x000000,
@@ -1245,7 +1245,9 @@ function closeAllCompartments(){
 
 function renderLights(){
 
-    renderer.toneMappingExposure = .2;
+    //renderer.toneMappingExposure = .2;
+    gsap.to(emissiveLight, {duration: 2, emissiveIntensity: 10000000, ease:"expo"});
+    gsap.to(renderer, {duration: 2, toneMappingExposure: .2, ease:"expo"});
 
 }
 
