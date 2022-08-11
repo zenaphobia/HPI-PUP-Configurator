@@ -40,11 +40,11 @@ void main()
 let loader, fileLoader, scene, container, camera, renderer, controls, dracoLoader, pmremGenerator;
 
 //#region INIT FILES
-let basemesh, testmesh, windowMesh, truckBaseMesh, testMat, hingePoint, lidTest;
+let basemesh, testmesh, windowMesh, truckBaseMesh, testMat, hingePoint, lidTest, testLight, spotLightHelper;
 //All Models
 var allModels, TruckModel, GullwingModel, HeadacheRackPost, HeadacheRackHex, LongLowSides, ShortLowSides,LongFlatHatch, ShortFlatHatch, LongDomedHatch, ShortDomedHatch, shortGladiatorFH, longGladiatorFH, shortGladiatorDH, longGladiatorDH, PupAccessories, XTBase, XT1200Truckslide, XT2000Truckslide;
 //Textures
-var bdpBumpTexture, dpBumpTexture, patriotTexture, BK62BumpTexture, carPaintTexture, blankTexture, customMaterial;
+var bdpBumpTexture, dpBumpTexture, patriotTexture, BK62BumpTexture, carPaintTexture, blankTexture, customMaterial, emissionMap;
 
 var clientPUP = new PickupPack("Flat Center Hatch", false, "Hex Headache Rack", false, false, false, 0, "Black Diamond Plate", "1200");
 console.log(clientPUP);
@@ -65,8 +65,6 @@ var isTruckslideOpen = false;
 
 //#endregion
 
-//Lazy Load files
-var isFullLengthPUPLoaded = false;
 //materials
 let metalMat, windowMat, redGlassMat,truckPaintMat, clearGlassMat, bdpMaterial, dpMaterial, blackMetalMat, leopardMaterial, patriotMat, emissiveLight, BK62Mat, clearGlassMatLights;
 
@@ -91,7 +89,7 @@ function init(){
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1; //If you enable sao, turn to 2
     renderer.outputEncoding = THREE.sRGBEncoding;
-    renderer.physicallyCorrectdirectionalLights = true;
+    //renderer.physicallyCorrectdirectionalLights = true;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
@@ -212,6 +210,7 @@ function init(){
     dpBumpTexture = new THREE.TextureLoader().load('textures/dp-pattern-final.jpg', texture => {texture.flipY = false});
     patriotTexture = new THREE.TextureLoader().load('textures/star-bump.jpg', texture => {texture.flipY = false});
     BK62BumpTexture = new THREE.TextureLoader().load('textures/BK62-bump.jpg', texture => {texture.flipY = false});
+    emissionMap = new THREE.TextureLoader().load('textures/emissionMap.png', texture => {texture.flipY = false});
     carPaintTexture = new  THREE.CanvasTexture(new FlakesTexture());
 
     bdpBumpTexture.wrapS = THREE.repeatWrapping;
@@ -235,6 +234,9 @@ function init(){
         color: 0xffffff,
         metalness: 1,
         roughness: .1,
+        // emissive: 0xffffff,
+        // emissiveMap: emissionMap,
+        // emissiveIntensity: 5,
     });
     blackMetalMat = new THREE.MeshStandardMaterial({
         color: 0x000000,
@@ -340,7 +342,17 @@ function init(){
     cameraTracker = new THREE.Mesh(geometry, blankTexture);
     scene.add(cameraTracker);
     cameraTracker.position.y = -1;
-    cameraTracker.visible = false;
+    cameraTracker.visible = true;
+
+    //Lights
+    //Adding Lights
+    testLight = new THREE.SpotLight(0xffffff, 0, 125, .75, 1, 2, 1);
+    testLight.position.set(-1.5,1,-2.65)
+
+    testLight.castShadow = true;
+    testLight.target = cameraTracker;
+
+    scene.add(testLight);
 
     //directionalLights
 
@@ -466,10 +478,10 @@ function animate() {
     //composer.render();
     controls.update();
         //Observe a scene or a renderer
-        // if (typeof __THREE_DEVTOOLS__ !== 'undefined') {
-        //     __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: scene }));
-        //     __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: renderer }));
-        //   }
+        if (typeof __THREE_DEVTOOLS__ !== 'undefined') {
+            __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: scene }));
+            __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: renderer }));
+          }
 }
 
 
@@ -698,6 +710,7 @@ function headacheRackSelect(){
 
     //close other compartments
     closeAllCompartments();
+    resetGlobalLight();
 
     //grabbing main element
     const sidebar = document.getElementById("options-bar-container");
@@ -738,6 +751,7 @@ function hatchSelect(){
 
     refreshUI("hatch-section");
     refreshConfig("config-hatch-description", "Hatch");
+    resetGlobalLight();
 
     //grabbing main element
     const sidebar = document.getElementById("options-bar-container");
@@ -788,6 +802,7 @@ function gullwingSelect(){
 
     //close other compartments
     closeAllCompartments();
+    resetGlobalLight();
 
     //grabbing main element
     const sidebar = document.getElementById("options-bar-container");
@@ -832,6 +847,7 @@ function finishSelect(){
 
     //close other compartments
     closeAllCompartments();
+    resetGlobalLight();
 
     //grabbing main element
     const sidebar = document.getElementById("options-bar-container");
@@ -895,6 +911,7 @@ function truckslideSelect(){
     //close other compartments
     closeGullwing();
     closeLowSideLid();
+    resetGlobalLight();
 
     //grabbing main element
     const sidebar = document.getElementById("options-bar-container");
@@ -977,6 +994,7 @@ function ladderRackSelect(){
 
     //close other compartments
     closeAllCompartments();
+    resetGlobalLight();
 
     //grabbing main element
     const sidebar = document.getElementById("options-bar-container");
@@ -1150,9 +1168,10 @@ async function addModelsToScene(){
     LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").material = bdpMaterial;
     ShortLowSides.getObjectByName("Shape_IndexedFaceSet118").material = emissiveLight;
 
-    // HeadacheRackHex.getObjectByName("Curve006").attach(ShortLowSides.getObjectByName("Icosphere"));
+    ShortLowSides.getObjectByName("Shape_IndexedFaceSet221").material = metalMat;
 
-    ShortLowSides.getObjectByName("Icosphere").attach(HeadacheRackHex.getObjectByName("Curve006"));
+
+    //ShortLowSides.getObjectByName("Icosphere").attach(HeadacheRackHex.getObjectByName("Curve006"));
 
     //hide models
     HeadacheRackPost.visible = false;
@@ -1183,7 +1202,6 @@ async function addModelsToScene(){
 
     //shows page after entire model is loaded and rendered.
     XT2000Truckslide.onAfterRender(showPage());
-
 }
 
 function openLowSideLid(){
@@ -1246,9 +1264,16 @@ function closeAllCompartments(){
 function renderLights(){
 
     //renderer.toneMappingExposure = .2;
+    gsap.to(testLight, {duration: 2, intensity: 10000, ease:"expo"});
     gsap.to(emissiveLight, {duration: 2, emissiveIntensity: 10000000, ease:"expo"});
-    gsap.to(renderer, {duration: 2, toneMappingExposure: .2, ease:"expo"});
+    gsap.to(renderer, {duration: 2, toneMappingExposure: .15, ease:"expo"});
+    gsap.to(cameraTracker.position, {duration: 2, x: -1.5, y: -1.15, z: -2.65, ease:"expo"});
 
+}
+
+function resetGlobalLight(){
+    gsap.to(renderer, {duration: 2, toneMappingExposure: 1, ease:"expo"});
+    gsap.to(testLight, {duration: 2, intensity: 0, ease:"expo"});
 }
 
 function renderGullwingTray(){
@@ -1309,9 +1334,11 @@ function renderLowSideTrays(){
             lowsideCountid.innerText = clientPUP.LowsideTrayCount;
                 switch(clientPUP.Gullwing.enabled){
                     case true:
+                        PupAccessories.getObjectByName("lowside-tray-2").position.x = -2.76635;
                         PupAccessories.getObjectByName("lowside-tray-3").position.x = -4.38547;
                         break;
                     case false:
+                        PupAccessories.getObjectByName("lowside-tray-2").position.x = -1.71959;
                         PupAccessories.getObjectByName("lowside-tray-3").position.x = -3.41479;
                         break;
                 }
