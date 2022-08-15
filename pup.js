@@ -5,7 +5,7 @@ import { DRACOLoader } from '/js/DRACOLoader.js';
 import { EXRLoader } from '/js/EXRLoader.js';
 import { FlakesTexture } from '/js/FlakesTexture.js'
 import PickupPack from '/js/PickupPack.js'
-import HeadacheRack from '/js/headacheRack.js';
+//import HeadacheRack from '/js/headacheRack.js';
 //import { UnrealBloomPass } from '/js/UnrealBloomPass.js';
 //import { EffectComposer } from '/js/EffectComposer.js';
 //import { RenderPass } from '/js/RenderPass.js';
@@ -51,7 +51,7 @@ console.log(clientPUP);
 //console.log(clientPUP.AdditionalLowsideTray);
 console.log(clientPUP.LowsideTrayCount);
 
-let cameraTracker;
+let cameraTracker, lightTracker;
 const standardCameraAngle = new THREE.Vector3(-25.0, 7.0, -10.0);
 var uniforms;
 const clock = new THREE.Clock();
@@ -342,17 +342,26 @@ function init(){
     cameraTracker = new THREE.Mesh(geometry, blankTexture);
     scene.add(cameraTracker);
     cameraTracker.position.y = -1;
-    cameraTracker.visible = true;
+    cameraTracker.visible = false;
 
     //Lights
-    //Adding Lights
-    testLight = new THREE.SpotLight(0xffffff, 0, 125, .75, 1, 2, 1);
-    testLight.position.set(-1.5,1,-2.65)
+
+    //Primitive Lighting tracker
+    lightTracker = new THREE.Mesh(geometry, blankTexture);
+    lightTracker.position.y = -1;
+    lightTracker.visible = false;
+    scene.add(lightTracker);
+
+    testLight = new THREE.SpotLight(0xffffff, 0, 125, 1.04, 1, 2, 1);
+    testLight.position.set(-1.25,1,-2.65)
 
     testLight.castShadow = true;
-    testLight.target = cameraTracker;
+    testLight.target = lightTracker;
+
+    //spotLightHelper = new THREE.SpotLightHelper(testLight, 0xffae88);
 
     scene.add(testLight);
+    //scene.add(spotLightHelper);
 
     //directionalLights
 
@@ -433,7 +442,9 @@ function init(){
     // document.getElementById('add-ls-tray').addEventListener("click", function(){addLowSideTrays()});
     // document.getElementById('remove-ls-tray').addEventListener("click", function(){removeLowSideTrays()});
     // document.getElementById('open-tailgate').addEventListener("click", function(){openTailgate()});
-    document.getElementById('additional-lights').addEventListener("click", function(){renderLights()});
+    document.getElementById('additional-lights').addEventListener("click", function(){additionalLightsSelect()});
+    document.getElementById('LED-lights-radio').addEventListener("click", function(){renderLights()});
+    document.getElementById('no-LED-lights-radio').addEventListener("click", function(){disableLights()});
     document.getElementById('lid-finishes').addEventListener("click", function(){finishSelect()});
     document.getElementById('diamond-plate-radio').addEventListener("click", function(){switchToDiamondPlate();refreshConfig("config-finish-description", "Finish")});
     document.getElementById('black-diamond-plate-radio').addEventListener("click", function(){switchToBlackDiamondPlate();refreshConfig("config-finish-description", "Finish")});
@@ -474,6 +485,7 @@ function animate() {
     requestAnimationFrame( animate );
     camera.lookAt(cameraTracker.position);
     renderer.render( scene, camera );
+    //spotLightHelper.update()
     //console.log(camera.position);
     //composer.render();
     controls.update();
@@ -1063,7 +1075,49 @@ function additionalTraysSelect(){
 
 }
 
-var lidOpen;
+function additionalLightsSelect(){
+    refreshUI("additional-lights-section");
+    refreshConfig("config-LED-light-description", "LED");
+
+    //close other compartments
+    closeTruckslide();
+
+
+    //grabbing main element
+    const sidebar = document.getElementById("options-bar-container");
+
+    //show sidebar
+    gsap.to(sidebar, {duration: 1, left:0, ease:"expo.inOut"});
+
+    controls.enabled = false;
+
+
+    if(clientPUP.Gullwing.enabled === true){
+        gsap.to(camera.position, {duration: 2, x: -8, y: 5, z: -10, ease:"expo", onComplete: enableOrbitControls});
+        gsap.to(cameraTracker.position, {duration: 2, x: -1.25, y: 0, z:-3, ease:"expo"});
+        gsap.to(lightTracker.position, {duration: 2, x: -1.25, y: 0, z:-3, ease:"expo"});
+        testLight.position.set(-1.25 , 1 , -2.25);
+    }
+    else{
+        gsap.to(camera.position, {duration: 2, x: -5, y: 5, z: -10, ease:"expo", onComplete: enableOrbitControls});
+        gsap.to(cameraTracker.position, {duration: 2, x: 0, y: 0, z: -3, ease:"expo"});
+        gsap.to(lightTracker.position, {duration: 2, x: 0, y: 0, z: -3, ease:"expo"});
+        testLight.position.set(0 , 1 , -2.25);
+    }
+
+    if(clientPUP.LED.enabled){
+        gsap.to(testLight, {duration: 2, intensity: 10000, ease:"expo"});
+    }
+
+    gsap.to(emissiveLight, {duration: 2, emissiveIntensity: 10000000, ease:"expo"});
+    gsap.to(renderer, {duration: 2, toneMappingExposure: .15, ease:"expo"});
+
+    controls.minDistance = 10;
+    controls.maxDistance = 30;
+    controls.target = cameraTracker.position;
+
+    openLowSideLid();
+}
 
 async function loadModels(){
     //add all models here
@@ -1167,8 +1221,9 @@ async function addModelsToScene(){
     ShortDomedHatch.getObjectByName("Shape_IndexedFaceSet028").material = bdpMaterial;
     LongDomedHatch.getObjectByName("Shape_IndexedFaceSet012").material = bdpMaterial;
     ShortLowSides.getObjectByName("Shape_IndexedFaceSet118").material = emissiveLight;
+    LongLowSides.getObjectByName("Shape_IndexedFaceSet095").material = emissiveLight;
 
-    ShortLowSides.getObjectByName("Shape_IndexedFaceSet221").material = metalMat;
+    //ShortLowSides.getObjectByName("Shape_IndexedFaceSet221").material = metalMat;
 
 
     //ShortLowSides.getObjectByName("Icosphere").attach(HeadacheRackHex.getObjectByName("Curve006"));
@@ -1181,8 +1236,11 @@ async function addModelsToScene(){
     GullwingModel.getObjectByName("additional-gw-tray").visible = false;
     ShortLowSides.getObjectByName("GL-left-lid").visible = false;
     ShortLowSides.getObjectByName("GL-right-lid").visible = false;
+    ShortLowSides.getObjectByName("GL-right-lid").visible = false;
+    ShortLowSides.getObjectByName("Shape_IndexedFaceSet118").visible = false
     LongLowSides.getObjectByName("GL-ls-left-lid").visible = false;
     LongLowSides.getObjectByName("GL-ls-right-lid").visible = false;
+    LongLowSides.getObjectByName("Shape_IndexedFaceSet095").visible = false;
     PupAccessories.getObjectByName("lowside-tray-2").visible = false;
     PupAccessories.getObjectByName("lowside-tray-3").visible = false;
     ShortLowSides.visible = false
@@ -1262,18 +1320,33 @@ function closeAllCompartments(){
 }
 
 function renderLights(){
+    const LEDid = document.getElementById("config-LED-light-description");
+    clientPUP.setLED = 'Wired';
 
-    //renderer.toneMappingExposure = .2;
-    gsap.to(testLight, {duration: 2, intensity: 10000, ease:"expo"});
+    LEDid.innerText = clientPUP.LED.name;
+
+    gsap.to(testLight, {duration: 1, intensity: 10000, ease:"expo"});
     gsap.to(emissiveLight, {duration: 2, emissiveIntensity: 10000000, ease:"expo"});
-    gsap.to(renderer, {duration: 2, toneMappingExposure: .15, ease:"expo"});
-    gsap.to(cameraTracker.position, {duration: 2, x: -1.5, y: -1.15, z: -2.65, ease:"expo"});
 
+    ShortLowSides.getObjectByName("Shape_IndexedFaceSet118").visible = true;
+    LongLowSides.getObjectByName("Shape_IndexedFaceSet095").visible = true;
+}
+
+function disableLights(){
+    const LEDid = document.getElementById("config-LED-light-description");
+    clientPUP.setLED = false;
+
+    LEDid.innerText = clientPUP.LED.name;
+
+    testLight.intensity = 0;
+
+    ShortLowSides.getObjectByName("Shape_IndexedFaceSet118").visible = false;
+    LongLowSides.getObjectByName("Shape_IndexedFaceSet095").visible = false;
 }
 
 function resetGlobalLight(){
     gsap.to(renderer, {duration: 2, toneMappingExposure: 1, ease:"expo"});
-    gsap.to(testLight, {duration: 2, intensity: 0, ease:"expo"});
+    gsap.to(testLight, {duration: .015, intensity: 0, ease:"expo"});
 }
 
 function renderGullwingTray(){

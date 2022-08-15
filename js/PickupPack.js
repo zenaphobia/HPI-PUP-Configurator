@@ -37,14 +37,17 @@ const LadderRackSelected = {
 }
 const LedLightsWired = {
     name: "LED Lights Selected: Wired",
+    enabled: true,
     price: 0
 }
 const LedLightsBattery= {
     name: "LED Lights Selected: Battery",
+    enabled: true,
     price: 0
 }
 const NoLedLightsSelected = {
     name: "No LED Lights Selected",
+    enabled: false,
     price: 0
 }
 const BlackDiamondPlateFinish = {
