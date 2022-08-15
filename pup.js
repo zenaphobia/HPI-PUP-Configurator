@@ -1131,7 +1131,7 @@ async function loadModels(){
         loader.loadAsync('models/seperate-models/longFlatHatch.gltf'),
         loader.loadAsync('models/seperate-models/shortFlatHatch.gltf'),
         loader.loadAsync('models/seperate-models/longDomedHatch.gltf'),
-        loader.loadAsync('models/seperate-models/shortDomedHatch.gltf'),
+        loader.loadAsync('models/seperate-models/ShortDomedHatch.gltf'),
         loader.loadAsync('models/seperate-models/shortGladiatorFlatHatch.gltf'),
         loader.loadAsync('models/seperate-models/longGladiatorFlatHatch.gltf'),
         loader.loadAsync('models/seperate-models/shortGladiatorDomedHatch.gltf'),
