@@ -79,7 +79,7 @@ function init(){
     scene = new THREE.Scene();
     //scene.fog = new THREE.FogExp2(0xffffff, .01);
     container = document.getElementById('myCanvas');
-    camera = new THREE.PerspectiveCamera( 25, container.offsetWidth / container.offsetHeight, 0.1, 50 );
+    camera = new THREE.PerspectiveCamera( 25, container.offsetWidth / container.offsetHeight, 0.1, 100 );
     camera.aspect = (container.offsetWidth / container.offsetHeight);
     camera.position.set(standardCameraAngle.x, standardCameraAngle.y, standardCameraAngle.z);
     renderer = new THREE.WebGLRenderer({canvas: container, antialias: true, alpha: true});
@@ -386,7 +386,7 @@ function init(){
     controls.enablePan = false;
     controls.enableDamping = true;
     controls.maxPolarAngle = 1.6;
-    controls.maxDistance = 25;
+    controls.maxDistance = 50;
     controls.maxAzimuthAngle = .5;
     controls.minAzimuthAngle = -3.5;
     controls.rotateSpeed = (container.offsetWidth / 8000);
@@ -416,11 +416,11 @@ function init(){
     //#endregion
 
     //functions
-    document.getElementById('headacherack').addEventListener("mouseenter", function(){headacheRackHoverOn();});
-    document.getElementById('headacherack').addEventListener("mouseleave", function(){headacheRackHoverOff()});
+    //document.getElementById('headacherack').addEventListener("mouseenter", function(){headacheRackHoverOn();});
+    //document.getElementById('headacherack').addEventListener("mouseleave", function(){headacheRackHoverOff()});
     document.getElementById('headacherack').addEventListener("click", function(){headacheRackSelect()});
-    document.getElementById('ladderrack').addEventListener("mouseenter", function(){ladderRackHoverOn()});
-    document.getElementById('ladderrack').addEventListener("mouseleave", function(){ladderRackHoverOff()});
+    //document.getElementById('ladderrack').addEventListener("mouseenter", function(){ladderRackHoverOn()});
+    //document.getElementById('ladderrack').addEventListener("mouseleave", function(){ladderRackHoverOff()});
     document.getElementById('ladderrack').addEventListener("click", function(){ladderRackSelect()});
     // document.getElementById('hinge').addEventListener("click", function(){openLowSideLid()});
     document.getElementById('gullwing').addEventListener("click", function(){gullwingSelect()});
@@ -468,6 +468,12 @@ function init(){
     document.getElementById("congif-back-btn-container").addEventListener("click", function(){hideConfigBar()});
     document.getElementById("shopping-cart").addEventListener("click", function(){showConfigBar(); refreshAllConfig()});
 
+    // document.addEventListener('keydown', (e) => {
+    //     if(e.code === "Space"){
+    //         startAnimation();
+    //     }
+    // });
+
     //Window resizing
     window.addEventListener( 'resize', onWindowResize );
     function onWindowResize(){
@@ -489,11 +495,11 @@ function animate() {
     //console.log(camera.position);
     //composer.render();
     controls.update();
-        //Observe a scene or a renderer
-        if (typeof __THREE_DEVTOOLS__ !== 'undefined') {
-            __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: scene }));
-            __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: renderer }));
-          }
+        // //Observe a scene or a renderer
+        // if (typeof __THREE_DEVTOOLS__ !== 'undefined') {
+        //     __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: scene }));
+        //     __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: renderer }));
+        //   }
 }
 
 
@@ -928,45 +934,6 @@ function truckslideSelect(){
     //grabbing main element
     const sidebar = document.getElementById("options-bar-container");
 
-    //Grabbing elements.
-    const noTruckslideText = document.getElementById("no-truckslide-radio-text");
-    const twelveTruckslideText = document.getElementById("1200-truckslide-radio-text");
-    const twoTruckslideText = document.getElementById("2000-truckslide-radio-text");
-    const fourTruckslideText = document.getElementById("4000-truckslide-radio-text");
-
-    //Check which option is selected already.
-
-    switch(clientPUP.Truckslide.name){
-        case "No truckslide":
-            //radio text
-            noTruckslideText.innerText = "This option is selected";
-            twelveTruckslideText.innerText = "Select this option";
-            twoTruckslideText.innerText = "Select this option";
-            fourTruckslideText.innerText = "Select this option";
-            break;
-        case "XT1200":
-            //radio text
-            noTruckslideText.innerText = "Select this option";
-            twelveTruckslideText.innerText = "This option is selected";
-            twoTruckslideText.innerText = "Select this option";
-            fourTruckslideText.innerText = "Select this option";
-            break;
-        case "XT2000":
-            //radio text
-            noTruckslideText.innerText = "Select this option";
-            twelveTruckslideText.innerText = "Select this option";
-            twoTruckslideText.innerText = "This option is selected";
-            fourTruckslideText.innerText = "Select this option";
-            break;
-        case "XT4000":
-            //radio text
-            noTruckslideText.innerText = "Select this option";
-            twelveTruckslideText.innerText = "Select this option";
-            twoTruckslideText.innerText = "Select this option";
-            fourTruckslideText.innerText = "This option is selected";
-            break;
-    }
-
     //show sidebar
     gsap.to(sidebar, {duration: 1, left:0, ease:"expo.inOut"});
 
@@ -1034,6 +1001,7 @@ function additionalTraysSelect(){
 
     //close other compartments
     closeTruckslide();
+    resetGlobalLight();
 
 
     //grabbing main element
@@ -2258,6 +2226,30 @@ function swapMeshes(){
     }
 
 }
+
+//animation -- remmeber to delete:
+// function startAnimation(){
+//     const camStart = new THREE.Vector3(-30.5, -1.29, 23.78);
+//     //const camEnd = new THREE.Vector3(-18.792, 6.661, -15.08);
+
+//     camera.position.x = camStart.x;
+//     camera.position.y = camStart.y;
+//     camera.position.z = camStart.z;
+//     //start x -19.65, y: - 0.729, z: 15.43
+//     //end  x: -18.792, y: 6.661, z: -15.08
+//     var timeline = gsap.timeline();
+//     timeline.to(camera.position, {x: -30.662, y: 13.51, z: -23.345, ease:"power2.inOut", duration: 5, delay: 1});
+//     gsap.to(cameraTracker.position, {duration: 2, x: 0, y: 0, Z:0, ease:"sine.inOut", duration: 4}, "<2");
+//     timeline.to(GullwingModel.getObjectByName("GW-left-hinge").rotation, {duration: 2, x: 135 * (Math.PI / 180), ease:"expo"},"< 2");
+//     timeline.to(hingePoint.rotation, {duration: 2, x: 2 * Math.PI * (160 / 360), ease:"expo" }, "< 1");
+//     timeline.to(LongLowSides.getObjectByName('long-ls-left-hinge').rotation, {duration: 2, x: 2 * Math.PI * (160 / 360), ease:"expo" },"<");
+//     timeline.to(ShortFlatHatch.getObjectByName("Decimated_Hatch").rotation, {duration: 2, y: 2 * Math.PI * (-15 / 360), ease:"expo"},"< .5");
+//     timeline.to(TruckModel.getObjectByName("tailgate").rotation, {duration: 2, x: 2 * Math.PI * (-90 / 360), ease:"expo", delay: 0},"<.5");
+//     timeline.to(XTBase.getObjectByName("truckslide_movingBase").position, {duration: 2, x: -11, ease:"expo", delay: 0}, "<.5");
+//     timeline.to(XT1200Truckslide.getObjectByName("Truckslide_XT1200").position, {duration: 2, x: -11, ease:"expo", delay: 0}, "<");
+// }
+
+
 //Returns all active objects in a group
 function findAllActiveObjects(x){
     var group;
