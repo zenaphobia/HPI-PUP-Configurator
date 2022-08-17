@@ -438,14 +438,13 @@ max-height: 100vh;
     opacity: 25%;
     display: flex;
     flex-direction: row;
-    background-color: rgba(237, 237, 237, .85);;
+    background-color: rgba(237, 237, 237, .65);;
     justify-content: space-between;
     align-items: center;
-    width: 500px;
+    width: 600px;
     border-radius: 50px;
     transition: opacity .35s;
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(5px);
   }
   .container:hover{
     opacity: 100%;
@@ -455,10 +454,19 @@ max-height: 100vh;
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
-    background-color: #d1d1d1;
+    background-color:rgba(209, 209, 209, .5);
     border-radius: 50px;
     padding: 15px;
     margin-left: 5px;
+  }
+  .cam-angle{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-left: 10px;
+    width: 50%;
+    border-radius: 5px;
+    padding: 5px;
   }
   .item{
     background-color: teal;
@@ -468,6 +476,7 @@ max-height: 100vh;
     border-radius: 10px;
     margin-left: 10px;
     margin-right: 10px;
+    box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
     transition: margin-top .25s, width .25s, height .25s;
     -webkit-transition: margin-top .25s, width .25s, height .25s;
     -moz-transition: margin-top .25s, width .25s, height .25s;
@@ -478,15 +487,6 @@ max-height: 100vh;
     margin-top: -5px;
     width: 55px;
     height: 55px;
-  }
-  .cam-angle{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin-left: 10px;
-    width: 50%;
-    border-radius: 5px;
-    padding: 5px;
   }
   #red-btn{
     background: linear-gradient(165deg, rgba(87,0,1,1) 0%, rgba(139,0,0,1) 100%);
