@@ -459,11 +459,11 @@ function init(){
     // document.getElementById('open-hatch').addEventListener("click", function(){openHatch()});
     // document.getElementById('open-truckslide').addEventListener("click", function(){openTruckslide()});
     // document.getElementById('hide-truckslide').addEventListener("click", function(){hideTruckslide()});
-    // document.getElementById('change-to-red').addEventListener("click", function(){truckPaintMat.color.set(0x570000);truckPaintMat.sheenColor.set(0x2b0000); });
-    // document.getElementById('change-to-blue').addEventListener("click", function(){truckPaintMat.color.set(0x001340); truckPaintMat.sheenColor.set(0x000000); });
-    // document.getElementById('change-to-grey').addEventListener("click", function(){truckPaintMat.color.set(0x1f1f1f); truckPaintMat.sheenColor.set(0xffffff);});
-    // document.getElementById('change-to-black').addEventListener("click", function(){truckPaintMat.color.set(0x050505); truckPaintMat.sheenColor.set(0xffffff);});
-    // document.getElementById('change-to-white').addEventListener("click", function(){truckPaintMat.color.set(0xf0f0f0)});
+    document.getElementById('red-btn').addEventListener("click", function(){truckPaintMat.color.set(0x570000);truckPaintMat.sheenColor.set(0x2b0000); });
+    document.getElementById('blue-btn').addEventListener("click", function(){truckPaintMat.color.set(0x001340); truckPaintMat.sheenColor.set(0x000000); });
+    document.getElementById('grey-btn').addEventListener("click", function(){truckPaintMat.color.set(0x1f1f1f); truckPaintMat.sheenColor.set(0xffffff);});
+    document.getElementById('black-btn').addEventListener("click", function(){truckPaintMat.color.set(0x050505); truckPaintMat.sheenColor.set(0xffffff);});
+    document.getElementById('white-btn').addEventListener("click", function(){truckPaintMat.color.set(0xf0f0f0)});
     document.getElementById("back-btn-container").addEventListener("click", function(){hideSidebar()});
     document.getElementById("congif-back-btn-container").addEventListener("click", function(){hideConfigBar()});
     document.getElementById("shopping-cart").addEventListener("click", function(){showConfigBar(); refreshAllConfig()});
