@@ -1087,6 +1087,15 @@ function additionalLightsSelect(){
     openLowSideLid();
 }
 
+THREE.DefaultLoadingManager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
+
+	console.log( 'Loading files: ' + 100 * (itemsLoaded / itemsTotal) + "% Complete..." );
+
+};
+
+//console.log( 'Loading files: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+
+
 async function loadModels(){
     //add all models here
     var [truckData, gullwingData, hrHexData, hrPostData, LongLSData, shortLSData, longFHData, shortFHdata, longDomedData, shortDomedData, shortGladFHData, longGladFHData, shortGladDHData, longGladDHData, PupExtrasData, TSBaseData, TSData1200, TSData2000] = await Promise.all([
