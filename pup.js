@@ -1089,7 +1089,11 @@ function additionalLightsSelect(){
 
 THREE.DefaultLoadingManager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
 
-	console.log( 'Loading files: ' + 100 * (itemsLoaded / itemsTotal) + "% Complete..." );
+    const loaderText = document.getElementById("percent-loaded");
+    const loaderBar = document.getElementById("bar-length");
+
+    loaderText.innerText = parseInt(100 * (itemsLoaded / itemsTotal)) + '%';
+    loaderBar.style.width = 100 * (itemsLoaded / itemsTotal) + '%';
 
 };
 
