@@ -642,22 +642,6 @@ function enableOrbitControls(){
     controls.enabled = true;
 }
 
-function createElement(postObject){
-
-    for(let i = 0; i < postObject.length; i++){
-        console.log(postObject[i]);
-        var UIHeader = postObject[i].name;
-        var UIDescription = postObject[i].description;
-        const optionsElement = document.getElementById("options-bar1");
-        const node = document.getElementById("option-1");
-        document.getElementById("option-1").remove();
-        var clonedElement = node.cloneNode(true);
-        clonedElement.querySelector(".header").innerText = UIHeader;
-        clonedElement.querySelector(".description").innerText = UIDescription;
-        optionsElement.appendChild(clonedElement);
-    }
-}
-
 function createNewElements(postObject){
     try{
         for(let i = 0; i < postObject.length; i++){
