@@ -8,9 +8,7 @@
   flex-direction: column;
   flex-wrap: wrap;
   margin: auto;
-  max-width: 100vw;
-  max-height: 100vh;
-  z-index: -1;
+  width: 100%;
 }
 
 .uiContainer {
@@ -26,19 +24,37 @@
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+  height: auto;
   border: none;
   text-align: center;
   font-family: "Poppins";
   font-size: 14px;
   text-decoration: none;
 }
-
+@media screen and (max-aspect-ratio: 1/1){
+  .nav-bar{
+    display: none;
+  }
+  #overall-container{
+    display: none;
+  }
+  #config-options-bar{
+    display: none;
+  }
+  #options-bar-container{
+    display: none;
+  }
+  body{
+    margin-top: 50%;
+  }
+}
 .nav-buttons {
+  display: flex;
+  align-items: center;
   text-align: center;
   font-family: "Poppins";
   font-size: 1.5em;
   text-decoration: none;
-  display: inline-block;
   background-color: transparent;
   border: none;
   transition: background-color 0.5s;
@@ -48,6 +64,7 @@
   padding-bottom: 5px;
   padding-left: 25px;
   padding-right: 25px;
+  object-fit: contain;
   -webkit-transition: background-color 0.5s;
   -moz-transition: background-color 0.5s;
   -ms-transition: background-color 0.5s;
@@ -55,6 +72,10 @@
 }
 .nav-buttons:hover {
   background-color: #ededed;
+}
+#shopping-cart{
+  width: 50px;
+  margin: auto;
 }
 
 #textTop {
@@ -182,10 +203,8 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  height: 90vh;
-  margin: auto;
-  outline: none;
-  border: none;
+  height: 100%;
+  width: 100%;
 }
 
 /* this is the old options-bar
@@ -454,13 +473,6 @@
 
 .radio-text {
   font-family: "poppins";
-}
-
-#shopping-cart {
-  display: flex;
-  width: 85px;
-  height: auto;
-  justify-content: center;
 }
 
 /* submenu css */
