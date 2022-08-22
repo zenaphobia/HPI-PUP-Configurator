@@ -4,7 +4,7 @@ import { OrbitControls } from '/js/OrbitControls.js';
 import { DRACOLoader } from '/js/DRACOLoader.js';
 import { EXRLoader } from '/js/EXRLoader.js';
 import { FlakesTexture } from '/js/FlakesTexture.js'
-import PickupPack from '/js/PickupPack.js'
+import { PickupPack } from '/js/PickupPack.js';
 //import HeadacheRack from '/js/headacheRack.js';
 //import { UnrealBloomPass } from '/js/UnrealBloomPass.js';
 //import { EffectComposer } from '/js/EffectComposer.js';
@@ -1094,6 +1094,8 @@ THREE.DefaultLoadingManager.onProgress = function ( url, itemsLoaded, itemsTotal
 
     loaderText.innerText = parseInt(100 * (itemsLoaded / itemsTotal)) + '%';
     loaderBar.style.width = 100 * (itemsLoaded / itemsTotal) + '%';
+
+    console.log(100 * (itemsLoaded / itemsTotal)) + '%';
 
 };
 

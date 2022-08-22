@@ -290,4 +290,4 @@ class PickupPack{
     }
 }
 
-export default PickupPack;
+export { PickupPack };
