@@ -398,22 +398,7 @@ function init(){
     loader.setDRACOLoader(dracoLoader);
 
     //  Model Loader
-
     addModelsToScene();
-
-    //#region Basic PUP object implementation
-    // clientPUP = {
-    //     Hatch: "Flat Center Hatch",
-    //     Gullwing: false,
-    //     HeadacheRack: "Hex",
-    //     LadderRack: false,
-    //     LEDdirectionalLighting: "None", //'battery', 'wired'
-    //     AdditionalGullwingTray: false,
-    //     AdditionalLowSideTray: "None", //1, 2
-    //     LidFinishes: "BlackDiamondPlate", //BlackDiamondPlate, Leopard, Gladiator
-    //     Truckslide: "1200",
-    // };
-    //#endregion
 
     //functions
     //document.getElementById('headacherack').addEventListener("mouseenter", function(){headacheRackHoverOn();});
@@ -1083,7 +1068,9 @@ THREE.DefaultLoadingManager.onProgress = function ( url, itemsLoaded, itemsTotal
 
 };
 
-//console.log( 'Loading files: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+THREE.DefaultLoadingManager.onLoad = function(){
+    showPage();
+}
 
 
 async function loadModels(){
@@ -1224,9 +1211,6 @@ async function addModelsToScene(){
     XT2000Truckslide.getObjectByName("truckslide-left-xt4000").visible = false;
     XT2000Truckslide.getObjectByName("truckslide-right-xt4000").visible = false;
     XT2000Truckslide.getObjectByName("4000-middle-taper").visible = false;
-
-    //shows page after entire model is loaded and rendered.
-    XT2000Truckslide.onAfterRender(showPage());
 }
 
 function openLowSideLid(){
