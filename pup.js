@@ -394,7 +394,7 @@ function init(){
 
     //Draco Loader
     dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderPath('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/js/libs/draco/');
+    dracoLoader.setDecoderPath('./js/draco/');
     loader.setDRACOLoader(dracoLoader);
 
     //  Model Loader
