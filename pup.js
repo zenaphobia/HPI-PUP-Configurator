@@ -1,10 +1,10 @@
-import * as THREE from '/js/three.module.js';
-import { GLTFLoader } from '/js/GLTFLoader.js';
-import { OrbitControls } from '/js/OrbitControls.js';
-import { DRACOLoader } from '/js/DRACOLoader.js';
-import { EXRLoader } from '/js/EXRLoader.js';
-import { FlakesTexture } from '/js/FlakesTexture.js'
-import { PickupPack } from '/js/PickupPack.js';
+import * as THREE from './js/three.module.js';
+import { GLTFLoader } from './js/GLTFLoader.js';
+import { OrbitControls } from './js/OrbitControls.js';
+import { DRACOLoader } from './js/DRACOLoader.js';
+import { EXRLoader } from './js/EXRLoader.js';
+import { FlakesTexture } from './js/FlakesTexture.js'
+import { PickupPack } from './js/PickupPack.js';
 //import HeadacheRack from '/js/headacheRack.js';
 //import { UnrealBloomPass } from '/js/UnrealBloomPass.js';
 //import { EffectComposer } from '/js/EffectComposer.js';

@@ -487,7 +487,7 @@
   background-color: rgba(237, 237, 237, 0.65);
   justify-content: space-between;
   align-items: center;
-  width: 600px;
+  width: auto;
   border-radius: 50px;
   transition: opacity 0.35s;
   backdrop-filter: blur(5px);
@@ -498,12 +498,12 @@
 .colors {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   width: 100%;
-  background-color: rgba(209, 209, 209, 0.5);
   border-radius: 50px;
   padding: 15px;
-  margin-left: 5px;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 .cam-angle {
   display: flex;

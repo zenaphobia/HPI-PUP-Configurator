@@ -1,0 +1,22 @@
+{
+  "name": "hpi-pup-configurator",
+  "version": "1.0.0",
+  "description": "PUP configurator built with Threejs",
+  "main": "pup.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zenaphobia/HPI-PUP-Configurator.git"
+  },
+  "author": "Alex Navarro",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zenaphobia/HPI-PUP-Configurator/issues"
+  },
+  "homepage": "https://github.com/zenaphobia/HPI-PUP-Configurator#readme",
+  "dependencies": {
+    "three": "^0.150.1"
+  }
+}
