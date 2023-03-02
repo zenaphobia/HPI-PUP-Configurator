@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>My first three.js app</title>
-		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="/style.css">
 		<style>
 			@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Poppins:wght@200;400;800&display=swap');
 		</style>
@@ -11,146 +11,434 @@
 
 	</head>
 	<body>
-		<script type="module" src="pup.js"></script>
+		<!-- Submenu -->
+		<div class="container" id="overall-container">
+			<div class="cam-angle">
+				<div class="item"></div>
+				<div class="item"></div>
+			</div>
+			<div class="colors">
+				<div class="item" id="red-btn"></div>
+				<div class="item" id="blue-btn"></div>
+				<div class="item" id="grey-btn"></div>
+				<div class="item" id="black-btn"></div>
+				<div class="item" id="white-btn"></div>
+			</div>
+		</div>
+			<!-- end submenu -->
+			<div class="loading-container" id="loader">
+				<div id="percent-loaded">1</div>
+				<div class="loading-bar-container">
+				  <div class="bar" id="bar-length"></div>
+				</div>
+			  </div>
+		<script type="module" src="/pup.js"></script>
 		<nav>
 			<div class="nav-bar">
-				<button class="nav-buttons">
+				<button class="nav-buttons" id="hatch-nav">
+					Hatch
+				</button>
+				<button class="nav-buttons" id="gullwing">
 					Gullwing
 				</button>
-				<button class="nav-buttons">
+				<button class="nav-buttons" id="headacherack">
 					Headache Rack
 				</button>
-				<button class="nav-buttons">
+				<button class="nav-buttons" id="ladderrack">
 					Ladder Rack
 				</button>
-				<button class="nav-buttons">
+				<button class="nav-buttons" id="additional-lights">
 					LED Lighting
 				</button>
-				<button class="nav-buttons">
+				<button class="nav-buttons" id="additional-trays">
 					Additional Trays
 				</button>
-				<button class="nav-buttons">
+				<button class="nav-buttons" id="lid-finishes">
 					Lid Finishes
 				</button>
-				<button class="nav-buttons">
+				<button class="nav-buttons" id="truckslide">
 					Truckslides
 				</button>
+				<div class="nav-buttons">
+					<img src="graphic-assets/shopping-cart.svg" class="nav-buttons" id="shopping-cart">
+				</div>
 			</div>
-			
 		</nav>
-		<div class="UIWrapper" id="body">
-			<div class="uiContainer">
-				<div class="Text">
-					<div id="textTop">
-						Welcome!
+		<div class="options-bar-container" id="options-bar-container">
+			<form>
+				<div class="back-btn-container" id="back-btn-container">
+					<img src="/graphic-assets/back-btn.svg" alt="back-button" id="back-btn">
+				</div>
+				<div class="options-group" id="hatch-section">
+					<div class="option" id="flat-hatch-option">
+						<div class="header">
+							Flat Center Hatch
+						</div>
+						<div class="description">
+							Keep the contents of your bed dry and secure with a locking center hatch.
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="flat-hatch-radio" name="hatch-option" value="flat-hatch" checked>
+							<label for="flat hatch" class="radio-text" id="flat-hatch-radio-text">Choose this option</label><br>
+						</div>
 					</div>
-					<div id="textBottom">
-						Click on any of the options you change your experience
+					<div class="option" id="domed-hatch-option">
+						<div class="header">
+							Domed Center Hatch
+						</div>
+						<div class="description">
+							Increase interior clearance by 4” with a domed hatch.
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="domed-hatch-radio" name="hatch-option" value="domed-hatch">
+							<label for="domed hatch" class="radio-text" id="domed-hatch-radio-text">Choose this option</label><br>
+						</div>
 					</div>
 				</div>
-				<nav>
-					<div class="Buttons2">
-						<button class="btn-reg" id="pup-pro">
-							Pickup Pack w/ Gullwing
-						</button>
-						<button class="btn-reg" id="pup-standard">
-							PUP w/o Gullwing
-						</button>
+				<div class="options-group" id="gullwing-section">
+					<div class="option" id="pup-standard">
+						<div class="header">
+							Standard
+						</div>
+						<div class="description">
+							Lowside toolboxes spanning the total length of your truck bed.
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="pup-standard-radio" name="gullwing-section" value="standard-pup" checked>
+							<label for="gullwing standard" class="radio-text" id="pup-standard-text">Choose this option</label><br>
+						</div>
 					</div>
-					<div class="Buttons2">
-						<button class="btn-reg" id="flat-hatch">
-							Flat Hatch
-						</button>
-						<button class="btn-reg" id="domed-hatch">
-							Domed Hatch
-						</button>
+					<div class="option" id="pup-gullwing">
+						<div class="header">
+							Gullwing Toolbox
+						</div>
+						<div class="description">
+							Make it a pickup Pack Pro by adding easy access to cross body storage to your Pickup Pack.
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="pup-gullwing-radio" name="gullwing-section" value="gullwing-pup">
+							<label for="gullwing toolbox" class="radio-text" id="pup-gullwing-text">Choose this option</label><br>
+						</div>
 					</div>
-					<div class="Buttons2">
-						<button class="btn-reg" id="post-headache-rack">
-							Post Headache Rack
-						</button>
-						<button class="btn-reg" id="hex-headache-rack">
-							Hex Headache Rack
-						</button>
+				</div>
+				<div class="options-group" id="headache-rack-section">
+					<div class="option" id="hex-headache-rack">
+						<div class="header">
+							Hex
+						</div>
+						<div class="description">
+							Whether you want added protection for your rear window or to gain overhead storage a headache rack is the perfect add on.
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="hex-headache-rack-radio" name="Headache Rack" value="hex-headache-rack" checked>
+							<label for="Hex Headache Rack" class="radio-text" id="hex-radio-text">Choose this option</label><br>
+						</div>
 					</div>
-					<div class="Buttons2">
-						<button class="btn-reg" id="dp">
+					<div class="option" id="post-headache-rack">
+						<div class="header">
+							Open Headache Rack
+						</div>
+						<div class="description">
+							3rd brakelight camera compatible.
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="post-headache-rack-radio" name="Headache Rack" value="post-headache-rack">
+							<label for="Post Headache Rack" class="radio-text" id="post-radio-text">Choose this option</label><br>
+						</div>
+					</div>
+				</div>
+				<div class="options-group" id="ladder-rack-section">
+					<div class="option" id="no-ladder-rack-div">
+						<div class="header">
+							None
+						</div>
+						<div class="description">
+							No Ladder Rack
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="no-ladder-rack-radio" name="Ladder Rack" value="no-ladder-rack" checked>
+							<label for="No Ladder Rack" class="radio-text" id="no-ladder-rack-text">Choose this option</label><br>
+						</div>
+					</div>
+					<div class="option" id="ladder-rack-enabled-div">
+						<div class="header">
+							Ladder Rack
+						</div>
+						<div class="description">
+							Save space in your truck be by storing your ladders and other light materials above the cab. Easily removable when not in use.
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="ladder-rack-radio" name="Ladder Rack" value="ladder-rack-enabled">
+							<label for="Ladder Rack Enabled" class="radio-text" id="ladder-rack-text">Choose this option</label><br>
+						</div>
+					</div>
+				</div>
+				<div class="options-group" id="additional-trays-section">
+					<div class="option" id="tray-description">
+						<div class="description">
+							Each box comes standard with a single removable tray. Add additional trays to keep your small parts and tools organized.
+						</div>
+					</div>
+					<div class="option" id="gullwing-trays">
+						<div class="header">
+							Gullwing Trays
+						</div>
+						<div class="description">
+							Add an extra Gullwing toolbox for additional storage.
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="gullwing-1-radio" name="additional-gullwing-trays" value="0" checked>
+							<label for="gullwing standard" class="radio-text">0</label><br>
+							<input type="radio" class="radio" id="gullwing-2-radio" name="additional-gullwing-trays" value="1">
+							<label for="gullwing standard" class="radio-text">1</label><br>
+						</div>
+					</div>
+					<div class="option" id="lowside-trays">
+						<div class="header">
+							Lowside Trays
+						</div>
+						<div class="description">
+							Add up to 3 trays for each lowside box for maximum organized storage.
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="lowside-tray-0-radio" name="additional-lowside-trays" value="0" checked>
+							<label for="Lowside Trays" class="radio-text">0</label><br>
+							<input type="radio" class="radio" id="lowside-tray-1-radio" name="additional-lowside-trays" value="1">
+							<label for="Lowside Trays" class="radio-text">1</label><br>
+							<input type="radio" class="radio" id="lowside-tray-2-radio" name="additional-lowside-trays" value="2">
+							<label for="Lowside Trays" class="radio-text">2</label><br>
+						</div>
+					</div>
+				</div>
+				<div class="options-group" id="finish-section">
+					<div class="option" id="diamond-plate">
+						<div class="header">
 							Diamond Plate
-						</button>
-						<button class="btn-reg" id="black-dp">
+						</div>
+						<div class="description">
+							Whether you want added protection for your rear window or to gain overhead storage a headache rack is the perfect add on.
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="diamond-plate-radio" name="Finishes" value="Diamond-Plate">
+							<label for="Diamond Plate" class="radio-text" id="diamond-plate-radio-text">Choose this option</label><br>
+						</div>
+					</div>
+					<div class="option" id="black-diamond-plate">
+						<div class="header">
 							Black Diamond Plate
-						</button>
-						<button class="btn-reg" id="leopard">
+						</div>
+						<div class="description">
+							3rd brakelight camera compatible.
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="black-diamond-plate-radio" name="Finishes" value="Black-Diamond-Plate" checked>
+							<label for="Black Diamond Plate" class="radio-text" id="black-diamond-plate-radio-text">Choose this option</label><br>
+						</div>
+					</div>
+					<div class="option" id="leopard">
+						<div class="header">
 							Leopard
-						</button>
-						<button class="btn-reg" id="gladiator">
+						</div>
+						<div class="description">
+							3rd brakelight camera compatible.
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="leopard-radio" name="Finishes" value="Leopard">
+							<label for="Leopard" class="radio-text" id="leopard-radio-text">Choose this option</label><br>
+						</div>
+					</div>
+					<div class="option" id="gladiator">
+						<div class="header">
 							Gladiator
-						</button>
+						</div>
+						<div class="description">
+							3rd brakelight camera compatible.
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="gladiator-radio" name="Finishes" value="gladiator">
+							<label for="Gladiator" class="radio-text" id="gladiator-radio-text">Choose this option</label><br>
+						</div>
 					</div>
-					<div class="Buttons2">
-						<button class="btn-reg" id="open-truckslide">
-							Open Truckslide
-						</button>
-						<button class="btn-reg" id="xt1200">
-							XT1200
-						</button>
-						<button class="btn-reg" id="xt2000">
-							XT2000
-						</button>
-						<button class="btn-reg" id="xt4000">
-							XT4000
-						</button>
-						<button class="btn-reg" id="hide-truckslide">
+				</div>
+				<div class="options-group" id="truckslide-section">
+					<div class="option" id="truckslide-none">
+						<div class="header">
 							No Truckslide
-						</button>
+						</div>
+						<div class="description">
+							Consider upgrading for an experience that allows you to slide the contents of your bed out, and never crawl into your truck bed again.
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="no-truckslide-radio" name="Truckslide" value="no-truckslide">
+							<label for="no-truckslide" class="radio-text" id="no-truckslide-radio-text">Choose this option</label><br>
+						</div>
 					</div>
-					<div class="Buttons2">
-						<button class="btn-reg" id="open-gullwing">
-							Open Gullwing
-						</button>
-						<button class="btn-reg" id="open-tailgate">
-							Open Tailgate
-						</button>
-						<button class="btn-reg" id="hinge">
-							Open Lowside
-						</button>
-						<button class="btn-reg" id="open-hatch">
-							Open Hatch
-						</button>
+					<div class="option" id="xt1200">
+						<div class="header">
+							XT1200
+						</div>
+						<div class="description">
+							For everyday use - 1,200lb capacity.
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="1200-truckslide-radio" name="Truckslide" value="1200-truckslide" checked>
+							<label for="1200-truckslide" class="radio-text" id="1200-truckslide-radio-text">Choose this option</label><br>
+						</div>
 					</div>
-					<div class="Buttons2">
-						<button class="btn-reg" id="ladder-rack">
-							Add Ladder Rack
-						</button>
-						<button class="btn-reg" id="add-ls-tray">
-							Add Lowside Tray
-						</button>
-						<button class="btn-reg" id="remove-ls-tray">
-							Remove Lowside Tray
-						</button>
+					<div class="option" id="xt2000">
+						<div class="header">
+							XT2000
+						</div>
+						<div class="description">
+							For work trucks - 2,000lb capacity
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="2000-truckslide-radio" name="Truckslide" value="2000-truckslide">
+							<label for="2000-truckslide" class="radio-text" id="2000-truckslide-radio-text">Choose this option</label><br>
+						</div>
 					</div>
-					<div class="Buttons2">
-						<button class="btn-reg" id="change-to-red">
-							Red
-						</button>
-						<button class="btn-reg" id="change-to-blue">
-							Blue
-						</button>
-						<button class="btn-reg" id="change-to-grey">
-							Grey
-						</button>
-						<button class="btn-reg" id="change-to-black">
-							Black
-						</button>
-						<button class="btn-reg" id="change-to-white">
-							White
-						</button>
+					<div class="option" id="xt4000">
+						<div class="header">
+							XT4000
+						</div>
+						<div class="description">
+							For extreme commercial applications - 4000lb capacity
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="4000-truckslide-radio" name="Truckslide" value="4000-truckslide">
+							<label for="4000-truckslide" class="radio-text" id="4000-truckslide-radio-text">Choose this option</label><br>
+						</div>
 					</div>
-					</nav>
+				</div>
+				<div class="options-group" id="additional-lights-section">
+					<div class="option" id="no-lights">
+						<div class="header">
+							No Lights
+						</div>
+						<div class="description">
+							Consider adding lights for better visability.
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="no-LED-lights-radio" name="LED-lights" value="no-lights" checked>
+							<label for="no-lights" class="radio-text" id="no-LED-lights-radio-text">Choose this option</label><br>
+						</div>
+					</div>
+					<div class="option" id="xt1200">
+						<div class="header">
+							LED Lights
+						</div>
+						<div class="description">
+							Light up your compartment for late night jobs and better visibility. Can be applied to all boxes, and hatches.
+						</div>
+						<div class="radio-section">
+							<input type="radio" class="radio" id="LED-lights-radio" name="LED-lights" value="LED-lights">
+							<label for="LED-lights" class="radio-text" id="LED-lights-radio-text">Choose this option</label><br>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="config-options-bar-div" id="config-options-bar">
+			<div class="config-back-btn-container" id="congif-back-btn-container">
+				<img src="/graphic-assets/back-btn.svg" alt="back-button" id="config-back-btn">
 			</div>
-			<div class="model3d">
+			<div class="config-title">
+				My configuration
+			</div>
+			<div class="option">
+				<div class="header">
+					Hatch Style
+				</div>
+				<div class="description" id="config-hatch-description">
+					<div>
+						Flat Center Hatch
+					</div>
+				</div>
+			</div>
+			<div class="option">
+				<div class="header">
+					Gullwing Toolbox
+				</div>
+				<div class="description" id="config-toolbox-description">
+					<div>
+						Standard
+					</div>
+				</div>
+			</div>
+			<div class="option">
+				<div class="header">
+					Headache Rack
+				</div>
+				<div class="description" id="config-headache-rack-description">
+					<div>
+						Hex Headache Rack
+					</div>
+				</div>
+			</div>
+			<div class="option">
+				<div class="header">
+					Ladder Rack
+				</div>
+				<div class="description" id="config-ladder-rack-description">
+					<div>
+						No ladder rack
+					</div>
+				</div>
+			</div>
+			<div class="option">
+				<div class="header">
+					Additional Lights
+				</div>
+				<div class="description" id="config-LED-light-description">
+					<div>
+						No Additional Lights Selected
+					</div>
+				</div>
+			</div>
+			<div class="option">
+				<div class="header">
+					Additional Trays
+				</div>
+				<div class="description-stacked" id="config-gullwing-trays-description">
+					<div class="description-seperator">
+						Additional Gullwing Trays:
+					</div>
+					<div class="config-gw-trays-count" id="config-gw-trays-count-id">
+						0
+					</div>
+				</div>
+				<div class="description-stacked" id="config-lowside-trays-description">
+					<div class="description-seperator">
+						Additional Lowside Trays:
+					</div>
+					<div id="config-lowside-trays-count">
+						0
+					</div>
+				</div>
+			</div>
+			<div class="option">
+				<div class="header">
+					Finish
+				</div>
+				<div class="description" id="config-finish-description">
+					<div>
+						Black Diamond Plate
+					</div>
+				</div>
+			</div>
+			<div class="option">
+				<div class="header">
+					Truckslide
+				</div>
+				<div class="description" id="config-truckslide-description">
+					<div>
+						XT1200
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="UIWrapper" id="body">
 				<canvas id="myCanvas"></canvas>
-			</div>
 		</div>
 	</body>
 </html>
