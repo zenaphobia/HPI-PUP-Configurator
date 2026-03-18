@@ -720,7 +720,7 @@ function init() {
     renderer.setSize(container.offsetWidth, container.offsetHeight);
 
     setInterval(() => {
-      console.log(this.renderer.info);
+      console.log(renderer.info);
     }, 5000);
   }
 
