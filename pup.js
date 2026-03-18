@@ -718,11 +718,11 @@ function init() {
     camera.aspect = container.offsetWidth / container.offsetHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(container.offsetWidth, container.offsetHeight);
-
-    setInterval(() => {
-      console.log(renderer.info);
-    }, 5000);
   }
+
+  setInterval(() => {
+    console.log(renderer.info);
+  }, 5000);
 
   //Math function to convert angle to Radian
   //radian = 2 * Math.PI * (p_angle / 360);
